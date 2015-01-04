@@ -1,0 +1,11 @@
+(x) relationships on systemd daemons
+(x) create custom redis script for diamond listen llen from diferent queues
+(x) review deamonize installation
+(x) how to improve more threads to index from different redis queues 
+(x) kibana dashboard
+(x) grafana dashboard
+(x) stress benchmark
+(x) update github
+(x) catlahan post
+(x) english post
+
