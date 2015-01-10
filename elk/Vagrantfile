@@ -1,0 +1,14 @@
+Vagrant::Config.run do |config|
+    config.vm.define :elk do |elk_config|
+    elk_config.vm.box = "elk1"
+    elk_config.vm.box_url = "/Users/mcortinas/Boxes/centos7.box"
+    elk_config.vm.forward_port 80,3080
+    elk_config.vm.forward_port 443,3443
+    elk_config.vm.forward_port 9200,39200
+    elk_config.vm.forward_port 9300,39300
+        elk_config.vm.forward_port 2003,32003
+        elk_config.vm.forward_port 2004,32004
+        elk_config.vm.forward_port 8125,38125
+        elk_config.vm.forward_port 9000,39000
+    end
+end
