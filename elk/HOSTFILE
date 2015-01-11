@@ -1,2 +1,2 @@
-127.0.0.1 graphite grafana kibana
+127.0.0.1 graphite grafana kibana redis-commander
 

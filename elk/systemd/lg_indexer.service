@@ -1,0 +1,24 @@
+[Unit]
+Description=Logstash Indexer to Elasticsearch
+BindTo=network.target
+Requires=elasticsearch.service
+After=syslog.target
+After=network.target
+After=elasticsearch.service
+After=redis.service
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=forking
+User=root
+Group=root
+Environment="RUBYVER=1.9"
+Environment="RUBY=jruby"
+Environment="RUBY_JAR=/opt/logstash/vendor/jar/jruby-complete-1.7.11.jar"
+Environment="RUBYLIB=/opt/logstash/lib"
+Environment="GEM_HOME=/opt/logstash/vendor/bundle/jruby/1.9"
+ExecStart=/usr/local/sbin/daemonize -u root -o /opt/logstash/log/lg_indexer.log -e /opt/logstash/log/lg_indexer-error.log -c /opt/logstash /usr/bin/java -Xmx500m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -Djava.awt.headless=true -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -jar /opt/logstash/vendor/jar/jruby-complete-1.7.11.jar -I/opt/logstash/lib /opt/logstash/lib/logstash/runner.rb agent --config /opt/logstash/etc/indexer.conf   
+ExecStop=/bin/kill -TERM $MAINPID
+TimeoutSec=300
+

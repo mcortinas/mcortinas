@@ -1,7 +1,15 @@
-(x) relationships on systemd daemons
+(/) relationships on systemd daemons
+https://www.kernel.org/doc/Documentation/cgroups/cgroups.txt
+https://fedoraproject.org/wiki/Systemd
+
 (x) create custom redis script for diamond listen llen from diferent queues
+https://github.com/BrightcoveOS/Diamond/wiki/CustomCollectors
+
 (x) review deamonize installation
 (x) how to improve more threads to index from different redis queues 
+http://logstash.net/docs/1.4.2/inputs/redis#threads
+http://logstash.net/docs/1.4.2/outputs/elasticsearch#workers
+
 (x) kibana dashboard
 (x) grafana dashboard
 (x) stress benchmark

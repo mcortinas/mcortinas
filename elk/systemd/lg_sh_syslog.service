@@ -1,0 +1,28 @@
+[Unit]
+Description=Logstash Shipper from 514 TCP and UDP port
+BindTo=network.target
+Requires=elasticsearch.service
+After=syslog.target
+After=network.target
+After=rsyslog.service
+After=redis.service
+Requires=redis.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=forking
+User=root
+Group=root
+Environment="RUBYVER=1.9"
+Environment="RUBY=jruby"
+Environment="RUBY_JAR=/opt/logstash/vendor/jar/jruby-complete-1.7.11.jar"
+Environment="RUBYLIB=/opt/logstash/lib"
+Environment="GEM_HOME=/opt/logstash/vendor/bundle/jruby/1.9"
+#EnvironmentFile=-/etc/sysconfig/lg_sh_syslog
+#ExecStart=/usr/local/sbin/daemonize $FOO -u ${JAVA_USER} -o $JAVA_STDOUT -e ${JAVA_STDERR} $JAVA_APPDIR $JAVA_BIN $ARG1 $ARG2 $ARG3
+ExecStart=/usr/local/sbin/daemonize -u root -o /opt/logstash/log/lg_sh_syslog.log -e /opt/logstash/log/lg_sh_syslog-error.log -c /opt/logstash /usr/bin/java -Xmx500m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -Djava.awt.headless=true -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -jar /opt/logstash/vendor/jar/jruby-complete-1.7.11.jar -I/opt/logstash/lib /opt/logstash/lib/logstash/runner.rb agent --config /opt/logstash/etc/syslog_shipper.conf   
+ExecStop=/bin/kill -TERM $MAINPID
+TimeoutSec=300
+
