@@ -7,4 +7,6 @@ RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=acc
 RUN rpm -Uvh jdk-8u45-linux-x64.rpm
 RUN rm -f /root/jdk-8u45-linux-x64.rpm
 
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
