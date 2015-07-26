@@ -1,0 +1,31 @@
+# dpkg -l |grep -i elast
+ii  elasticsearch                   1.5.2                               Open Source, Distributed, RESTful Search Engine
+# java -version
+java version "1.8.0_45"
+Java(TM) SE Runtime Environment (build 1.8.0_45-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.45-b02, mixed mode)
+# uname -a
+Linux bcn1-cache-misc-009p1 3.2.0-70-generic #105-Ubuntu SMP Wed Sep 24 19:49:16 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+# curl -XGET "http://localhost:9200/_cluster/health?pretty=true"
+{
+  "cluster_name" : "my-cluster",
+  "status" : "green",
+  "timed_out" : false,
+  "number_of_nodes" : 9,
+  "number_of_data_nodes" : 9,
+  "active_primary_shards" : 84,
+  "active_shards" : 336,
+  "relocating_shards" : 0,
+  "initializing_shards" : 0,
+  "unassigned_shards" : 0,
+  "number_of_pending_tasks" : 0
+}
+# curl 'localhost:9200/_cat/indices'
+{"error":"NullPointerException[null]","status":500}
+#curl -XGET "localhost:9200/_all/_stats?pretty=true"
+{
+  "error" : "NullPointerException[null]",
+  "status" : 500
+}
+
+
