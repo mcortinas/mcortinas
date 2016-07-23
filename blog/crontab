@@ -1,0 +1,6 @@
+30 0,6,9,12,15,19,22 * * * /bin/systemctl restart httpd ; /bin/systemctl restart varnish ; sleep 30 ; wget --recursive --level=2 http://marc.cortinasval.cat/ --user-agent='Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)'
+0 3 * * * /bin/systemctl restart httpd ; /bin/systemctl restart varnish ; /bin/systemctl restart mariadb
+*/60 * * * * /usr/bin/monit monitor all
+0 4 * * 1 /bin/systemctl stop httpd; /usr/bin/mysqldump wordpress | /bin/gzip > /opt/backup/wordpres.week$(date +%W).sql.gz ; /bin/systemctl start httpd
+0 5 * * 1 /bin/systemctl stop httpd; /bin/tar cfz /opt/backup/wordpress.files.week$(date +%W).tar.gz /var/www/html/* ; /bin/systemctl start httpd
+30 5 * * * find /opt/backup/ -type f -mtime +45 -exec rm -rf {} \;
