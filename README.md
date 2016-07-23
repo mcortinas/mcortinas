@@ -4,13 +4,13 @@ Adding Personal Repository code and configurations
 
 ## Getting Started
 
- Try to sort all this data and update this file and blog link with every commit
+ Try to sort all this data and update this file and try add blog post on each important commit
 
 ## Content
 
 * ELK personal lab ,[more info here](https://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/)
 * Docker personal lab, CI with docker first lab  
-* Blog personal lab , settings on my AWF free year wordpress configuration 
+* Blog personal lab , settings on my AWS free year wordpress configuration 
 * Phantomas 2 graphite python script, [more info here] (https://github.com/macbre/phantomas/issues/381)
 
 
@@ -25,4 +25,6 @@ See also the personal blog [Personal - Blogsite](https://marc.cortinasval.cat/bl
  Personal license instead of any kind of MIT license 
 
 ## Acknowledgments
+ :)
+
 
