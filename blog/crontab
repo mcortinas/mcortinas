@@ -1,3 +1,5 @@
+# this is the crontasks due to maintain the blogsite healthy
+
 30 0,6,9,12,15,19,22 * * * /bin/systemctl restart httpd ; /bin/systemctl restart varnish ; sleep 30 ; wget --recursive --level=2 http://marc.cortinasval.cat/ --user-agent='Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)'
 0 3 * * * /bin/systemctl restart httpd ; /bin/systemctl restart varnish ; /bin/systemctl restart mariadb
 */60 * * * * /usr/bin/monit monitor all
