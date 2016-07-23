@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>One more technical blog in the net &#187; tmux</title>
+	<atom:link href="https://marc.cortinasval.cat/blog/tag/tmux-en/feed/" rel="self" type="application/rss+xml" />
+	<link>https://marc.cortinasval.cat/blog</link>
+	<description>it's flowing through my head...</description>
+	<lastBuildDate>Mon, 12 Jan 2015 08:16:14 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.1.1</generator>
+	<item>
+		<title>Tmux, the best choice!</title>
+		<link>https://marc.cortinasval.cat/blog/2013/11/29/tmux-the-best-choice/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/11/29/tmux-the-best-choice/#comments</comments>
+		<pubDate>Fri, 29 Nov 2013 09:11:05 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[console]]></category>
+		<category><![CDATA[iterm]]></category>
+		<category><![CDATA[screen]]></category>
+		<category><![CDATA[ssh2]]></category>
+		<category><![CDATA[terminal]]></category>
+		<category><![CDATA[terminator]]></category>
+		<category><![CDATA[tmux]]></category>
+		<category><![CDATA[tty]]></category>
+		<category><![CDATA[wemux]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=288</guid>
+		<description><![CDATA[We&#8217;re going to talk about terminal multiplexor! We&#8217;re talking about TMUX!! Few months ago each one on system&#8217;s department was starting working with this multiplexor terminal and we&#8217;re so satisfied , in fact, i&#8217;ve needed write this post! I also remember with nostalgy when I started to use &#8220;screen&#8221;, a very useful tool used to: [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>We&#8217;re going to talk about terminal multiplexor! We&#8217;re talking about TMUX!!</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif" alt="tmux_magento" width="620" height="538" class="aligncenter size-full wp-image-294" /></a></p>
+<p>Few months ago each one on system&#8217;s department was starting working with this multiplexor terminal and we&#8217;re so satisfied , in fact, i&#8217;ve needed write this post!</p>
+<p>I also remember with nostalgy when I started to use &#8220;screen&#8221;, a very useful tool used to:</p>
+<li> run long processes mixed the time command  ( /usr/bin/time &#8211;format=&#8221;%E %S %U %P&#8221; &#8211;output=&#8221;log file&#8221;) and the other &#8220;&#038;>>&#8221; can help us too much</li>
+<li>run critical processes such as new code deploy in production environment</li>
+<li>run scripts in unattended mode like a daemon, it can be the first step before to be demonized.</li>
+<li>to share scripts or processes with other collegues or resume jobs from differents working shifts</li>
+<p>Moreover, <a href="https://launchpad.net/terminator/+download" title="Terminator" target="_blank">Terminator(Linux)</a> and <a href="http://iterm.sourceforge.net" title="iTerm" target="_blank">iTerm(Mac)</a> has been the consoles used for simultaneous typing to arbitrary groups of terminals to do some tasks such as new code deployment or changes in configurations. Furthermore, you can arrange terminals in a grid for each tab, really useful!!!  </p>
+<p>If this iTerm/Terminator features are really useful, you can imagine combine with screen features, here we have TMUX!! a few weeks ago in a very rainy sunday afternoon i learned many functionalities and features customizing my work environment, it was so productivity, i recommend for any system administrator. </p>
+<p>here we go:</p>
+<li>use multiples tab, grouping by roles/environment the servers managed</li>
+<li>split each tab in a different panels</li>
+<li>send the same command or signal to all panels for a tab</li>
+<li>resize for each panel quickly</li>
+<li>shift from each panel or tab easily</li>
+<li>no need for X11, awesome!</li>
+<li>define the buffer size for each panel, you can </li>
+<li>customize profiles like a template where we define tab, panels, sizes and we can use it as script</li>
+<li>customize the shortcut for any action</li>
+<p>I&#8217;ve attached my tmux configuration profile (~/.tmux.conf), i&#8217;m going to comment my preferit parameters:<br />
+File: <a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux.conf_.txt">tmux.conf</a><br />
+Path: $HOME/.tmux.conf</p>
+<pre class="brush: plain; title: ; notranslate">
+# Alert on activity in any panel
+set -g visual-activity on
+# Set buffer size of any terminal in 10000 lines
+set -g buffer-limit 10000
+# C^B+r reload the tmux configuration without close/open tmux instances
+unbind r
+bind r source-file ~/.tmux.conf  \; display &quot;Reloaded!&quot;
+#C^B+a :(All) write or send signal simultaneously to all panels in a tab
+unbind a
+bind a setw synchronize-panes on
+# C^B+o :(One) write or send signal just one panel
+unbind o
+bind o setw synchronize-panes off
+# index panel and index tab start in 1, default is 0
+set -g base-index 1
+setw -g pane-base-index 1
+# Custom status bar
+# Powerline symbols: ⮂ ⮃ ⮀ ⮁ ⭤
+set -g status-utf8 on
+set -g status-left-length 32
+set -g status-right-length 150
+set -g status-interval 2
+
+set -g status-left '#[fg=colour15,bg=colour238,bold] #S #[fg=colour238,bg=colour234,nobold]⮀'
+set -g status-right '#[fg=colour245]⮃ %R ⮃ %d %b #[fg=colour254,bg=colour234,nobold]⮂#[fg=colour16,bg=colour254,bold] #h '
+set -g window-status-format &quot;#[fg=white,bg=colour234] #I #W &quot;
+set -g window-status-current-format &quot;#[fg=colour234,bg=colour39]⮀#[fg=colour16,bg=colour39,noreverse,bold] #I ⮁ #W #F #[fg=colour39,bg=colour234,nobold]⮀&quot;
+</pre>
+<p>Here you have a script to easily use it, very powerful in any emergency if you need manage several servers<br />
+<a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.sh_.txt">tmux_magento.sh</a><br />
+The previous gif I show us how can I launch the script, i&#8217;ve connected to 8 nodes with the same role (magenta web servers). As you can see my script add a new tmux tab and split it in 8 panells and connect each one to different node. For run this, you must run inside one tmux console.</p>
+<p>Finally, the sources i&#8217;ve read:<br />
+<a title="http://blog.sanctum.geek.nz/zooming-tmux-panes/" href="http://blog.sanctum.geek.nz/zooming-tmux-panes/" target="_blank">Zooming Tmux Panes</a><br />
+<a title="http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/" href="http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/" target="_blank">Simple Remote Pairing with Wemux</a><br />
+<a title="http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily" href="http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily" target="_blank">Splitting terminal with tmux</a><br />
+<a title="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" href="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" target="_blank">Tmux Documentation</a></p>
+<p>Projects Links:<br />
+<a title="http://tmux.sourceforge.net" href="http://tmux.sourceforge.net" target="_blank">Tmux Project</a><br />
+<a title="https://github.com/zolrath/wemux" href="https://github.com/zolrath/wemux">Wemux Project</a></p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/11/29/tmux-the-best-choice/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

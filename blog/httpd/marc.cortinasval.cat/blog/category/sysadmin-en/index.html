@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>SysAdmin | One more technical blog in the net</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link rel="profile" href="http://gmpg.org/xfn/11"/>
+<link rel="pingback" href="https://marc.cortinasval.cat/blog/xmlrpc.php"/>
+<link rel="alternate" type="application/rss+xml" title="One more technical blog in the net &raquo; Feed" href="https://marc.cortinasval.cat/blog/en/feed/"/>
+<link rel="alternate" type="application/rss+xml" title="One more technical blog in the net &raquo; Comments Feed" href="https://marc.cortinasval.cat/blog/en/comments/feed/"/>
+<link rel="alternate" type="application/rss+xml" title="One more technical blog in the net &raquo; SysAdmin Category Feed" href="https://marc.cortinasval.cat/blog/category/sysadmin-en/feed/"/>
+<link rel='stylesheet' id='gsc_style-css' href='https://marc.cortinasval.cat/blog/wp-content/plugins/google-custom-search/css/smoothness/jquery-ui.theme.min.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='gsc_style_search_bar-css' href='https://www.google.com/cse/style/look/minimalist.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='gsc_style_search_bar_more-css' href='https://marc.cortinasval.cat/blog/wp-content/plugins/google-custom-search/css/gsc.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_source_sans-css' href='//fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700%2C900&#038;ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_open_sans-css' href='//fonts.googleapis.com/css?family=Open+Sans%3A400%2C600&#038;ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_bootstrap_css-css' href='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/css/bootstrap.min.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_style-css' href='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/style.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='custom-style-css' href='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/css/custom.css?ver=4.1.1' type='text/css' media='all'/>
+<style id='custom-style-inline-css'>header,.widget_tag_cloud a:hover,.sticky-img,#primary-menu li ul li{background-color:#20b2aa}a:hover,#primary-menu li:hover a{color:#20b2aa}</style>
+<!-- This site uses the Google Analytics by Yoast plugin v5.3.3 - Universal enabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');__gaTracker('create','UA-26821552-3','auto');__gaTracker('set','forceSSL',true);__gaTracker('send','pageview');</script>
+<!-- / Google Analytics by Yoast -->
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/google-custom-search/js/gsc.js?ver=4.1.1'></script>
+<script src='https://www.google.com/jsapi?ver=4.1.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://marc.cortinasval.cat/blog/xmlrpc.php?rsd"/>
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://marc.cortinasval.cat/blog/wp-includes/wlwmanifest.xml"/>
+<meta name="generator" content="WordPress 4.1.1"/>
+<script>var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-0000000-0']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+<link rel="stylesheet" href="https://marc.cortinasval.cat/blog/wp-content/plugins/multi-column-tag-map/mctagmap.css?mctm_ver=12.0.4" type="text/css" media="screen"/>
+<!--[if lt IE 9]><script src="https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/js/html5shiv.js"></script><![endif]--><link rel="alternate" href="https://marc.cortinasval.cat/blog/category/sysadmin/" hreflang="ca"/>
+<link rel="alternate" href="https://marc.cortinasval.cat/blog/category/sysadmin-en/" hreflang="en"/>
+<style id="syntaxhighlighteranchor"></style>
+<script pagespeed_no_defer="">//<![CDATA[
+(function(){var c=encodeURIComponent,g=window,h="performance";g.pagespeed=g.pagespeed||{};var l=g.pagespeed,m=function(f,a,d,b){this.c=f;this.a=a;this.b=d;this.d=b};l.beaconUrl="";
+var n=function(f){var a=f.c,d=g.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf("?")?"?":"&"),a=a+"ets="+("load"==f.a?"load:":"unload:"),a=a+b;if("beforeunload"!=f.a||!g.mod_pagespeed_loaded){a+="&r"+f.a+"=";if(g[h]){var b=g[h].timing,e=b.navigationStart,k=b.requestStart,a=a+(b[f.a+"EventStart"]-e),a=a+("&nav="+(b.fetchStart-e)),a=a+("&dns="+(b.domainLookupEnd-b.domainLookupStart)),a=a+("&connect="+(b.connectEnd-b.connectStart)),a=a+("&req_start="+(k-e)),a=a+("&ttfb="+(b.responseStart-
+k)),a=a+("&dwld="+(b.responseEnd-b.responseStart)),a=a+("&dom_c="+(b.domContentLoadedEventStart-e));g[h].navigation&&(a+="&nt="+g[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:g.chrome&&g.chrome.loadTimes&&(e=Math.floor(1E3*g.chrome.loadTimes().firstPaintTime));e=e-k;0<=e&&(a+="&fp="+e)}else a+=b;l.getResourceTimingData&&g.parent==g&&(a+=l.getResourceTimingData());a+=g.parent!=g?"&ifr=1":"&ifr=0";"load"==f.a&&(g.mod_pagespeed_loaded=!0,(b=g.mod_pagespeed_num_resources_prefetched)&&(a+=
+"&nrp="+b),(b=g.mod_pagespeed_prefetch_start)&&(a+="&htmlAt="+(d-b)));l.panelLoader&&(d=l.panelLoader.getCsiTimingsString(),""!=d&&(a+="&b_csi="+d));l.criticalCss&&(d=l.criticalCss,a+="&ccis="+d.total_critical_inlined_size+"&cces="+d.total_original_external_size+"&ccos="+d.total_overhead_size+"&ccrl="+d.num_replaced_links+"&ccul="+d.num_unreplaced_links);""!=f.b&&(a+=f.b);document.referrer&&(a+="&ref="+c(document.referrer));a+="&url="+c(f.d);l.beaconUrl=a;(new Image).src=a}};
+l.e=function(f,a,d,b){var e=new m(f,a,d,b);g.addEventListener?g.addEventListener(a,function(){n(e)},!1):g.attachEvent("on"+a,function(){n(e)})};l.addInstrumentationInit=l.e;})();
+
+pagespeed.addInstrumentationInit('/mod_pagespeed_beacon', 'beforeunload', '', 'http://marc.cortinasval.cat/blog/category/sysadmin-en/');
+//]]></script></head>
+<body class="archive category category-sysadmin-en category-143">
+<header role="banner">
+<div id="top-bar" role="navigation">
+<div class="container">
+<div class="row">
+<div id="site-description" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+<p>it&#8217;s flowing through my head&#8230;</p>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6">
+<form id="header-search" role="search" class="search-form form-inline" action="https://marc.cortinasval.cat/blog/en/">
+<input type="search" class="search-field" value="" name="s"/>
+<button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div id="bot-bar" class="container">
+<div class="row">
+<div id="logo" class="col-md-12 col-lg-3">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a href="https://marc.cortinasval.cat/blog/en/" rel="home">One more technical blog in the net</a>
+</div>
+<div id="primary-menu" class="col-md-12 col-lg-9" role="navigation">
+<div class="collapse navbar-collapse">
+<ul id="menu-principal" class="menu"><li id="menu-item-10" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10"><a href="https://marc.cortinasval.cat/blog/category/sysadmin/">SysAdmin</a></li>
+<li id="menu-item-11" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11"><a href="https://marc.cortinasval.cat/blog/category/tecno/">Tecnologia</a></li>
+<li id="menu-item-12" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12"><a href="https://marc.cortinasval.cat/blog/category/varis/">Varis</a></li>
+<li id="menu-item-239-ca" class="lang-item lang-item-63 lang-item-ca menu-item menu-item-type-custom menu-item-object-custom menu-item-239-ca"><a href="https://marc.cortinasval.cat/blog/category/sysadmin/" hreflang="ca"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAIAAAD5gJpuAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAATBJREFUeNpUkU1LA0EMhpNViqWtVYrFj4OnulCoFNSbF3+Gtn9UvBSxoHgR9eRBD1Xbgyu0Ckt3MhMzMzvtGsLLSxieTBKkhxMIwczGmKJqrcUsVGJVqtQ5de8NsGbQwMTWKGaFTABqhb1X6uYVJ/295v5Z3kJIWgFZZXKpJDOmTAyUK/O7F0zvu3TYguW3BK883mUmaqxmCLXZYITj3m5j7QgKgTTP2Rac5U2kQ6U6e3zD39tO6aAB/4PNEs/G4qUC0fr7cIKfFzubpXbxdUSp6xDYwWOt/vM0wumwzd1mYbMWbMIAxjexY6gI6slVgh/n21vlOAzsYY7qNpNXSIHRXN1In8f4fR1Hx3FgEwek+72si4Rt78PaACWXU/watPyN/SH9dRfqT+69GHn5J8AAeJhkjAZrdt8AAAAASUVORK5CYII=" title="Català" alt="Català"/>&nbsp;Català</a></li>
+</ul>	</div>
+</div>
+</div>
+</div>
+</header>
+<div id="content" class="container"><div class="row" role="main">
+<div class="col-md-8">
+<article id="post-500" class="post-500 post type-post status-publish format-standard hentry category-sysadmin-en category-tecnologhy tag-acl tag-demo tag-haproxy-en tag-runtime">
+<h3 class="post-title"><a href="https://marc.cortinasval.cat/blog/2014/09/15/apply-acl-without-reload-all-configuration/" rel="bookmark">apply ACL without reload all configuration</a></h3><p>I was looking this afternoon for some workaround in web environment let me to modify an ACL (add or delete ip) without reload all configuration when I found haproxy with lucky!</p>
+<p><a href="http://comments.gmane.org/gmane.comp.web.haproxy/14764" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://comments.gmane.org/gmane.comp.web.haproxy/14764', 'Thierry FOURNIER told us this workaround here.');" title="read ACL to block ip's from file to prevent DDoS?" target="_blank">Thierry FOURNIER told us this workaround here.</a> He suggest us combine <a href="http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.1.2" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.1.2', 'ACL matching integers');" title="ACL matching integers">ACL matching integers</a> AND <a href="http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map', 'fetch data from map file');" title="Fetch data from map file">fetch data from map file</a>. </p>
+<pre class="brush: plain; title: ; notranslate" title="">
+frontend input-pool 0.0.0.0:8080
+        default_backend output-pool
+        ....
+        acl abuser src,map_ip_int(/etc/haproxy/abusers.lst,0) -m int eq 1
+        http-request tarpit if abuser
+
+backend output-pool 0.0.0.0:8080
+        balance roundrobin
+        server  app1_1 :81 cookie app1inst1 check inter 2000 rise 2 fall 5
+        server  app1_2 :80 cookie app1inst2 check inter 2000 rise 2 fall 5
+</pre>
+<p>Finally, we have to enable <a href="http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#3.1-stats%20socket" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#3.1-stats%20socket', 'socket stat');">socket stat</a> file launch these commands:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+## Block http request from 127.0.0.1
+echo &quot;add map /etc/haproxy/abusers.lst 127.0.0.1 1&quot; | socat - unix:/tmp/haproxy 
+## Allow http request from 127.0.0.1
+echo &quot;del map /etc/haproxy/abusers.lst 127.0.0.1 1&quot; | socat - unix:/tmp/haproxy
+</pre>
+<p>Also, this is another useful command</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+echo &quot;show stat&quot;| socat unix-connect:/tmp/haproxy stdio
+</pre>
+<p>I attached in this post a little gif with my testing this behavior in my vagrant lab.<br/>
+(Round robin balance is defined in virtual box instance running Ubuntu14 LTS, haproxy opens socket defined in 127.0.0.1:8080 balancing http requests to 127.0.0.1:81 and 127.0.0.1:80)<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/09/haproxy_acl_keymap.gif"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/09/haproxy_acl_keymap.gif" alt="demo acl dinamic map" width="620" height="538" class="aligncenter size-full wp-image-294"/></a></p>
+<p>Useful tool, <a href="http://www.dest-unreach.org/socat/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.dest-unreach.org/socat/', 'Socat');">Socat</a></p>
+<div class="post-meta clearfix post-meta-list">
+<p class="author-date">
+<span class="glyphicon glyphicon-user"></span> mcortinas
+<span class="glyphicon glyphicon-calendar"></span> September 15, 2014
+</p>
+<p class="post-tags"><span class="glyphicon glyphicon-tags"></span><a href="https://marc.cortinasval.cat/blog/tag/acl/">acl</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/demo/">demo</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/haproxy-en/">haproxy</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/runtime/">runtime</a> <span class="slash"> / </span></p>
+</div>
+</article>
+<hr class="post-divider"><article id="post-426" class="post-426 post type-post status-publish format-standard hentry category-sysadmin-en tag-akamai-en tag-amazon-en tag-aws-en tag-cloudfront-en tag-elasticserch-en tag-kibana-en tag-logstasgh-en tag-waf-en">
+<h3 class="post-title"><a href="https://marc.cortinasval.cat/blog/2014/03/05/kibana-help-us-to-analyze-cdn-logs/" rel="bookmark">Kibana help us to analyze CDN logs</a></h3><p>The logs analysis is too useful to know the state, understand the different behaviors and trends of every component in our platform. Furthermore it allow us fix mistakes, prevent failures and improve the product. Splunk has been the best solution that i has tested. The main disadvantage of Splunk is its price.</p>
+<p>Due to the high cost of Splunk I&#8217;ve chosen Kibana+Elastcisearch+Logstash to analyze logs from my company CDNs, such as Akamai and Amazon Cloudfront. The main goal of this post is show us an alternative workaround cheaper than the another one.</p>
+<p>Firstly, we’re going to import the Akamai logs, this is log format from official documentation:</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/waf_logformat.png"><img class="alignleft size-full wp-image-431" alt="waf_logformat" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/waf_logformat.png" width="1354" height="288"/></a></p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/apache_logformat.png"><img class="alignleft size-full wp-image-430" alt="apache_logformat" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/apache_logformat.png" width="1164" height="578"/></a></p>
+<p>This is the logstash filter:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+filter {
+    grok {
+      type =&gt; &quot;esw3c_waf&quot;
+      match =&gt; { &quot;message&quot; =&gt; &quot;%{IPORHOST:clientip} %{USER:ident} %{USER:auth} \[%{HTTPDATE:timestamp}\] (?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest}) %{NUMBER:response} (?:%{NUMBER:bytes}|-) %{QS:referrer} %{QS:agent} %{QS:cookies} \&quot;%{WORD:WafPolicy}\|%{DATA:WafAlertRules}\|%{DATA:WafDenyRules}\&quot;&quot; }
+    }
+
+    date {
+      type =&gt; &quot;esw3c_waf&quot;
+      match =&gt; [ &quot;timestamp&quot;, &quot;dd/MMM/yyyy:HH:mm:ss Z&quot; ]
+      locale =&gt; &quot;en&quot;
+    }
+
+}
+</pre>
+<p>Moreover, we can see Cloudfront log format <a title="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html#BasicDistributionFileFormat" href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html#BasicDistributionFileFormat" target="_blank"> here<br/>
+</a></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+#Fields: date time x-edge-location sc-bytes c-ip cs-method cs(Host) cs-uri-stem sc-status cs(Referer) cs(User-Agent) cs-uri-query cs(Cookie) x-edge-result-type x-edge-request-id x-host-header cs-protocol cs-bytes
+07/01/2012 01:13:11 FRA2 182 192.0.2.10 GET d111111abcdef8.cloudfront.net /view/my/file.html 200 www.displaymyfiles.com Mozilla/4.0%20(compatible;%20MSIE%205.0b1;%20Mac_PowerPC) - zip=98101 RefreshHit MRVMF7KydIvxMWfJIglgwHQwZsbG2IhRJ07sn9AkKUFSHS9EXAMPLE== d111111abcdef8.cloudfront.net http -
+</pre>
+<p>For one hand, logstash has got a S3 input type to read gzip log file directly from S3 bucket. For other hand, this is the filter applied:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+filter {
+    grok {
+    type =&gt; &quot;aws&quot;
+    pattern =&gt; &quot;%{DATE_EU:date}\t%{TIME:time}\t%{WORD:x-edge-location}\t(?:%{NUMBER:sc-bytes}|-)\t%{IPORHOST:c-ip}\t%{WORD:cs-method}\t%{HOSTNAME:cs-host}\t%{NOTSPACE:cs-uri-stem}\t%{NUMBER:sc-status}\t%{GREEDYDATA:referrer}\t%{GREEDYDATA:User-Agent}\t%{GREEDYDATA:cs-uri-stem}\t%{GREEDYDATA:cookies}\t%{WORD:x-edge-result-type}\t%{NOTSPACE:x-edge-request-id}\t%{HOSTNAME:x-host-header}\t%{URIPROTO:cs-protocol}\t%{INT:cs-bytes}&quot;
+}
+mutate {
+    type =&gt; &quot;aws&quot;
+        add_field =&gt; [ &quot;listener_timestamp&quot;, &quot;%{date} %{time}&quot; ]
+    }
+date {
+      type =&gt; &quot;aws&quot;
+      match =&gt; [ &quot;listener_timestamp&quot;, &quot;yy-MM-dd HH:mm:ss&quot; ]
+    }
+}
+</pre>
+<p>Also, I recommend enable <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html', 'LifeCycle');" title="Object Lifecycle" target="_blank">LifeCycle</a> in S3 Bucket to set the log&#8217;s purge, it increases so quick!</p>
+<p>Well, next step is install Elasticsearch 1.0, it has been released recently and i’m so proud because it was announced me by <a href="https://twitter.com/HonzaKral" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://twitter.com/HonzaKral', 'Honza Kral');" target="_blank">Honza Kral</a> in Fosdem’2014</p>
+<p>I want highlight two essential plugins that sysadmins will like it. The first one is <a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-plugins.html" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-plugins.html', 'HEAD');">HEAD</a> and the other one is <a href="http://www.elasticsearch.org/overview/marvel/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.elasticsearch.org/overview/marvel/', 'MARVEL');" title="Marvel" target="_blank">MARVEL</a>.</p>
+<p>HEAD plugin screenshot, 1 index for day/cdn<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/ElasticHead.png"><img class="alignleft size-full wp-image-445" alt="ElasticHead" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/ElasticHead.png" width="2498" height="1250"/></a></p>
+<p>Marvel plugin screenshot:<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/Marvel.png"><img class="alignleft size-full wp-image-446" alt="Marvel" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/Marvel.png" width="2372" height="1464"/></a></p>
+<p>These is a useful links:<br/>
+&#8211; <a href="https://github.com/logstash/logstash/tree/v1.3.3/patterns." onclick="__gaTracker('send', 'event', 'outbound-article', 'https://github.com/logstash/logstash/tree/v1.3.3/patterns.', 'GROK patterns list');" title="Llista de patrons GROK disponibles " target="_blank">GROK patterns list</a><br/>
+&#8211; <a href="http://grokdebug.herokuapp.com" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://grokdebug.herokuapp.com', 'Tool to build expressions');" title="Eina per construir les configuracions" target="_blank">Tool to build expressions</a></p>
+<p>Finally, we use <a href="http://www.elasticsearch.org/overview/kibana/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.elasticsearch.org/overview/kibana/', 'Kibana');" title="Kibana" target="_blank">Kibana</a> to create reports and charts, a Javascript application reads data from Elasticsearch instance. My first step was create two basic dashboard.</p>
+<p>AWS Cloudfront Dashboard<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/CloudfrontDashboard.png"><img class="alignleft size-full wp-image-448" alt="CloudfrontDashboard" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/CloudfrontDashboard.png" width="2498" height="1200"/></a></p>
+<p>Akamai Dashboard<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/AkamaiDashboard.png"><img class="alignleft size-full wp-image-450" alt="AkamaiDashboard" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/AkamaiDashboard.png" width="2554" height="1600"/></a></p>
+<div class="post-meta clearfix post-meta-list">
+<p class="author-date">
+<span class="glyphicon glyphicon-user"></span> mcortinas
+<span class="glyphicon glyphicon-calendar"></span> March 5, 2014
+</p>
+<p class="post-tags"><span class="glyphicon glyphicon-tags"></span><a href="https://marc.cortinasval.cat/blog/tag/akamai-en/">akamai</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/amazon-en/">amazon</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/aws-en/">aws</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/cloudfront-en/">cloudfront</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/elasticserch-en/">elasticserch</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/kibana-en/">kibana</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/logstasgh-en/">logstasgh</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/waf-en/">waf</a> <span class="slash"> / </span></p>
+</div>
+</article>
+<hr class="post-divider"><article id="post-331" class="post-331 post type-post status-publish format-standard hentry category-sysadmin-en category-tecnologhy tag-balance-en tag-centos-en tag-corosync-en tag-ha-en tag-haproxy-en tag-http-en tag-https-en tag-nginx-en tag-pacemaker-en tag-vmware-en">
+<div class="sticky-txt "><span class="glyphicon glyphicon-star"></span> Featured Post</div>
+<h3 class="post-title"><a href="https://marc.cortinasval.cat/blog/2013/12/04/a-cheap-web-balancer-nginxhaproxypacemaker/" rel="bookmark">A cheap web balancer: Nginx+haproxy+pacemaker</a></h3><p>I’m going to explain you how can you mount a too cheap and efficient web balancer, I’ve rolled out in productive and non-productive environments publishing all the web applications of multiples environments from continuos integration. I&#8217;ve used this solution in our productive environment after I had done benchmarks tests with “ab” and “siege” tool, but i will explain the tuning parameters and these benchmark tests in other post.</p>
+<p> I’ve published all website for all environments dividing the main domain into a several subdomains<br/>
+(p.e.: example.com) such as dev01.example.com, int01.example.com, test01.example.com, pre.example.com, etc…</p>
+<p>Furthermore, in production environments we can use this segmentation splitting by countries (es.example.com, it.groupalia.com,…), platforms (m.example.com,…) or content type (static.example.com,…)</p>
+<p>The list of the main goals:</p>
+<li>Low cost: I&#8217;ve used open source technologies such as centOS, Nginx, Haproxy, Pacemaker, Corosync..</li>
+<li>High availability: I&#8217;ve used virtualization technologies with HA feature enabled where virtual machines are running in different physicals machines, we have also high availability in service level through pacemaker+corosync daemons</li>
+<li>SSL offloading, we centralize all httpS negotiation by nginx daemon, after that, all traffic rear nginx is plain http</li>
+<li>Flexibility and control: haproxy bring us customize the balance algorithm to analyze load averages, free memory, connection status to databases, etc&#8230;</li>
+<li>Security: we might use diferents virtual lans, all traffic between each one is filtered by firewall and we use httpS protocol in secure http transactions</li>
+<p>We use this list technologies: Nginx,Haproxy, Pacemaker, Corosync.<br/>
+Look at the diagram of this solution:<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB.png"><img class="size-medium wp-image-64 aligncenter" alt="fisicalLB" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB-300x203.png" width="300" height="203"/></a></p>
+<p>I explain this shortly, i just describe all components.<br/>
+Firstly, the browsers request content to CDN or our origins. Then, all requests come in to our origin filtered by firewall. One time traffic is filtered it goes to nginx, this split it by domain and do httpS negotiation. Then traffic is sended to haproxy, this balance all traffic to differents web servers. I’m going to secure all this infrastructure, we define 3 virtual lans, dmz, frontend and backend. All this traffic is filtered by firewall. Two virtual machines running CentOs will be deployed in DMZ, this machines are going to run Nginx and Haproxy in active-passive mode using pacemaker-corosync to manage this behavior. Web servers will be deployed in frontend vlan and databases and shared filesystems such as mysql, postgre, cassandra, mongo, cifs, hfs, nfs, etc.. will be deployed in backend vlan.</p>
+<p>I try to explain better using just one environment in this example, int01.example.com. I’ll describe up to down. This will be a little bit more technical explanation. Maybe, I hope this diagram help you to understand easier the architecture<br/>
+<div id="attachment_68" style="width: 310px" class="wp-caption aligncenter"><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional.png" target="_blank"><img class="size-medium wp-image-68 " title="Diagrama Lògic" alt="Diagrama Lògic" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional-300x179.png" width="300" height="179"/></a><p class="wp-caption-text">Diagrama Lògic</p></div></p>
+<p>First of all, in DMZ vlan will be running nginx and haproxy with 2 virtual ip pools, one pool for each one. I’ve rolled out in vmware virtual infrastructure but you can do this using more cheapers solutions like Xenserver, KVM, etc… Tip: you must check each virtual machine is running in different physical machine, we need add this rule in our virtual infrastructure. The request come in nginx daemon running as a reverse proxy splitting traffic using multiples virtual hosts. Furthermore, nginx will do the httpS negotiation and will use plain http protocol to transfer traffic to haproxy adding HTTP header when transaction was httpS originally. Apache will recognize this http header and we&#8217;ll set the properly variable to mask it to application.<br/>
+Tip: We use a SSL certificate using wildcard in the Common-Name, it will be easier to manage this.<br/>
+Other Tip: set the properly parameters in this equation: max_clients=worker_processes * worker_connections / 4.</p>
+<p>All web traffic has splitted by nginx and transfered to haproxy. We will define a pool of “upstream” in haproxy parameter, one pool for each environment. Haproxy let us to select the best balance algorithm, i use Round Robin commonly. We also define ip ranges for every environment.<br/>
+Tip: we must define too large ip ranges, where we have many free ip, if we have performance troubles this bring us to deploy more front servers without restart haproxy daemon.<br/>
+In this example, haproxy will check the health status of any web server, haproxy will request a php script whose return will be the string &#8220;OK&#8221; only if node have a properly load average, all connections to each database is successfully and it has free memory. Note that haproxy also bring us to do sticky balancers analyzing HTTP headers like these: JSESSIONID in Java apps, PHPSESSID in PHP apps, ASPSESSIONID in ASP apps. Tip: You must to know each request need about 17KB and you will can define maxconn parameter.</p>
+<p>Finally, varnish-cache instance receives all requests in each server, the non-cacheable content and caducated content are requested to Apache in the same node, but i know these daemons need a special explanation, i will explain us in other post.</p>
+<p>Look at the configurations files below.<br/>
+Nginx configuration:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+....
+upstream http-example-int01 {
+    server lb2-vip.example.com:8080;
+    keepalive 16;
+}
+server {
+        listen lb1-vip.example.com:80;
+    server_name int01.example.com ~^.*-int01\.example\.com$;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host;
+                proxy_pass http://http-example-int01/;
+                proxy_redirect off;
+        }
+}
+server {
+        listen lb1-vip.example.com:443 ssl;
+    server_name int01.example.com ~^.*-int01\.example\.com$;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/crt/concat.pem;
+        ssl_certificate_key /etc/nginx/ssl/key/example.key;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto https;
+                proxy_set_header Host $host;
+                proxy_pass http://http-example-int01/;
+                proxy_redirect off;
+        }
+}
+....
+</pre>
+<p>Haproxy configuration</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+...
+frontend example-int01 lb2-vip.grpprod.com:8080
+    default_backend example-int01
+backend  example-int01
+        option forwardfor
+        option httpchk GET /healthcheck.php
+        http-check expect string OK
+        server  web01 x.y.z.w:80 check inter 2000 fall 3
+        server  web02 x.y.z.w:80 check inter 2000 fall 3
+        server  web03 x.y.z.w:80 check inter 2000 fall 3
+        server  web04 x.y.z.w:80 check inter 2000 fall 3
+        server  web05 x.y.z.w:80 check inter 2000 fall 3
+...
+</pre>
+<p>Apache configuration</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+
+ ServerName int01.example.com
+    DocumentRoot &quot;/srv/www/example/fa-front/public&quot;
+
+   &lt;Directory &quot;/srv/www/example/fa-front/public&quot;&gt;
+      Options -Indexes FollowSymLinks
+      AllowOverride None
+      Allow from All
+      Order Allow,Deny
+      RewriteEngine On
+      RewriteCond %{HTTP:X-Forwarded-Proto} https
+      RewriteRule .* - [E=HTTPS:on]
+
+      RewriteCond %{REQUEST_FILENAME} -s [OR]
+      RewriteCond %{REQUEST_FILENAME} -l [OR]
+      RewriteCond %{REQUEST_FILENAME} -d
+      RewriteRule ^.*$ - [NC,L]
+      RewriteRule ^.*$ index.php [NC,L]
+
+   SetEnv APPLICATION_ENV int01
+   DirectoryIndex index.php
+
+   LogFormat &quot;%v %{Host}i %h %l %u %t \&quot;%r\&quot; %&gt;s %b %{User-agent}i&quot; marc.int01
+   CustomLog /var/log/httpd/cloud-example-front.log example
+
+</pre>
+<p>Pacemaker configuration</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+node balance01
+node balance02
+primitive nginx lsb:nginx \
+        op monitor interval=&quot;1s&quot; \
+        meta target-role=&quot;Started
+primitive haproxy lsb:haproxy \
+        op monitor interval=&quot;1s&quot; \
+        meta target-role=&quot;Started&quot;
+primitive lb1-vip ocf:heartbeat:IPaddr2 \
+        params ip=&quot;x.x.x.x&quot; iflabel=&quot;nginx-vip&quot; cidr_netmask=&quot;32&quot; \
+        op monitor interval=&quot;1s&quot;
+primitive lb2-vip ocf:heartbeat:IPaddr2 \
+        params ip=&quot;y.y.y.y&quot; iflabel=&quot;haproxy-vip&quot; cidr_netmask=&quot;32&quot; \
+        op monitor interval=&quot;1s&quot;
+group haproxy_cluster lb2-vip haproxy \
+        meta target-role=&quot;Started&quot;
+group nginx_cluster lb1-vip  nginx \
+        meta target-role=&quot;Started&quot;
+property $id=&quot;cib-bootstrap-options&quot; \
+        dc-version=&quot;1.1.7-6.el6-148fccfd5985c5590cc601123c6c16e966b85d14&quot; \
+        cluster-infrastructure=&quot;openais&quot; \
+        expected-quorum-votes=&quot;2&quot; \
+        stonith-enabled=&quot;false&quot; \
+        last-lrm-refresh=&quot;1355137974&quot; \
+        no-quorum-policy=&quot;ignore&quot;
+rsc_defaults $id=&quot;rsc-options&quot; \
+        resource-stickiness=&quot;100&quot;
+</pre>
+<div class="post-meta clearfix post-meta-list">
+<p class="author-date">
+<span class="glyphicon glyphicon-user"></span> mcortinas
+<span class="glyphicon glyphicon-calendar"></span> December 4, 2013
+</p>
+<p class="post-tags"><span class="glyphicon glyphicon-tags"></span><a href="https://marc.cortinasval.cat/blog/tag/balance-en/">balance</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/centos-en/">centos</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/corosync-en/">corosync</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/ha-en/">ha</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/haproxy-en/">haproxy</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/http-en/">http</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/https-en/">https</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/nginx-en/">nginx</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/pacemaker-en/">pacemaker</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/vmware-en/">vmware</a> <span class="slash"> / </span></p>
+</div>
+</article>
+<hr class="post-divider"><article id="post-288" class="post-288 post type-post status-publish format-standard hentry category-sysadmin-en category-tecnologhy tag-console-en tag-iterm-en tag-screen-en tag-ssh2-en tag-terminal-en tag-terminator-en tag-tmux-en tag-tty-en tag-wemux-en">
+<h3 class="post-title"><a href="https://marc.cortinasval.cat/blog/2013/11/29/tmux-the-best-choice/" rel="bookmark">Tmux, the best choice!</a></h3><p>We&#8217;re going to talk about terminal multiplexor! We&#8217;re talking about TMUX!!</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif" alt="tmux_magento" width="620" height="538" class="aligncenter size-full wp-image-294"/></a></p>
+<p>Few months ago each one on system&#8217;s department was starting working with this multiplexor terminal and we&#8217;re so satisfied , in fact, i&#8217;ve needed write this post!</p>
+<p>I also remember with nostalgy when I started to use &#8220;screen&#8221;, a very useful tool used to:</p>
+<li> run long processes mixed the time command ( /usr/bin/time &#8211;format=&#8221;%E %S %U %P&#8221; &#8211;output=&#8221;log file&#8221;) and the other &#8220;&#038;>>&#8221; can help us too much</li>
+<li>run critical processes such as new code deploy in production environment</li>
+<li>run scripts in unattended mode like a daemon, it can be the first step before to be demonized.</li>
+<li>to share scripts or processes with other collegues or resume jobs from differents working shifts</li>
+<p>Moreover, <a href="https://launchpad.net/terminator/+download" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://launchpad.net/terminator/+download', 'Terminator(Linux)');" title="Terminator" target="_blank">Terminator(Linux)</a> and <a href="http://iterm.sourceforge.net" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://iterm.sourceforge.net', 'iTerm(Mac)');" title="iTerm" target="_blank">iTerm(Mac)</a> has been the consoles used for simultaneous typing to arbitrary groups of terminals to do some tasks such as new code deployment or changes in configurations. Furthermore, you can arrange terminals in a grid for each tab, really useful!!! </p>
+<p>If this iTerm/Terminator features are really useful, you can imagine combine with screen features, here we have TMUX!! a few weeks ago in a very rainy sunday afternoon i learned many functionalities and features customizing my work environment, it was so productivity, i recommend for any system administrator. </p>
+<p>here we go:</p>
+<li>use multiples tab, grouping by roles/environment the servers managed</li>
+<li>split each tab in a different panels</li>
+<li>send the same command or signal to all panels for a tab</li>
+<li>resize for each panel quickly</li>
+<li>shift from each panel or tab easily</li>
+<li>no need for X11, awesome!</li>
+<li>define the buffer size for each panel, you can </li>
+<li>customize profiles like a template where we define tab, panels, sizes and we can use it as script</li>
+<li>customize the shortcut for any action</li>
+<p>I&#8217;ve attached my tmux configuration profile (~/.tmux.conf), i&#8217;m going to comment my preferit parameters:<br/>
+File: <a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux.conf_.txt">tmux.conf</a><br/>
+Path: $HOME/.tmux.conf</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+# Alert on activity in any panel
+set -g visual-activity on
+# Set buffer size of any terminal in 10000 lines
+set -g buffer-limit 10000
+# C^B+r reload the tmux configuration without close/open tmux instances
+unbind r
+bind r source-file ~/.tmux.conf  \; display &quot;Reloaded!&quot;
+#C^B+a :(All) write or send signal simultaneously to all panels in a tab
+unbind a
+bind a setw synchronize-panes on
+# C^B+o :(One) write or send signal just one panel
+unbind o
+bind o setw synchronize-panes off
+# index panel and index tab start in 1, default is 0
+set -g base-index 1
+setw -g pane-base-index 1
+# Custom status bar
+# Powerline symbols: ⮂ ⮃ ⮀ ⮁ ⭤
+set -g status-utf8 on
+set -g status-left-length 32
+set -g status-right-length 150
+set -g status-interval 2
+
+set -g status-left '#[fg=colour15,bg=colour238,bold] #S #[fg=colour238,bg=colour234,nobold]⮀'
+set -g status-right '#[fg=colour245]⮃ %R ⮃ %d %b #[fg=colour254,bg=colour234,nobold]⮂#[fg=colour16,bg=colour254,bold] #h '
+set -g window-status-format &quot;#[fg=white,bg=colour234] #I #W &quot;
+set -g window-status-current-format &quot;#[fg=colour234,bg=colour39]⮀#[fg=colour16,bg=colour39,noreverse,bold] #I ⮁ #W #F #[fg=colour39,bg=colour234,nobold]⮀&quot;
+</pre>
+<p>Here you have a script to easily use it, very powerful in any emergency if you need manage several servers<br/>
+<a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.sh_.txt">tmux_magento.sh</a><br/>
+The previous gif I show us how can I launch the script, i&#8217;ve connected to 8 nodes with the same role (magenta web servers). As you can see my script add a new tmux tab and split it in 8 panells and connect each one to different node. For run this, you must run inside one tmux console.</p>
+<p>Finally, the sources i&#8217;ve read:<br/>
+<a href="http://blog.sanctum.geek.nz/zooming-tmux-panes/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://blog.sanctum.geek.nz/zooming-tmux-panes/', 'Zooming Tmux Panes');" title="http://blog.sanctum.geek.nz/zooming-tmux-panes/" target="_blank">Zooming Tmux Panes</a><br/>
+<a href="http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/', 'Simple Remote Pairing with Wemux');" title="http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/" target="_blank">Simple Remote Pairing with Wemux</a><br/>
+<a href="http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily', 'Splitting terminal with tmux');" title="http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily" target="_blank">Splitting terminal with tmux</a><br/>
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1', 'Tmux Documentation');" title="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" target="_blank">Tmux Documentation</a></p>
+<p>Projects Links:<br/>
+<a href="http://tmux.sourceforge.net" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://tmux.sourceforge.net', 'Tmux Project');" title="http://tmux.sourceforge.net" target="_blank">Tmux Project</a><br/>
+<a href="https://github.com/zolrath/wemux" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://github.com/zolrath/wemux', 'Wemux Project');" title="https://github.com/zolrath/wemux">Wemux Project</a></p>
+<div class="post-meta clearfix post-meta-list">
+<p class="author-date">
+<span class="glyphicon glyphicon-user"></span> mcortinas
+<span class="glyphicon glyphicon-calendar"></span> November 29, 2013
+</p>
+<p class="post-tags"><span class="glyphicon glyphicon-tags"></span><a href="https://marc.cortinasval.cat/blog/tag/console-en/">console</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/iterm-en/">iterm</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/screen-en/">screen</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/ssh2-en/">ssh2</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/terminal-en/">terminal</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/terminator-en/">terminator</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/tmux-en/">tmux</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/tty-en/">tty</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/wemux-en/">wemux</a> <span class="slash"> / </span></p>
+</div>
+</article>
+<hr class="post-divider"><article id="post-240" class="post-240 post type-post status-publish format-standard hentry category-sysadmin-en category-tecnologhy tag-berryboot-en tag-mysql-en tag-nginx-en tag-php-fpm-en tag-pluguins-en tag-raspberrypi-en tag-raspbian-en tag-widgets-en tag-wordpress-en">
+<h3 class="post-title"><a href="https://marc.cortinasval.cat/blog/2013/11/20/wordpress-running-on-raspberrypi/" rel="bookmark">WordPress running on RaspberryPi</a></h3><p>This is my first post in my fresh wordpress installation. Just now i&#8217;ve finished installing wordpress and i&#8217;m going to collect all steps. I&#8217;ve selected install Debian as operating system, then i use nginx, php-fpm and mysql daemons for running wordpress. This are all steps:</p>
+<ul>
+<ul>
+<li>I had installed berryboot in SD card, and then i installed debian as a operative system. <a href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=12776" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.raspberrypi.org/phpBB3/viewtopic.php?t=12776', 'More info in this link');" target="_blank">More info in this link</a></span></li>
+<li>You must run &#8220;apt-get update&#8221; to update the repository source and i&#8217;ve installed my favourite editor.</li>
+<li>I&#8217;ve installed all daemons needed:</li>
+</ul>
+</ul>
+<pre class="brush: plain; title: ; notranslate" title="">
+$sudo apt-get install nginx php5-fpm php5-cgi php5-cli php5-common php5-curl php5-gd php5-mcrypt php5-mysql mysql-server
+</pre>
+<ul>
+<li><span style="line-height: 1.714285714; font-size: 1rem;">Set php-fpm to work with nginx daemons, for that we will use a socket unix file to communicate to nginx daemons, and then we can configure nginx virtual host and set a specific global variable from php.</span></li>
+</ul>
+<p>File: /etc/nginx/sites-available/marc.cortinasval.cat</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+server {
+        listen   80; ## listen for ipv4; this line is default and implied
+        root /usr/share/nginx/www;
+        index index.php;
+        server_name marc.cortinasval.cat;
+        location / {
+                rewrite  ^/?$  /blog/  redirect;
+                try_files $uri $uri/ /index.php;
+        }
+        location /blog/ {
+                try_files $uri $uri/ /blog/index.php?$args;
+        }
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+        location ~ /\.ht {
+                deny all;
+        }
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+                expires max;
+                log_not_found off;
+        }
+}
+</pre>
+<p>We must check the php5-fpm is listening in the properly unix file</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+$ grep listen /etc/php5/fpm/pool.d/www.conf
+listen = /var/run/php5-fpm.sock
+</pre>
+<p>Finally, we modify the cgi.fix_pathinfo to 0 in the file /etc/php5/fpm/php.ini</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+$grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
+cgi.fix_pathinfo=0
+</pre>
+<ul>
+<li>Firstly install the php files, then prepare the mysql database and finally set database credentials.</span></li>
+</ul>
+<p>Download wordpress installation files and unzip.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+$ cd /usr/share/nginx/www/
+$ wget http://wordpress.org/latest.zip
+$ unzip latest.zip
+$ mv wordpress blog
+$ rm latest.zip
+</pre>
+<p>We prepare mysql database:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+mysql&gt; CREATE DATABASE wordpress;
+Query OK, 1 row affected (6.58 sec)
+mysql&gt; GRANT ALL PRIVILEGES ON wordpress.* TO &quot;wordpress&quot;@&quot;localhost&quot;IDENTIFIED BY &quot;wordpress&quot;;
+Query OK, 0 rows affected (0.01 sec)
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.02 sec)
+mysql&gt; exit;
+Bye
+</pre>
+<p>Set database credentials in wordpress application</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+cp wp-config-sample.php wp-config.php
+vim wp-config.php
+</pre>
+<p>File /usr/share/nginx/www/blog/wp-config.php</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+/** The name of the database for WordPress */
+define('DB_NAME', 'wordpress');
+/** MySQL database username */
+define('DB_USER', 'wordpress');
+/** MySQL database password */
+define('DB_PASSWORD', 'wordpress');
+/** MySQL hostname */
+define('DB_HOST', 'localhost');
+</pre>
+<p>Fix permissions in files and restart all daemons</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+$sudo chown -R www-data.www-data /usr/share/nginx/www/
+$sudo service nginx restart 
+$sudo service php5-fpm restart
+</pre>
+<p>Open any browser and you can do the first http request, then you can see the installation wizard is triggered.<br/>
+Set admin blog credentials and the wizard creates mysql data structure. </p>
+<p>I recommend you use url friendlies, it can increase the user experience, for example this url: http://marc.cortinasval.cat/blog/index.php/2013/03/wordpress-en-raspberry-pi<br/>
+For that, we add this lines in nginx virtual host configuration.<br/>
+File: /etc/nginx/sites-available/marc.cortinasval.cat</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+...
+        location /blog/ {
+                try_files $uri $uri/ /blog/index.php?$args;
+        }
+...
+</pre>
+<ul>
+<li>Finally, add and set the wordpress pluggins, i&#8217;ve listed the plugging i like it.</span></li>
+</ul>
+<p>SyntaxHighlighter Evolved<br/>
+WP to Twitter<br/>
+NextScripts: Social Networks Auto-Poster<br/>
+Author Spotlight (Widget)<br/>
+ExtraWatch Live Stats and Visitor Counter FREE<br/>
+Google Analytics<br/>
+Google Analytics for WordPress<br/>
+Social Login for wordpress<br/>
+User Photo</p>
+<ul>
+<li>Create categories and define menu tabs</li>
+<li>Select, download and install any theme and add the menu</li>
+</ul>
+<p>I write this first post and my blog is ready to collect my technical experiences!!!</p>
+<div class="post-meta clearfix post-meta-list">
+<p class="author-date">
+<span class="glyphicon glyphicon-user"></span> mcortinas
+<span class="glyphicon glyphicon-calendar"></span> November 20, 2013
+</p>
+<p class="post-tags"><span class="glyphicon glyphicon-tags"></span><a href="https://marc.cortinasval.cat/blog/tag/berryboot-en/">berryboot</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/mysql-en/">mysql</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/nginx-en/">nginx</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/php-fpm-en/">php-fpm</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/pluguins-en/">pluguins</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/raspberrypi-en/">raspberrypi</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/raspbian-en/">raspbian</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/widgets-en/">widgets</a> <span class="slash"> / </span><a href="https://marc.cortinasval.cat/blog/tag/wordpress-en/">wordpress</a> <span class="slash"> / </span></p>
+</div>
+</article>
+<hr class="post-divider">	<div class="page-links"></div>	</div>
+<div id="primary-sidebar" class="col-md-4">
+<aside id="gsc-widget-2" class="widget google custom search"><hr> <div id="cse-search-form72" style="width: 100%;">Loading</div>
+<script>google.load('search','1',{language:'en_US'});google.setOnLoadCallback(function(){var customSearchControl=new google.search.CustomSearchControl('');customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);var options=new google.search.DrawOptions();options.setSearchFormRoot('cse-search-form72');options.setAutoComplete(true);customSearchControl.draw('dialog',options);customSearchControl.setSearchCompleteCallback(this,CallBackDisplayDialog);},true);function CallBackDisplayDialog(result){jQuery('#dialog').dialog('open');}</script>
+<!-- open dialog. For debug purposes
+                    <p><a href="#" id="dialog_link" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a></p>
+            -->
+<div id="dialog" title="Search Results">
+<p></p>
+</div>
+</aside>	<aside id="recent-posts-2" class="widget widget_recent_entries"><hr>	<h4>Recent Posts</h4>	<ul>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2014/09/15/apply-acl-without-reload-all-configuration/">apply ACL without reload all configuration</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2014/03/05/kibana-help-us-to-analyze-cdn-logs/">Kibana help us to analyze CDN logs</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2013/12/04/a-cheap-web-balancer-nginxhaproxypacemaker/">A cheap web balancer: Nginx+haproxy+pacemaker</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2013/11/29/tmux-the-best-choice/">Tmux, the best choice!</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2013/11/20/wordpress-running-on-raspberrypi/">WordPress running on RaspberryPi</a>
+</li>
+</ul>
+</aside><aside id="linkcat-0" class="widget widget_links"><hr><h4>Bookmarks</h4>
+<ul class='xoxo blogroll'>
+<li><a href="http://www.cloudadmins.org/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.cloudadmins.org/', 'Cloudadmins');" title="News about building cloud-ready infrastructures">Cloudadmins</a></li>
+<li><a href="http://www.tomas.cat/blog/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.tomas.cat/blog/', 'El blog d&#039;en Tomas');">El blog d&#039;en Tomas</a></li>
+<li><a href="http://maauso.com/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://maauso.com/', 'El blog de Miguel');">El blog de Miguel</a></li>
+<li><a href="http://www.entredevyops.es/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.entredevyops.es/', 'Entre Dev y Ops');">Entre Dev y Ops</a></li>
+<li><a href="http://highscalability.com/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://highscalability.com/', 'High Scability');">High Scability</a></li>
+<li><a href="https://groups.google.com/forum/?hl=es#!forum/puppet-users-barcelona" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://groups.google.com/forum/?hl=es#!forum/puppet-users-barcelona', 'Puppet Users BCN');">Puppet Users BCN</a></li>
+</ul>
+</aside>
+<aside id="meta-3" class="widget widget_meta"><hr><h4>Admin</h4>	<ul>
+<li><a href="https://marc.cortinasval.cat/blog/wp-login.php">Log in</a></li>
+<li><a href="https://marc.cortinasval.cat/blog/en/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="https://marc.cortinasval.cat/blog/en/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>	</ul>
+</aside></div></div>
+</div>
+<footer>
+<div id="footer-bottom">
+<div class="container">
+<div class="row">
+<div id="footer-meta" class="col-md-9">
+<p>&copy; <a id="footer-site" href="https://marc.cortinasval.cat/blog/en" title="One more technical blog in the net">One more technical blog in the net</a></p>
+</div>
+<div id="footer-credit" class="col-md-3">
+<p><a href="http://www.wpmultiverse.com/themes/franklin/" title="Franklin WordPress Theme">Franklin Theme</a></p>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9b'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain.js?ver=3.0.9b'></script>
+<script>(function(){var corecss=document.createElement('link');var themecss=document.createElement('link');var corecssurl="https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";if(corecss.setAttribute){corecss.setAttribute("rel","stylesheet");corecss.setAttribute("type","text/css");corecss.setAttribute("href",corecssurl);}else{corecss.rel="stylesheet";corecss.href=corecssurl;}document.getElementsByTagName("head")[0].insertBefore(corecss,document.getElementById("syntaxhighlighteranchor"));var themecssurl="https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9b";if(themecss.setAttribute){themecss.setAttribute("rel","stylesheet");themecss.setAttribute("type","text/css");themecss.setAttribute("href",themecssurl);}else{themecss.rel="stylesheet";themecss.href=themecssurl;}document.getElementsByTagName("head")[0].insertBefore(themecss,document.getElementById("syntaxhighlighteranchor"));})();SyntaxHighlighter.config.strings.expandSource='+ expand source';SyntaxHighlighter.config.strings.help='?';SyntaxHighlighter.config.strings.alert='SyntaxHighlighter\n\n';SyntaxHighlighter.config.strings.noBrush='Can\'t find brush for: ';SyntaxHighlighter.config.strings.brushNotHtmlScript='Brush wasn\'t configured for html-script option: ';SyntaxHighlighter.defaults['pad-line-numbers']=false;SyntaxHighlighter.defaults['toolbar']=false;SyntaxHighlighter.all();</script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/core.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/widget.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/mouse.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/resizable.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/draggable.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/button.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/position.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/js/bootstrap.min.js?ver=3.1.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/js/franklin.js?ver=1.0'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/multi-column-tag-map/mctagmap.js?mctm_ver=12.0.4&#038;ver=1'></script>
+<script>if(typeof console==='object'){console.log('[BEGIN WordPress HTTPS Debug Log]');console.log('Version: 3.3.6');console.log('HTTP URL: http://marc.cortinasval.cat/blog/');console.log('HTTPS URL: https://marc.cortinasval.cat/blog/');console.log('SSL: Yes');console.log('Diff Host: No');console.log('Subdomain: Yes');console.log('Proxy: Yes');console.log('Secure External URLs: [ https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=64&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D64&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=26&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D26&amp;r=G, https://secure.gravatar.com/avatar/6c87e23e43690cda892bef9999094abf?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, https://secure.gravatar.com/avatar/ea7dbb10aac09a108d5cbf5c6c9ea21a?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, https://secure.gravatar.com/avatar/4c530e5935bc75173f11e16a1436a8a8?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, http://lh5.googleusercontent.com/-TZkI5pIXMd8/AAAAAAAAAAI/AAAAAAAAAAA/zQRIcpCZBSQ/photo.jpg, http://cdn.gtln.us/img/nxs/noImgC.png, http://www.google.com/cse/style/look/minimalist.css, http://www.google.com/jsapi, https://secure.gravatar.com/avatar/4c530e5935bc75173f11e16a1436a8a8?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=96&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D96&amp;r=G, https://www.google.com/jsapi, https://secure.gravatar.com/avatar/ea7dbb10aac09a108d5cbf5c6c9ea21a?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G, https://secure.gravatar.com/avatar/6c87e23e43690cda892bef9999094abf?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G ]');console.log('Unsecure External URLs: [  ]');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/ElasticHead.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/ElasticHead.png');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/Marvel.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/Marvel.png');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/CloudfrontDashboard.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/CloudfrontDashboard.png');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/AkamaiDashboard.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/AkamaiDashboard.png');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB.png');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional.png');console.log('[FIXED] Element: <a> - http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif => https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/ElasticHead.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/ElasticHead.png');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/Marvel.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/Marvel.png');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/CloudfrontDashboard.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/CloudfrontDashboard.png');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/AkamaiDashboard.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2014/03/AkamaiDashboard.png');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB-300x203.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB-300x203.png');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional-300x179.png => https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional-300x179.png');console.log('[FIXED] Element: <img> http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif => https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif');console.log('[END WordPress HTTPS Debug Log]');}</script>
+<script pagespeed_no_defer="">//<![CDATA[
+
+pagespeed.addInstrumentationInit('/mod_pagespeed_beacon', 'load', '', 'http://marc.cortinasval.cat/blog/category/sysadmin-en/');
+//]]></script></body>
+</html>	

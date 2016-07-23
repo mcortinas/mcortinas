@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<title>ELK en CentOs7 | El blog d&#039;en Marc</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type='text/javascript'>window.mod_pagespeed_start = Number(new Date());</script><link rel="profile" href="http://gmpg.org/xfn/11"/>
+<link rel="pingback" href="https://marc.cortinasval.cat/blog/xmlrpc.php"/>
+<link rel="alternate" type="application/rss+xml" title="El blog d&#039;en Marc &raquo; Feed" href="https://marc.cortinasval.cat/blog/ca/feed/"/>
+<link rel="alternate" type="application/rss+xml" title="El blog d&#039;en Marc &raquo; Comments Feed" href="https://marc.cortinasval.cat/blog/ca/comments/feed/"/>
+<link rel="alternate" type="application/rss+xml" title="El blog d&#039;en Marc &raquo; ELK en CentOs7 Comments Feed" href="https://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/feed/"/>
+<link rel='stylesheet' id='gsc_style-css' href='https://marc.cortinasval.cat/blog/wp-content/plugins/google-custom-search/css/smoothness/jquery-ui.theme.min.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='gsc_style_search_bar-css' href='https://www.google.com/cse/style/look/minimalist.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='gsc_style_search_bar_more-css' href='https://marc.cortinasval.cat/blog/wp-content/plugins/google-custom-search/css/gsc.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_source_sans-css' href='//fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700%2C900&#038;ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_open_sans-css' href='//fonts.googleapis.com/css?family=Open+Sans%3A400%2C600&#038;ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_bootstrap_css-css' href='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/css/bootstrap.min.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='franklin_style-css' href='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/style.css?ver=4.1.1' type='text/css' media='all'/>
+<link rel='stylesheet' id='custom-style-css' href='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/css/custom.css?ver=4.1.1' type='text/css' media='all'/>
+<style id='custom-style-inline-css'>header,.widget_tag_cloud a:hover,.sticky-img,#primary-menu li ul li{background-color:#20b2aa}a:hover,#primary-menu li:hover a{color:#20b2aa}</style>
+<link rel='stylesheet' id='easy_table_style-css' href='https://marc.cortinasval.cat/blog/wp-content/plugins/easy-table/themes/default/style.css?ver=1.5.2' type='text/css' media='all'/>
+<!-- This site uses the Google Analytics by Yoast plugin v5.3.3 - Universal enabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');__gaTracker('create','UA-26821552-3','auto');__gaTracker('set','forceSSL',true);__gaTracker('send','pageview');</script>
+<!-- / Google Analytics by Yoast -->
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/google-custom-search/js/gsc.js?ver=4.1.1'></script>
+<script src='https://www.google.com/jsapi?ver=4.1.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://marc.cortinasval.cat/blog/xmlrpc.php?rsd"/>
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://marc.cortinasval.cat/blog/wp-includes/wlwmanifest.xml"/>
+<link rel='prev' title='Graphite: gran recurs per gràficar sistemes' href='https://marc.cortinasval.cat/blog/2014/04/29/graphite-gran-recurs-per-graficar-sistemes/'/>
+<meta name="generator" content="WordPress 4.1.1"/>
+<link rel='canonical' href='https://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/'/>
+<link rel='shortlink' href='https://marc.cortinasval.cat/blog/?p=522'/>
+<script>var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-0000000-0']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+<link rel="stylesheet" href="https://marc.cortinasval.cat/blog/wp-content/plugins/multi-column-tag-map/mctagmap.css?mctm_ver=12.0.4" type="text/css" media="screen"/>
+<!--[if lt IE 9]><script src="https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/js/html5shiv.js"></script><![endif]--><style id="syntaxhighlighteranchor"></style>
+<script pagespeed_no_defer="">//<![CDATA[
+(function(){var c=encodeURIComponent,g=window,h="performance";g.pagespeed=g.pagespeed||{};var l=g.pagespeed,m=function(f,a,d,b){this.c=f;this.a=a;this.b=d;this.d=b};l.beaconUrl="";
+var n=function(f){var a=f.c,d=g.mod_pagespeed_start,b=Number(new Date)-d,a=a+(-1==a.indexOf("?")?"?":"&"),a=a+"ets="+("load"==f.a?"load:":"unload:"),a=a+b;if("beforeunload"!=f.a||!g.mod_pagespeed_loaded){a+="&r"+f.a+"=";if(g[h]){var b=g[h].timing,e=b.navigationStart,k=b.requestStart,a=a+(b[f.a+"EventStart"]-e),a=a+("&nav="+(b.fetchStart-e)),a=a+("&dns="+(b.domainLookupEnd-b.domainLookupStart)),a=a+("&connect="+(b.connectEnd-b.connectStart)),a=a+("&req_start="+(k-e)),a=a+("&ttfb="+(b.responseStart-
+k)),a=a+("&dwld="+(b.responseEnd-b.responseStart)),a=a+("&dom_c="+(b.domContentLoadedEventStart-e));g[h].navigation&&(a+="&nt="+g[h].navigation.type);e=-1;b.msFirstPaint?e=b.msFirstPaint:g.chrome&&g.chrome.loadTimes&&(e=Math.floor(1E3*g.chrome.loadTimes().firstPaintTime));e=e-k;0<=e&&(a+="&fp="+e)}else a+=b;l.getResourceTimingData&&g.parent==g&&(a+=l.getResourceTimingData());a+=g.parent!=g?"&ifr=1":"&ifr=0";"load"==f.a&&(g.mod_pagespeed_loaded=!0,(b=g.mod_pagespeed_num_resources_prefetched)&&(a+=
+"&nrp="+b),(b=g.mod_pagespeed_prefetch_start)&&(a+="&htmlAt="+(d-b)));l.panelLoader&&(d=l.panelLoader.getCsiTimingsString(),""!=d&&(a+="&b_csi="+d));l.criticalCss&&(d=l.criticalCss,a+="&ccis="+d.total_critical_inlined_size+"&cces="+d.total_original_external_size+"&ccos="+d.total_overhead_size+"&ccrl="+d.num_replaced_links+"&ccul="+d.num_unreplaced_links);""!=f.b&&(a+=f.b);document.referrer&&(a+="&ref="+c(document.referrer));a+="&url="+c(f.d);l.beaconUrl=a;(new Image).src=a}};
+l.e=function(f,a,d,b){var e=new m(f,a,d,b);g.addEventListener?g.addEventListener(a,function(){n(e)},!1):g.attachEvent("on"+a,function(){n(e)})};l.addInstrumentationInit=l.e;})();
+
+pagespeed.addInstrumentationInit('/mod_pagespeed_beacon', 'beforeunload', '', 'http://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/');
+//]]></script></head>
+<body class="single single-post postid-522 single-format-standard">
+<header role="banner">
+<div id="top-bar" role="navigation">
+<div class="container">
+<div class="row">
+<div id="site-description" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+<p>Tal com raja&#8230;.</p>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6">
+<form id="header-search" role="search" class="search-form form-inline" action="https://marc.cortinasval.cat/blog/ca/">
+<input type="search" class="search-field" value="" name="s"/>
+<button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div id="bot-bar" class="container">
+<div class="row">
+<div id="logo" class="col-md-12 col-lg-3">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a href="https://marc.cortinasval.cat/blog/ca/" rel="home">El blog d&#039;en Marc</a>
+</div>
+<div id="primary-menu" class="col-md-12 col-lg-9" role="navigation">
+<div class="collapse navbar-collapse">
+<ul id="menu-principal" class="menu"><li id="menu-item-10" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10"><a href="https://marc.cortinasval.cat/blog/category/sysadmin/">SysAdmin</a></li>
+<li id="menu-item-11" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11"><a href="https://marc.cortinasval.cat/blog/category/tecno/">Tecnologia</a></li>
+<li id="menu-item-12" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12"><a href="https://marc.cortinasval.cat/blog/category/varis/">Varis</a></li>
+<li id="menu-item-239-en" class="lang-item lang-item-64 lang-item-en no-translation menu-item menu-item-type-custom menu-item-object-custom menu-item-239-en"><a href="https://marc.cortinasval.cat/blog/en/" hreflang="en"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAIAAAD5gJpuAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHzSURBVHjaYkxOP8IAB//+Mfz7w8Dwi4HhP5CcJb/n/7evb16/APL/gRFQDiAAw3JuAgAIBEDQ/iswEERjGzBQLEru97ll0g0+3HvqMn1SpqlqGsZMsZsIe0SICA5gt5a/AGIEarCPtFh+6N/ffwxA9OvP/7//QYwff/6fZahmePeB4dNHhi+fGb59Y4zyvHHmCEAAAW3YDzQYaJJ93a+vX79aVf58//69fvEPlpIfnz59+vDhw7t37968efP3b/SXL59OnjwIEEAsDP+YgY53b2b89++/awvLn98MDi2cVxl+/vl6mituCtBghi9f/v/48e/XL86krj9XzwEEEENy8g6gu22rfn78+NGs5Ofr16+ZC58+fvyYwX8rxOxXr169fPny+fPn1//93bJlBUAAsQADZMEBxj9/GBxb2P/9+S/R8u3vzxuyaX8ZHv3j8/YGms3w8ycQARmi2eE37t4ACCDGR4/uSkrKAS35B3TT////wADOgLOBIaXIyjBlwxKAAGKRXjCB0SOEaeu+/y9fMnz4AHQxCP348R/o+l+//sMZQBNLEvif3AcIIMZbty7Ly6t9ZmXl+fXj/38GoHH/UcGfP79//BBiYHjy9+8/oUkNAAHEwt1V/vI/KBY/QSISFqM/GBg+MzB8A6PfYC5EFiDAABqgW776MP0rAAAAAElFTkSuQmCC" title="English" alt="English"/>&nbsp;English</a></li>
+</ul>	</div>
+</div>
+</div>
+</div>
+</header>
+<div id="content" class="container"><div class="row" role="main">
+<div class="col-md-8">
+<p id="breadcrumbs"><span class="glyphicon glyphicon-home"></span> <a href="https://marc.cortinasval.cat/blog/ca/" rel="home">Home</a> <span class="glyphicon glyphicon-chevron-right"></span> <a href="https://marc.cortinasval.cat/blog/category/varis/" rel="category tag">Varis</a> <span class="glyphicon glyphicon-chevron-right"></span> ELK en CentOs7</p>
+<article id="post-522" class="post-522 post type-post status-publish format-standard hentry category-varis">
+<h1 id="post-title">ELK en CentOs7</h1><p>Aprofitant els dies lliures de vacances i amb el propòsit de conèixer les novetats de ELK, m&#8217;he decidit a instalar-ho en una màquina virtual vBox amb l&#8217;objectiu conèixer i practicar l&#8217;indexació de logs implementant-ho en un CentOs7. Alhora, tinc un bon amic que ho vol implementar i m&#8217;agradaria que serveixi de recull de comandes i una petita guia d&#8217;implementació.</p>
+<p>En aquest post va dirigit a tots els usuaris que coneixen ELK (Elasticsearch+Logstash+kibana), no vull pas explicar que és cada component sinó únicament recopilar totes les configuracions i joc de proves utilitzades en el montatge del següent diagrama.</p>
+<p>En aquest diagrama recullo la foto de totes les eines que he utilitzat en la màquina virtual, alhora, <a href="https://github.com/mcortinas/mcortinas/tree/master/elk" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://github.com/mcortinas/mcortinas/tree/master/elk', ' he pujat les diferents configuracions, VagrantFile i passwords al GitHub');"> he pujat les diferents configuracions, VagrantFile i passwords al GitHub</a> i <a href="https://mega.co.nz/#!tkI3kKJA!FUbJDaRL17HfL12bjU3OdKmEbRpsYbT0nrmPv1nBJI0" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://mega.co.nz/#!tkI3kKJA!FUbJDaRL17HfL12bjU3OdKmEbRpsYbT0nrmPv1nBJI0', ' la màquina virtual en el MEGA, pesa 1.5GB ');"> la màquina virtual en el MEGA, pesa 1.5GB </a>, deixo aquí els links per si algú la vol descarregar.</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Elk-CentoOs7-2.png"><img class="align center size-full wp-image-539" alt="Elk-CentoOs7" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Elk-CentoOs7-2.png" width="1441" height="728"/></a></p>
+<p>Bàsicament veiem com utilitzem logstash per agafar els logs de APACHE, SYSLOG, ELASTICSEARCH i CARBON, on enviem els logs filtrats amb els camps ja splittejats a 4 cues diferents de Redis, on tindrem una altra instancia de logstash que va agafant les dades d&#8217;aquestes 4 cues i les va insertant al Elasticsearch. A través de la interficie Kibana podem crear dashboard i interpretar les dades (els logs) recopilats.</p>
+<p>Si ens centrem com he utilitzat logstash per a tal de recollir els logs:<br/>
+&#8211; Apache: la instancia de logstash va recollint les traces dels fitxers de logs del apaches, les filtra i les envia al redis.<br/>
+&#8211; Carbon-cache: una instancia de logstash va recollint les traces dels fitxers de logs del carbon-cache, aplica un filtre i ho envia al redis<br/>
+&#8211; Syslog: Hem afegit en el Rsyslog de Centos7 l&#8217;enviem dels logs del SYSLOG al port 514/tcp, on tenim una instancia de logstash que agafa els logs, els filtra i els envia a Redis.<br/>
+&#8211; Elasticsearch: molt semblant al anterior, es a dir, modifiquem el logging de ES per a escriure els logs al port 9300/tcp, on tindrem una instancia de logstash que anirà recollint els logs, filtrant i enviant-ho al Redis.</p>
+<p>Alhora, hem instalat un graphite+carbon que va recollint les dades del OS i dels serveis Redis i Elasticsearch a través de &#8220;diamond&#8221;, un python script molt complert per recollir dades al graphite. En aquest cas, la interficie de Grafana i Graphite ens permetrà graficar.</p>
+<pre class="brush: plain; collapse: true; light: false; title: Installation commands for Graphite and Carbon-Cache; toolbar: true; notranslate" title="Installation commands for Graphite and Carbon-Cache">
+yum -y update
+yum install -y httpd net-snmp perl pycairo mod_wsgi python-devel git gcc-c++
+yum install -y python-pip node npm
+pip install 'django&amp;lt;1.6'
+pip install 'Twisted&amp;lt;12'
+pip install django-tagging
+pip install whisper
+pip install graphite-web
+pip install carbon
+yum install collectd collectd-snmp
+cp /opt/graphite/examples/example-graphite-vhost.conf /etc/httpd/conf.d/graphite.conf
+cp /opt/graphite/conf/storage-schemas.conf.example /opt/graphite/conf/storage-schemas.conf
+cp /opt/graphite/conf/storage-aggregation.conf.example /opt/graphite/conf/storage-aggregation.conf
+cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/conf/graphite.wsgi
+cp /opt/graphite/conf/graphTemplates.conf.example /opt/graphite/conf/graphTemplates.conf
+cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf
+chown -R apache:apache /opt/graphite/storage/
+vi /opt/graphite/conf/storage-schemas.conf #set granularity and retention data on whisper files
+cd /opt/graphite/webapp/graphite
+sudo python manage.py syncdb
+systemctl enable httpd
+systemctl start httpd
+/opt/graphite/bin/carbon-cache.py start
+#/opt/graphite/bin/run-graphite-devel-server.py /opt/graphite/ #developer mode
+chmod 777 /opt/graphite/storage/log/webapp/
+# Be ware fix permissions for sqlite database
+chmod 777 /opt/graphite/storage/graphite.db
+vi /etc/systemd/system/carbon-cache-a.service
+ [Unit]
+ Description=carbon-cache instance A (graphite)
+
+ [Service]
+ User=root
+ Group=root
+ ExecStartPre=/bin/rm -f /opt/graphite/storage/carbon-cache-a.pid
+ ExecStart=/opt/graphite/bin/carbon-cache.py --instance=a start
+ Type=forking
+ PIDFile=/opt/graphite/storage/carbon-cache-a.pid
+ LimitNOFILE=128000
+
+ [Install]
+ WantedBy=multi-user.target
+systemctl enable carbon-cache-a.service
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Installation Elasticsearch commands; toolbar: true; notranslate" title="Installation Elasticsearch commands">
+yum -y install java-1.7.0-openjdk
+rpm --import http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+vi /etc/yum.repos.d/elasticsearch.repo #add follow lines
+ [elasticsearch-1.1]
+ name=Elasticsearch repository for 1.1.x packages
+ baseurl=http://packages.elasticsearch.org/elasticsearch/1.1/centos
+ gpgcheck=1
+ gpgkey=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+ enabled=1
+yum -y install elasticsearch-1.1.1
+vi /etc/elasticsearch/elasticsearch.yml #modify next parameters if it is necessary
+ script.disable_dynamic: true
+ discovery.zen.ping.multicast.enabled: false
+systemctl start elasticsearch.service
+systemctl enable elasticsearch.service
+#Enable kopek and head elastic search pluging
+/usr/share/elasticsearch/bin/plugin --install mobz/elasticsearch-head
+/usr/share/elasticsearch/bin/plugin --install lmenezes/elasticsearch-kopf
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Installation kibana commands; toolbar: true; notranslate" title="Installation kibana commands">
+mkdir -p /opt/www/kibana
+cd !$; curl -s -L https://download.elasticsearch.org/kibana/kibana/kibana-3.0.1.tar.gz | tar xz
+mv kibana-3.0.1/* . &amp;amp;&amp;amp; rmdir kibana-3.0.1
+vi ~/kibana-3.0.1/config.js #modify next parameters if it is necessary
+ elasticsearch: &amp;quot;http://&amp;quot;+window.location.hostname+&amp;quot;:80&amp;quot;,
+vi /etc/httpd/conf.d/kibana3.conf #modify next parameters if it is necessary
+
+  ServerName kibana
+
+  DocumentRoot /opt/www/kibana
+
+    Allow from all
+    Options -Multiviews
+
+
+  LogLevel debug
+  ErrorLog /var/log/httpd/kibana_error_log
+  CustomLog /var/log/httpd/kibana_access_log combined
+
+  # Set global proxy timeouts
+  
+    ProxySet connectiontimeout=5 timeout=90
+
+
+  # Proxy for _aliases and .*/_search
+  &amp;lt;LocationMatch &amp;quot;^/(_nodes|_aliases|.*/_aliases|_search|.*/_search|_mapping|.*/_mapping)$&amp;quot;&amp;gt;
+    ProxyPassMatch http://127.0.0.1:9200/$1
+    ProxyPassReverse http://127.0.0.1:9200/$1
+
+
+  # Proxy for kibana-int/{dashboard,temp} stuff (if you don't want auth on /, then you will want these to be  protected)
+  &amp;lt;LocationMatch &amp;quot;^/(kibana-int/dashboard/|kibana-int/temp)(.*)$&amp;quot;&amp;gt;
+    ProxyPassMatch http://127.0.0.1:9200/$1$2
+    ProxyPassReverse http://127.0.0.1:9200/$1$2
+
+
+systemctl start httpd.service
+systemctl enable httpd.service
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Installation Logstash commands; toolbar: true; notranslate" title="Installation Logstash commands">
+vi /etc/yum.repos.d/logstash.repo #add follow lines
+ [logstash-1.4]
+ name=logstash repository for 1.4.x packages
+ baseurl=http://packages.elasticsearch.org/logstash/1.4/centos
+ gpgcheck=1
+ gpgkey=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+ enabled=1
+yum -y install logstash-1.4.2
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Installation Grafana commands; toolbar: true; notranslate" title="Installation Grafana commands">
+mkdir -p /opt/www/grafana
+cd !$; curl -s -L http://grafanarel.s3.amazonaws.com/grafana-1.9.0.tar.gz | tar xz
+mv grafana-1.9.0/* .
+rmdir grafana-1.9.0
+cp config.sample.js config.js
+vi config.js #be sure these lines are enabled
+      datasources: {
+        graphite: {
+          type: 'graphite',
+          url: &amp;quot;http://graphite:80&amp;quot;,
+        },
+        elasticsearch: {
+          type: 'elasticsearch',
+          url: &amp;quot;http://127.0.0.1:9200&amp;quot;,
+          index: 'grafana-dash',
+          grafanaDB: true,
+        }
+vi /etc/httpd/conf.d/grafana.conf #add these configuration lines
+
+  ServerName grafana
+
+  DocumentRoot /opt/www/grafana
+
+    Allow from all
+    Options -Multiviews
+
+
+  LogLevel debug
+  ErrorLog /var/log/httpd/grafana_error_log
+  CustomLog /var/log/httpd/grafana_access_log combined
+
+systemctl start httpd.service
+systemctl enable httpd.service
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Installation Redis commands; toolbar: true; notranslate" title="Installation Redis commands">
+#we need Epel repository enabled
+yum install redis
+systemctl start redis.service
+systemctl status redis.service
+systemctl enable redis.service
+redis-cli ping
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Modify HOSTFILE in vBox and physical node,disable SELinux and Firewalld in vBox; toolbar: true; notranslate" title="Modify HOSTFILE in vBox and physical node,disable SELinux and Firewalld in vBox">
+echo &amp;quot;127.0.0.1 kibana grafana graphite redis-commander&amp;quot; &amp;gt; /etc/hosts
+systemctl stop firewalld
+systemctl disable firewalld
+vi /etc/selinux/config #Be ware is disabled instead of enforced in the next config line
+ SELINUX=disabled
+reboot
+</pre>
+<pre class="brush: plain; collapse: true; light: false; title: Apache fix; toolbar: true; notranslate" title="Apache fix">
+#Add &amp;quot;Require all granted&amp;quot; in any vhost applied in this lab
+#more info: http://httpd.apache.org/docs/2.4/upgrading.html
+ Require all granted
+</pre>
+<p style="text-align: center;">Aquestes són les eines implementades:<br/>
+-Elasticsearch, prices java on tenim indexat les diferents tipus de traces, com podem veure:<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Captura-de-pantalla-2015-01-12-a-les-1.24.07.png"><img class="wp-image-549 alignnone" alt="Captura de pantalla 2015-01-12 a les 1.24.07" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Captura-de-pantalla-2015-01-12-a-les-1.24.07.png" width="353" height="356"/></a><br/>
+-Kibana, aplicació javascript que permet fer consultes, dashboards per interpretar els logs indexats en el ES.<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Kibana_3_-_BasicELK1_-_2015-01-12_01.33.44.png"><img class="aligncenter  wp-image-553" alt="Kibana_3_-_BasicELK1_-_2015-01-12_01.33.44" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Kibana_3_-_BasicELK1_-_2015-01-12_01.33.44.png" width="820" height="3397"/></a><br/>
+-Logstash, aplicació java que recull els logs, el filtra i categoritza i els indexa al ES, utilitzant Redis com a memoria intermedia.<br/>
+-Grafana, aplicació Javascript que permet fer consultes, dashboards de les dades de graphite.<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Grafana_-_ELK-1_-_2015-01-10_18.15.38.png"><img class="aligncenter  wp-image-550" alt="Grafana_-_ELK-1_-_2015-01-10_18.15.38" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Grafana_-_ELK-1_-_2015-01-10_18.15.38.png" width="768" height="719"/></a><br/>
+-Graphite+Carbon-Cache+Diamond, aplicació en python que recull estat dels serveis i els introdueix al carbon. Aquí veiem com ho podem consultar a través de la webapp de graphite.<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Captura-de-pantalla-2015-01-12-a-les-1.28.00.png"><img class="aligncenter  wp-image-551" alt="Captura de pantalla 2015-01-12 a les 1.28.00" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Captura-de-pantalla-2015-01-12-a-les-1.28.00.png" width="364" height="506"/></a><br/>
+-Redis + Redis-Commander, memoria intermedia on logstash va guardant els logs ja filtrats. Redis-Commander es una aplicació en nodeJS que permet monitorar l&#8217;estat de les 4 cues que utlitzem de Redis.<br/>
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Captura-de-pantalla-2015-01-11-a-les-20.11.09.png"><img class="aligncenter size-full wp-image-548" alt="Captura de pantalla 2015-01-11 a les 20.11.09" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2015/01/Captura-de-pantalla-2015-01-11-a-les-20.11.09.png" width="2560" height="1288"/></a></p>
+<p>Si us baixeu la maquina virtual vBox i la inicieu amb Vagrant <a href="https://github.com/mcortinas/mcortinas/blob/master/elk/Vagrantfile" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://github.com/mcortinas/mcortinas/blob/master/elk/Vagrantfile', ' (utilitzant aquest VagrantFile que linko aquí)');"> (utilitzant aquest VagrantFile que linko aquí)</a>, aquestes serán les URLs de les aplicacions implementades:<br/>
+&#8211; <a href="http://127.0.0.1:39200" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://127.0.0.1:39200', 'URL ES: http://127.0.0.1:39200');">URL ES: http://127.0.0.1:39200</a><br/>
+&#8211; <a href="http://127.0.0.1:39200/_plugin/head/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://127.0.0.1:39200/_plugin/head/', 'Pluguin Head ES, http://127.0.0.1:39200/_plugin/head/');">Pluguin Head ES, http://127.0.0.1:39200/_plugin/head/</a><br/>
+&#8211; <a href="http://kibana:3080/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://kibana:3080/', ' Kibana GUI, http://kibana:3080');"> Kibana GUI, http://kibana:3080</a><br/>
+&#8211; <a href="http://grafana:3080/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://grafana:3080/', ' Grafana GUI, http://grafana:3080/ ');"> Grafana GUI, http://grafana:3080/ </a><br/>
+&#8211; <a href="http://graphite:3080/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://graphite:3080/', ' Graphite GUI, http://graphite:3080/ ');"> Graphite GUI, http://graphite:3080/ </a><br/>
+&#8211; <a href="http://redis-commander:3080/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://redis-commander:3080/', ' Redis Commander GUI, http://redis-commander:3080/ ');"> Redis Commander GUI, http://redis-commander:3080/ </a></p>
+<p>També recopilo les fonts que he seguit per instalar-ho i configurar-ho.<br/>
+&#8211; <a href="http://sourceforge.net/projects/mustsyslog/?source=typ_redirect" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://sourceforge.net/projects/mustsyslog/?source=typ_redirect', 'http://sourceforge.net/projects/mustsyslog/?source=typ_redirec ');">http://sourceforge.net/projects/mustsyslog/?source=typ_redirec </a><br/>
+&#8211; <a href="http://kartar.net/2014/09/when-logstash-and-syslog-go-wrong/" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://kartar.net/2014/09/when-logstash-and-syslog-go-wrong/', 'http://kartar.net/2014/09/when-logstash-and-syslog-go-wrong/ ');">http://kartar.net/2014/09/when-logstash-and-syslog-go-wrong/ </a><br/>
+&#8211; <a href="http://www.ozmonet.com/projects/graphite.html" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.ozmonet.com/projects/graphite.html', 'http://www.ozmonet.com/projects/graphite.html ');">http://www.ozmonet.com/projects/graphite.html </a><br/>
+&#8211; <a href="https://www.digitalocean.com/community/tutorials/how-to-use-logstash-and-kibana-to-centralize-logs-on-centos-7" onclick="__gaTracker('send', 'event', 'outbound-article', 'https://www.digitalocean.com/community/tutorials/how-to-use-logstash-and-kibana-to-centralize-logs-on-centos-7', 'https://www.digitalocean.com/community/tutorials/how-to-use-logstash-and-kibana-to-centralize-logs-on-centos-7 ');">https://www.digitalocean.com/community/tutorials/how-to-use-logstash-and-kibana-to-centralize-logs-on-centos-7 </a><br/>
+&#8211; <a href="http://www.rsyslog.com/doc/rsyslog_reliable_forwarding.html" onclick="__gaTracker('send', 'event', 'outbound-article', 'http://www.rsyslog.com/doc/rsyslog_reliable_forwarding.html', 'http://www.rsyslog.com/doc/rsyslog_reliable_forwarding.html ');">http://www.rsyslog.com/doc/rsyslog_reliable_forwarding.html </a></p>
+<div class="post-meta clearfix ">
+<p class="author-date">
+<span class="glyphicon glyphicon-user"></span> mcortinas
+<span class="glyphicon glyphicon-calendar"></span> Gener 12, 2015
+</p>
+</div>
+<div id="post-nav" class="clearfix">
+<div id="post-nav-prev">
+<span class="glyphicon glyphicon-chevron-left"></span>
+<a class="post-nav-older" href="https://marc.cortinasval.cat/blog/2014/04/29/graphite-gran-recurs-per-graficar-sistemes/">
+Graphite: gran recurs per gràficar sistemes	</a>
+</div>
+</div>
+</article>
+<hr class="post-divider"><div id="comments">
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/blog/2015/01/12/elk-en-centos7/#respond" style="display:none;">Cancel reply</a></small></h3>
+<form action="https://marc.cortinasval.cat/blog/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+<p class="comment-notes">Your email address will not be published / Required fields are marked *</p>	<label for="author">Author</label><input id="author" name="author" type="text" placeholder="Name*" value=""/>
+<label for="email">Email</label><input id="email" name="email" type="text" placeholder="Email*" value=""/>
+<label for="url">Website</label><input id="url" name="url" type="text" placeholder="Website" value=""/>
+<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-describedby="form-allowed-tags" aria-required="true"></textarea></p>	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes: <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>	<p class="form-submit">
+<input name="submit" type="submit" id="submit" class="submit" value="Post Comment"/>
+<input type='hidden' name='comment_post_ID' value='522' id='comment_post_ID'/>
+<input type='hidden' name='comment_parent' id='comment_parent' value='0'/>
+</p>
+<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="dea9788474"/></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="186"/></p>	</form>
+</div><!-- #respond -->
+</div>
+</div>
+<div id="primary-sidebar" class="col-md-4">
+<aside id="gsc-widget-2" class="widget google custom search"><hr> <div id="cse-search-form72" style="width: 100%;">Loading</div>
+<script>google.load('search','1',{language:'ca'});google.setOnLoadCallback(function(){var customSearchControl=new google.search.CustomSearchControl('');customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);var options=new google.search.DrawOptions();options.setSearchFormRoot('cse-search-form72');options.setAutoComplete(true);customSearchControl.draw('dialog',options);customSearchControl.setSearchCompleteCallback(this,CallBackDisplayDialog);},true);function CallBackDisplayDialog(result){jQuery('#dialog').dialog('open');}</script>
+<!-- open dialog. For debug purposes
+                    <p><a href="#" id="dialog_link" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a></p>
+            -->
+<div id="dialog" title="Resultat de la cerca">
+<p></p>
+</div>
+</aside>	<aside id="recent-posts-2" class="widget widget_recent_entries"><hr>	<h4>Entrades recents</h4>	<ul>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/">ELK en CentOs7</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2014/04/29/graphite-gran-recurs-per-graficar-sistemes/">Graphite: gran recurs per gràficar sistemes</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2014/03/05/kibana-ens-ajuda-amb-els-logs-de-aws-cloudfront-i-waf-akamai/">Kibana ens ajuda amb els logs de AWS Cloudfront i WAF Akamai</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2013/12/17/varnish-cache-un-molt-bon-aliat-per-a-la-web/">varnish-cache, un molt bon aliat per a la web</a>
+</li>
+<li>
+<a href="https://marc.cortinasval.cat/blog/2013/12/15/breu-resum-de-la-nostra-historia/">breu resum de la nostra història</a>
+</li>
+</ul>
+</aside><aside id="linkcat-0" class="widget widget_links"><hr><h4>Favorits</h4>
+<ul class='xoxo blogroll'>
+<li><a href="http://www.cloudadmins.org/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.cloudadmins.org/', 'Cloudadmins');" title="News about building cloud-ready infrastructures">Cloudadmins</a></li>
+<li><a href="http://www.tomas.cat/blog/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.tomas.cat/blog/', 'El blog d&#039;en Tomas');">El blog d&#039;en Tomas</a></li>
+<li><a href="http://maauso.com/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://maauso.com/', 'El blog de Miguel');">El blog de Miguel</a></li>
+<li><a href="http://www.entredevyops.es/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://www.entredevyops.es/', 'Entre Dev y Ops');">Entre Dev y Ops</a></li>
+<li><a href="http://highscalability.com/" onclick="__gaTracker('send', 'event', 'outbound-widget', 'http://highscalability.com/', 'High Scability');">High Scability</a></li>
+<li><a href="https://groups.google.com/forum/?hl=es#!forum/puppet-users-barcelona" onclick="__gaTracker('send', 'event', 'outbound-widget', 'https://groups.google.com/forum/?hl=es#!forum/puppet-users-barcelona', 'Puppet Users BCN');">Puppet Users BCN</a></li>
+</ul>
+</aside>
+<aside id="authorspotlight-2" class="widget AuthorSpotlight_Widget"><hr><h4></h4><div id="author-spotlight"><div id="author-profile"><h2>Marc Cortinas Val</h2><div id="social-icons" style="display:none;"></div><!--#social-icons--><img alt='' src='https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=96&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D96&amp;r=G' class='avatar avatar-96 photo' height='96' width='96'/><div id="author-description">&nbsp;<i><a href="https://marc.cortinasval.cat/blog/ca/author/mcortinas/" title="Read full Profile">Read Full</a></i></div><!--#author-description--><div id="author-link"><a href="https://marc.cortinasval.cat/blog/ca/author/mcortinas/" title="More articles by this author">More posts by the Author »</a></div></div><!--#author-profile--></div><!--#author-spotlight--></aside><aside id="meta-3" class="widget widget_meta"><hr><h4>Admin</h4>	<ul>
+<li><a href="https://marc.cortinasval.cat/blog/wp-login.php">Log in</a></li>
+<li><a href="https://marc.cortinasval.cat/blog/ca/feed/"><abbr title="en anglès, Really Simple Syndication">RSS</abbr> de les entrades</a></li>
+<li><a href="https://marc.cortinasval.cat/blog/ca/comments/feed/"><abbr title="en inglés, Really Simple Syndication">RSS</abbr> dels comentaris</a></li>
+<li><a href="https://wordpress.org/" title="Funcionant amb el WordPress, plataforma semàntica de publicació personal de primer ordre.">WordPress.org</a></li>	</ul>
+</aside></div></div>
+</div>
+<footer>
+<div id="footer-bottom">
+<div class="container">
+<div class="row">
+<div id="footer-meta" class="col-md-9">
+<p>&copy; <a id="footer-site" href="https://marc.cortinasval.cat/blog/ca" title="El blog d&#039;en Marc">El blog d&#039;en Marc</a></p>
+</div>
+<div id="footer-credit" class="col-md-3">
+<p><a href="http://www.wpmultiverse.com/themes/franklin/" title="Franklin WordPress Theme">Franklin Theme</a></p>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/akismet/_inc/form.js?ver=3.1.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9b'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain.js?ver=3.0.9b'></script>
+<script>(function(){var corecss=document.createElement('link');var themecss=document.createElement('link');var corecssurl="https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";if(corecss.setAttribute){corecss.setAttribute("rel","stylesheet");corecss.setAttribute("type","text/css");corecss.setAttribute("href",corecssurl);}else{corecss.rel="stylesheet";corecss.href=corecssurl;}document.getElementsByTagName("head")[0].insertBefore(corecss,document.getElementById("syntaxhighlighteranchor"));var themecssurl="https://marc.cortinasval.cat/blog/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9b";if(themecss.setAttribute){themecss.setAttribute("rel","stylesheet");themecss.setAttribute("type","text/css");themecss.setAttribute("href",themecssurl);}else{themecss.rel="stylesheet";themecss.href=themecssurl;}document.getElementsByTagName("head")[0].insertBefore(themecss,document.getElementById("syntaxhighlighteranchor"));})();SyntaxHighlighter.config.strings.expandSource='+ expand source';SyntaxHighlighter.config.strings.help='?';SyntaxHighlighter.config.strings.alert='SyntaxHighlighter\n\n';SyntaxHighlighter.config.strings.noBrush='Can\'t find brush for: ';SyntaxHighlighter.config.strings.brushNotHtmlScript='Brush wasn\'t configured for html-script option: ';SyntaxHighlighter.defaults['pad-line-numbers']=false;SyntaxHighlighter.defaults['toolbar']=false;SyntaxHighlighter.all();</script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/core.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/widget.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/mouse.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/resizable.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/draggable.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/button.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/position.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.2'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/js/bootstrap.min.js?ver=3.1.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/themes/franklin/assets/js/franklin.js?ver=1.0'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-includes/js/comment-reply.min.js?ver=4.1.1'></script>
+<script src='https://marc.cortinasval.cat/blog/wp-content/plugins/multi-column-tag-map/mctagmap.js?mctm_ver=12.0.4&#038;ver=1'></script>
+<script>if(typeof console==='object'){console.log('[BEGIN WordPress HTTPS Debug Log]');console.log('Version: 3.3.6');console.log('HTTP URL: http://marc.cortinasval.cat/blog/');console.log('HTTPS URL: https://marc.cortinasval.cat/blog/');console.log('SSL: Yes');console.log('Diff Host: No');console.log('Subdomain: Yes');console.log('Proxy: Yes');console.log('Secure External URLs: [ https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=64&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D64&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=26&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D26&amp;r=G, https://secure.gravatar.com/avatar/6c87e23e43690cda892bef9999094abf?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, https://secure.gravatar.com/avatar/ea7dbb10aac09a108d5cbf5c6c9ea21a?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, https://secure.gravatar.com/avatar/4c530e5935bc75173f11e16a1436a8a8?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=50&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D50&amp;r=G, http://lh5.googleusercontent.com/-TZkI5pIXMd8/AAAAAAAAAAI/AAAAAAAAAAA/zQRIcpCZBSQ/photo.jpg, http://cdn.gtln.us/img/nxs/noImgC.png, http://www.google.com/cse/style/look/minimalist.css, http://www.google.com/jsapi, https://secure.gravatar.com/avatar/4c530e5935bc75173f11e16a1436a8a8?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G, https://secure.gravatar.com/avatar/42273633a4b1808ae44b549f7302a810?s=96&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D96&amp;r=G, https://www.google.com/jsapi, https://secure.gravatar.com/avatar/ea7dbb10aac09a108d5cbf5c6c9ea21a?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G, https://secure.gravatar.com/avatar/6c87e23e43690cda892bef9999094abf?s=40&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D40&amp;r=G ]');console.log('Unsecure External URLs: [  ]');console.log('[END WordPress HTTPS Debug Log]');}</script>
+<script pagespeed_no_defer="">//<![CDATA[
+
+pagespeed.addInstrumentationInit('/mod_pagespeed_beacon', 'load', '', 'http://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/');
+//]]></script></body>
+</html>	

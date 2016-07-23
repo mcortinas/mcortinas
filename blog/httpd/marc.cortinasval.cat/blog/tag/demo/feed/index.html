@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>One more technical blog in the net &#187; demo</title>
+	<atom:link href="https://marc.cortinasval.cat/blog/tag/demo/feed/" rel="self" type="application/rss+xml" />
+	<link>https://marc.cortinasval.cat/blog</link>
+	<description>it's flowing through my head...</description>
+	<lastBuildDate>Mon, 12 Jan 2015 08:16:14 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.1.1</generator>
+	<item>
+		<title>apply ACL without reload all configuration</title>
+		<link>https://marc.cortinasval.cat/blog/2014/09/15/apply-acl-without-reload-all-configuration/</link>
+		<comments>https://marc.cortinasval.cat/blog/2014/09/15/apply-acl-without-reload-all-configuration/#comments</comments>
+		<pubDate>Mon, 15 Sep 2014 21:27:47 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[acl]]></category>
+		<category><![CDATA[demo]]></category>
+		<category><![CDATA[haproxy]]></category>
+		<category><![CDATA[runtime]]></category>
+
+		<guid isPermaLink="false">https://marc.cortinasval.cat/blog/?p=500</guid>
+		<description><![CDATA[I was looking this afternoon for some workaround in web environment let me to modify an ACL (add or delete ip) without reload all configuration when I found haproxy with lucky! Thierry FOURNIER told us this workaround here. He suggest us combine ACL matching integers AND fetch data from map file. Finally, we have to [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>I was looking this afternoon for some workaround in web environment let me to modify an ACL (add or delete ip) without reload all configuration when I found haproxy with lucky!</p>
+<p><a href="http://comments.gmane.org/gmane.comp.web.haproxy/14764" title="read ACL to block ip's from file to prevent DDoS?" target="_blank">Thierry FOURNIER told us this workaround here.</a> He suggest us combine <a href="http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.1.2" title="ACL matching integers">ACL matching integers</a> AND <a href="http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#7.3.1-map" title="Fetch data from map file">fetch data from map file</a>. </p>
+<pre class="brush: plain; title: ; notranslate">
+frontend input-pool 0.0.0.0:8080
+        default_backend output-pool
+        ....
+        acl abuser src,map_ip_int(/etc/haproxy/abusers.lst,0) -m int eq 1
+        http-request tarpit if abuser
+
+backend output-pool 0.0.0.0:8080
+        balance roundrobin
+        server  app1_1 :81 cookie app1inst1 check inter 2000 rise 2 fall 5
+        server  app1_2 :80 cookie app1inst2 check inter 2000 rise 2 fall 5
+</pre>
+<p>Finally, we have to enable <a href="http://cbonte.github.io/haproxy-dconv/configuration-1.5.html#3.1-stats%20socket">socket stat</a> file launch these commands:</p>
+<pre class="brush: plain; title: ; notranslate">
+## Block http request from 127.0.0.1
+echo &quot;add map /etc/haproxy/abusers.lst 127.0.0.1 1&quot; | socat - unix:/tmp/haproxy 
+## Allow http request from 127.0.0.1
+echo &quot;del map /etc/haproxy/abusers.lst 127.0.0.1 1&quot; | socat - unix:/tmp/haproxy
+</pre>
+<p>Also, this is another useful command</p>
+<pre class="brush: plain; title: ; notranslate">
+echo &quot;show stat&quot;| socat unix-connect:/tmp/haproxy stdio
+</pre>
+<p>I attached in this post a little gif with my testing this behavior in my vagrant lab.<br />
+(Round robin balance is defined in virtual box instance running Ubuntu14 LTS, haproxy opens socket defined in 127.0.0.1:8080 balancing http requests to 127.0.0.1:81 and 127.0.0.1:80)<br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/09/haproxy_acl_keymap.gif"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/09/haproxy_acl_keymap.gif" alt="demo acl dinamic map" width="620" height="538" class="aligncenter size-full wp-image-294" /></a></p>
+<p>Useful tool, <a href="http://www.dest-unreach.org/socat/">Socat</a></p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2014/09/15/apply-acl-without-reload-all-configuration/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

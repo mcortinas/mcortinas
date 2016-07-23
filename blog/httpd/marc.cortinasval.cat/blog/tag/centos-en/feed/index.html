@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>One more technical blog in the net &#187; centos</title>
+	<atom:link href="https://marc.cortinasval.cat/blog/tag/centos-en/feed/" rel="self" type="application/rss+xml" />
+	<link>https://marc.cortinasval.cat/blog</link>
+	<description>it's flowing through my head...</description>
+	<lastBuildDate>Mon, 12 Jan 2015 08:16:14 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.1.1</generator>
+	<item>
+		<title>A cheap web balancer: Nginx+haproxy+pacemaker</title>
+		<link>https://marc.cortinasval.cat/blog/2013/12/04/a-cheap-web-balancer-nginxhaproxypacemaker/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/12/04/a-cheap-web-balancer-nginxhaproxypacemaker/#comments</comments>
+		<pubDate>Wed, 04 Dec 2013 16:15:10 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[balance]]></category>
+		<category><![CDATA[centos]]></category>
+		<category><![CDATA[corosync]]></category>
+		<category><![CDATA[ha]]></category>
+		<category><![CDATA[haproxy]]></category>
+		<category><![CDATA[http]]></category>
+		<category><![CDATA[https]]></category>
+		<category><![CDATA[nginx]]></category>
+		<category><![CDATA[pacemaker]]></category>
+		<category><![CDATA[vmware]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=331</guid>
+		<description><![CDATA[I’m going to explain you how can you mount a too cheap and efficient web balancer, I’ve rolled out in productive and non-productive environments publishing all the web applications of multiples environments from continuos integration. I&#8217;ve used this solution in our productive environment after I had done benchmarks tests with “ab” and “siege” tool, but [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>I’m going to explain you how can you mount a too cheap and efficient web balancer, I’ve rolled out in productive and non-productive environments publishing all the web applications of multiples environments from continuos integration. I&#8217;ve used this solution in our productive environment after I had done benchmarks tests with “ab” and “siege” tool, but i will explain the tuning parameters and these benchmark tests in other post.</p>
+<p>  I’ve published all website for all environments dividing the main domain into a several subdomains<br />
+(p.e.: example.com) such as dev01.example.com, int01.example.com, test01.example.com, pre.example.com, etc…</p>
+<p>Furthermore, in production environments we can use this segmentation splitting by countries (es.example.com, it.groupalia.com,…), platforms (m.example.com,…) or content type (static.example.com,…)</p>
+<p>The list of the main goals:</p>
+<li>Low cost: I&#8217;ve used open source technologies such as centOS, Nginx, Haproxy, Pacemaker, Corosync..</li>
+<li>High availability: I&#8217;ve used virtualization technologies with HA feature enabled where virtual machines are running in different physicals machines,  we have also high availability in service level through pacemaker+corosync daemons</li>
+<li>SSL offloading, we centralize all httpS negotiation by nginx daemon, after that, all traffic rear nginx is plain http</li>
+<li>Flexibility and control: haproxy bring us customize the balance algorithm to analyze load averages, free memory, connection status to databases, etc&#8230;</li>
+<li>Security: we might use diferents virtual lans, all traffic between each one is filtered by firewall and we use httpS protocol in secure http transactions</li>
+<p>We use this list technologies: Nginx,Haproxy, Pacemaker, Corosync.<br />
+Look at the diagram of this solution:<br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB.png"><img class="size-medium wp-image-64 aligncenter" alt="fisicalLB" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB-300x203.png" width="300" height="203" /></a></p>
+<p>I explain this shortly, i just describe all components.<br />
+Firstly, the browsers request content to CDN or our origins. Then, all requests come in to our origin filtered by firewall. One time traffic is filtered it goes to nginx, this split it by domain and do httpS negotiation. Then traffic is sended to haproxy, this balance all traffic to differents web servers. I’m going to secure all this infrastructure, we define 3 virtual lans, dmz, frontend and backend. All this traffic is filtered by firewall. Two virtual machines running CentOs will be deployed in DMZ, this machines are going to run Nginx and Haproxy in active-passive mode using pacemaker-corosync to manage this behavior. Web servers will be deployed in frontend vlan and databases and shared filesystems such as mysql, postgre, cassandra, mongo, cifs, hfs, nfs, etc.. will be deployed in backend vlan.</p>
+<p>I try to explain better using just one environment in this example, int01.example.com. I’ll describe up to down. This will be a little bit more technical explanation. Maybe, I hope this diagram help you to understand easier the architecture<br />
+<div id="attachment_68" style="width: 310px" class="wp-caption aligncenter"><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional.png" target="_blank"><img class="size-medium wp-image-68 " title="Diagrama Lògic" alt="Diagrama Lògic" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional-300x179.png" width="300" height="179" /></a><p class="wp-caption-text">Diagrama Lògic</p></div></p>
+<p>First of all, in DMZ vlan will be running nginx and haproxy with 2 virtual ip pools, one pool for each one. I’ve rolled out in vmware virtual infrastructure but you can do this using more cheapers solutions like Xenserver, KVM, etc… Tip: you must check each virtual machine is running in different physical machine, we need add this rule in our virtual infrastructure. The request come in nginx daemon running as a reverse proxy splitting traffic using multiples virtual hosts. Furthermore, nginx will do the httpS negotiation and will use plain http protocol to transfer traffic to haproxy adding HTTP header when transaction was httpS originally. Apache will recognize this http header and we&#8217;ll set the properly variable to mask it to application.<br />
+Tip: We use a SSL certificate using wildcard in the Common-Name, it will be easier to manage this.<br />
+Other Tip: set the properly parameters in this equation: max_clients=worker_processes * worker_connections / 4.</p>
+<p>All web traffic has splitted by nginx and transfered to haproxy. We will define a pool of “upstream” in haproxy parameter, one pool for each environment. Haproxy let us to select the best balance algorithm, i use Round Robin commonly.  We also define ip ranges for every environment.<br />
+Tip: we must define too large ip ranges, where we have many free ip, if we have performance troubles  this bring us to deploy more front servers without restart haproxy daemon.<br />
+In this example, haproxy will check the health status of any web server, haproxy will request a php script whose return will be the string &#8220;OK&#8221; only if node have a properly load average, all connections to each database is successfully and it has free memory. Note that haproxy also bring us to do sticky balancers analyzing HTTP headers like these: JSESSIONID in Java apps, PHPSESSID in PHP apps, ASPSESSIONID in ASP apps. Tip: You must to know each request need about 17KB and you will can define maxconn parameter.</p>
+<p>Finally, varnish-cache instance receives all requests in each server, the non-cacheable content and caducated content are requested to Apache in the same node, but i know these daemons need a special explanation, i will explain us in other post.</p>
+<p>Look at the configurations files below.<br />
+Nginx configuration:</p>
+<pre class="brush: plain; title: ; notranslate">
+....
+upstream http-example-int01 {
+    server lb2-vip.example.com:8080;
+    keepalive 16;
+}
+server {
+        listen lb1-vip.example.com:80;
+    server_name int01.example.com ~^.*-int01\.example\.com$;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host;
+                proxy_pass http://http-example-int01/;
+                proxy_redirect off;
+        }
+}
+server {
+        listen lb1-vip.example.com:443 ssl;
+    server_name int01.example.com ~^.*-int01\.example\.com$;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/crt/concat.pem;
+        ssl_certificate_key /etc/nginx/ssl/key/example.key;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto https;
+                proxy_set_header Host $host;
+                proxy_pass http://http-example-int01/;
+                proxy_redirect off;
+        }
+}
+....
+</pre>
+<p>Haproxy configuration</p>
+<pre class="brush: plain; title: ; notranslate">
+...
+frontend example-int01 lb2-vip.grpprod.com:8080
+    default_backend example-int01
+backend  example-int01
+        option forwardfor
+        option httpchk GET /healthcheck.php
+        http-check expect string OK
+        server  web01 x.y.z.w:80 check inter 2000 fall 3
+        server  web02 x.y.z.w:80 check inter 2000 fall 3
+        server  web03 x.y.z.w:80 check inter 2000 fall 3
+        server  web04 x.y.z.w:80 check inter 2000 fall 3
+        server  web05 x.y.z.w:80 check inter 2000 fall 3
+...
+</pre>
+<p>Apache configuration</p>
+<pre class="brush: plain; title: ; notranslate">
+
+ ServerName int01.example.com
+    DocumentRoot &quot;/srv/www/example/fa-front/public&quot;
+
+   &lt;Directory &quot;/srv/www/example/fa-front/public&quot;&gt;
+      Options -Indexes FollowSymLinks
+      AllowOverride None
+      Allow from All
+      Order Allow,Deny
+      RewriteEngine On
+      RewriteCond %{HTTP:X-Forwarded-Proto} https
+      RewriteRule .* - [E=HTTPS:on]
+
+      RewriteCond %{REQUEST_FILENAME} -s [OR]
+      RewriteCond %{REQUEST_FILENAME} -l [OR]
+      RewriteCond %{REQUEST_FILENAME} -d
+      RewriteRule ^.*$ - [NC,L]
+      RewriteRule ^.*$ index.php [NC,L]
+
+   SetEnv APPLICATION_ENV int01
+   DirectoryIndex index.php
+
+   LogFormat &quot;%v %{Host}i %h %l %u %t \&quot;%r\&quot; %&gt;s %b %{User-agent}i&quot; marc.int01
+   CustomLog /var/log/httpd/cloud-example-front.log example
+
+</pre>
+<p>Pacemaker configuration</p>
+<pre class="brush: plain; title: ; notranslate">
+node balance01
+node balance02
+primitive nginx lsb:nginx \
+        op monitor interval=&quot;1s&quot; \
+        meta target-role=&quot;Started
+primitive haproxy lsb:haproxy \
+        op monitor interval=&quot;1s&quot; \
+        meta target-role=&quot;Started&quot;
+primitive lb1-vip ocf:heartbeat:IPaddr2 \
+        params ip=&quot;x.x.x.x&quot; iflabel=&quot;nginx-vip&quot; cidr_netmask=&quot;32&quot; \
+        op monitor interval=&quot;1s&quot;
+primitive lb2-vip ocf:heartbeat:IPaddr2 \
+        params ip=&quot;y.y.y.y&quot; iflabel=&quot;haproxy-vip&quot; cidr_netmask=&quot;32&quot; \
+        op monitor interval=&quot;1s&quot;
+group haproxy_cluster lb2-vip haproxy \
+        meta target-role=&quot;Started&quot;
+group nginx_cluster lb1-vip  nginx \
+        meta target-role=&quot;Started&quot;
+property $id=&quot;cib-bootstrap-options&quot; \
+        dc-version=&quot;1.1.7-6.el6-148fccfd5985c5590cc601123c6c16e966b85d14&quot; \
+        cluster-infrastructure=&quot;openais&quot; \
+        expected-quorum-votes=&quot;2&quot; \
+        stonith-enabled=&quot;false&quot; \
+        last-lrm-refresh=&quot;1355137974&quot; \
+        no-quorum-policy=&quot;ignore&quot;
+rsc_defaults $id=&quot;rsc-options&quot; \
+        resource-stickiness=&quot;100&quot;
+</pre>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/12/04/a-cheap-web-balancer-nginxhaproxypacemaker/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

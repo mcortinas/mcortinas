@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>El blog d&#039;en Marc &#187; Tecnologia</title>
+	<atom:link href="https://marc.cortinasval.cat/blog/category/tecno/feed/" rel="self" type="application/rss+xml" />
+	<link>https://marc.cortinasval.cat/blog</link>
+	<description>Tal com raja....</description>
+	<lastBuildDate>Mon, 12 Jan 2015 08:16:14 +0000</lastBuildDate>
+	<language>ca</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.1.1</generator>
+	<item>
+		<title>Graphite: gran recurs per gràficar sistemes</title>
+		<link>https://marc.cortinasval.cat/blog/2014/04/29/graphite-gran-recurs-per-graficar-sistemes/</link>
+		<comments>https://marc.cortinasval.cat/blog/2014/04/29/graphite-gran-recurs-per-graficar-sistemes/#comments</comments>
+		<pubDate>Mon, 28 Apr 2014 22:33:27 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[carbon]]></category>
+		<category><![CDATA[graphite]]></category>
+		<category><![CDATA[monitor]]></category>
+		<category><![CDATA[systems]]></category>
+		<category><![CDATA[whisper]]></category>
+
+		<guid isPermaLink="false">https://marc.cortinasval.cat/blog/?p=472</guid>
+		<description><![CDATA[després de un parell de caps de setmana aprenent el potencial del Grpahite i aprofitant que he descobert el Omnigraffle també m&#8217;he animat a fer uns dibuixets. En aquest post recopilaré les comandes i configuracions aplicades per montar un lab en el macbook, on l&#8217;objectiu ha estat conèixer cadascun dels components que ens proporciona el [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>després de un parell de caps de setmana aprenent el potencial del Grpahite i aprofitant que he descobert el Omnigraffle també m&#8217;he animat a fer uns dibuixets. </p>
+<p>En aquest post recopilaré les comandes i configuracions aplicades per montar un lab en el macbook, on l&#8217;objectiu ha estat conèixer cadascun dels components que ens proporciona el Grpahite per a tal d&#8217;escalar-ho i també d&#8217;aconseguir una mica de alta disponibilitat.</p>
+<p>Mostraré 3 escenaris i comentaré les configuracions, on anirà creixent la complexitat alhora que tindrem el montatge preparat per recollir/graficar més quantitat de dades de forma més segura, ja enfoncant-ho per entorns de producció.  </p>
+<p>Les eines que he fet servir han estat Vagrant+VirtualBox per a virtualizat i Ubuntu 13.04 LTS en cadascun dels nodes virtualitzats.</p>
+<p>Evidentment, tot el que he practicat i après ha estat llegint les següents fonts:<br />
+&#8211; <a href="https://launchpad.net/graphite" title="https://launchpad.net/graphite" target="_blank">https://launchpad.net/graphite</a><br />
+&#8211; <a href="http://graphite.wikidot.com/installation" title="http://graphite.wikidot.com/installation" target="_blank">http://graphite.wikidot.com/installation</a><br />
+&#8211; <a href="http://bitprophet.org/blog/2013/03/07/graphite/" title="http://bitprophet.org/blog/2013/03/07/graphite/" target="_blank">http://bitprophet.org/blog/2013/03/07/graphite/</a></p>
+<p>Comencem per el escenari més sencill, on montem una maquina virtual Ubuntu a sobre el virtual Box amb Vagrant, on us pasaré les comandes utilitzades per a la instalació base.</p>
+<pre class="brush: plain; title: ; notranslate">	
+wget https://launchpad.net/graphite/0.9/0.9.10/+download/check-dependencies.py
+python check-dependencies.py
+apt-get update
+apt-get upgrade
+apt-get update
+apt-get -y install python-cairo python-django python-django-tagging python-memcache python-ldap python-zope python-twisted python-txamqp
+python check-dependencies.py
+apt-get -y install git vim 
+
+wget https://launchpad.net/graphite/0.9/0.9.10/+download/whisper-0.9.10.tar.gz
+tar xvfz whisper-0.9.10.tar.gz
+cd whisper-0.9.10/
+python setup.py install
+cd ..
+wget https://launchpad.net/graphite/0.9/0.9.10/+download/carbon-0.9.10.tar.gz
+tar xvfz carbon-0.9.10.tar.gz
+cd carbon-0.9.10/
+python setup.py install
+cd ..
+wget https://launchpad.net/graphite/0.9/0.9.10/+download/graphite-web-0.9.10.tar.gz
+tar xvfz graphite-web-0.9.10.tar.gz
+cd graphite-web-0.9.10/
+python setup.py install
+cd ..
+
+apt-get install libapache2-mod-wsgi
+cd /opt/graphite/conf
+cp carbon.conf.example carbon.conf
+vim carbon.conf
+cp storage-schemas.conf.example storage-schemas.conf
+vim storage-schemas.conf
+/opt/graphite/bin/carbon-cache.py start
+cp /opt/graphite/webapp/graphite/local_settings.py.example /opt/graphite/webapp/graphite/local_settings.py
+vim /opt/graphite/webapp/graphite/local_settings.py
+rm /etc/apache2/sites-enabled/000-default
+cd /opt/graphite
+cp ./examples/example-graphite-vhost.conf /etc/apache2/sites-enabled/
+chown -R www-data webapp
+chgrp www-data storage
+chmod g+w storage
+su - www-data
+ cd /opt/graphite
+ PYTHONPATH=`pwd`/webapp:`pwd`/whisper python ./webapp/graphite/manage.py syncdb
+cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/conf/graphite.wsgi
+chgrp www-data /opt/graphite/storage/log/webapp
+chmod g+w /opt/graphite/storage/log/webapp
+/etc/init.d/apache2 restart
+</pre>
+<p>L&#8217;escenari que obtenir és el segment i detallem per sobre cadascuna de les peces:<br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/scenari1.png"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/scenari1.png" alt="scenari1" width="392" height="298" class="alignleft size-full wp-image-475" /></a></p>
+<p>&#8211; <a> diamon.py: </a> Python script que recull dades del sistema que volem graficar. Més info a <a href="http://docs.brightcove.com/en/video-cloud/open-source/" title="http://docs.brightcove.com/en/video-cloud/open-source/" target="_blank">aquí</a>. Aquest dimoni enviará les dades en format plà al port 2003/tcp del carbon-cache.py amb el format: &#8220;NOM_DADE VALOR_DADA TIMESTAMP&#8221;. També ho pot enviar al port 2004/tcp si volem optimitzar l&#8217;enviament.<br />
+&#8211; <a> carbon-cache.py:  </a> Python Script que recull les dades tcp o udp, va emmagatzemant les dades en RAM i va volcant les dades al filesystem. La granularitat i la retenció de dades són definides a aquí.<br />
+&#8211; <a> Fitxer de dades WHISPER:  </a>En el sistema de fitxers tindrem un fitxer per a cada tipu de dada, amb extensió WSP<br />
+&#8211; <a> Una webapp python  </a> serà la encarregada de partir dels fitxers WHISPER permetré graficar-los i obetnir els reports. </p>
+<p>El carbon-cache.py és el component més important, per una banda, a ell li direm com guardarem les dades i per una altra també defineix com s&#8217;escala tota la solució, ja que si volem més capacitat haurem de posar més carbon-cache.py (1 per vCPU) i un carbon-relay.py per sobre que vagi distribuint l&#8217;entrada de dades.<br />
+TIP: En el cas de voler fer sharding de dades, ho hauriem de definir a aquí.</p>
+<p>A l&#8217;hore de agregar dades, ho tenim en 3 formes diferents:<br />
+ &#8211; Les guardem totes les dades granulades en els fitxers WSP i en la webapp graphite serà on les pintem agregades utilitzant funcions i el gran amic wilcard &#8220;*&#8221;.<br />
+ &#8211; Fem un agregat de dades en el carbon-cache.py a l&#8217;hora de emmagatzemar-ho a disc en el fitxer WSP, per defecte, quant tenim varies dades per a un mateix &#8220;instant&#8221; de temps, carbon-cache utilitza la funció de mitjana amb les dades entrants i només guarda un resultat. Podem canviar la funció de agregació i jugant amb els patrons en el carbon-cache.py, això ho especifiquem en el fitxer storage-aggregations.conf.<br />
+ &#8211; Per sobre del carbon-cache.py hi posem un altre python script carbon-aggregator.py on anirà agregant les dades rebudes del collectors i les enviarà al carbon-cache.</p>
+<p>Ara ja estem en condicions d&#8217;entendre el seguent resum:<br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/summary1.png"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/summary1.png" alt="summary" width="603" height="644" class="alignleft size-full wp-image-484" /></a></p>
+<p>El segon escenari, duplicarem el numero de nodes i afegirem el carbon-relay.py en cadascun d&#8217;ells. En aquest hi definirem un factor de replicació de 2 i enviarem les dades el corresponent carbon-cache.py i al carbon-relay de l&#8217;altre node. Obtindrem el següent escenari:<br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/HAcreuat.png"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/HAcreuat.png" alt="HAcreuat" width="590" height="470" class="alignleft size-full wp-image-486" /></a></p>
+<p>En la següent captura teniu els dos webapps on veiem que grafiquen dades dels 2 collectors:<br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/Captura-de-pantalla-2014-04-26-a-les-10.35.46.png"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/Captura-de-pantalla-2014-04-26-a-les-10.35.46.png" alt="Captura de pantalla 2014-04-26 a les 10.35.46" width="2454" height="1180" class="alignleft size-full wp-image-487" /></a></p>
+<p>Finalment, l&#8217;ultime escenari que tenim es afegir un 3 node on únicament hi montarem un carbon-relay.py i serà ell qui rebi tot el trafic d&#8217;entrada i qui apliqui un factor de replicació 2, on passarà el trafic als carbon-relay.py que hi tenim en cada node. A més, duplicarem en cada node el numero de carbon-cache.py. En el fitxer relay-rules.conf definirem quines dades enviarem a cadascun del cabon-caches.py de cada node.</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/hafull.png"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2014/04/hafull.png" alt="hafull" width="590" height="595" class="alignleft size-full wp-image-489" /></a> </p>
+<p>Per concluir, us paso el fitxer de Vagrant on teniu definides les 3 VMs per si algú el vol aprofitar.</p>
+<pre class="brush: plain; title: ; notranslate">
+❯ cat Vagrantfile
+Vagrant::Config.run do |config|
+    config.vm.define :graphiterelay do |graphiterelay_config|
+        graphiterelay_config.vm.box = &quot;graphiterelay&quot;
+        graphiterelay_config.vm.box_url = &quot;package.box&quot;
+        graphiterelay_config.vm.forward_port 80,8000
+        graphiterelay_config.vm.forward_port 8888,8888
+        graphiterelay_config.vm.forward_port 443,44300
+        graphiterelay_config.vm.network :hostonly, &quot;192.168.50.2&quot;, :netmask =&gt; &quot;255.255.255.0&quot;
+    end
+    config.vm.define :graphite do |graphite_config|
+	graphite_config.vm.box = &quot;graphite&quot;
+	graphite_config.vm.box_url = &quot;/Users/mcortinas/Boxes/ubuntu-precise12042-x64-vbox43.box&quot;
+        graphite_config.vm.forward_port 80,8001
+        graphite_config.vm.forward_port 443,44301
+	graphite_config.vm.forward_port 8888,18888
+	graphite_config.vm.network :hostonly, &quot;192.168.50.4&quot;, :netmask =&gt; &quot;255.255.255.0&quot;
+    end
+    config.vm.define :graphite2 do |graphite2_config|
+        graphite2_config.vm.box = &quot;graphite2&quot;
+        graphite2_config.vm.box_url = &quot;package.box&quot;
+        graphite2_config.vm.forward_port 80,8002
+	graphite2_config.vm.forward_port 8888,28888
+        graphite2_config.vm.forward_port 443,44302
+	graphite2_config.vm.network :hostonly, &quot;192.168.50.5&quot;, :netmask =&gt; &quot;255.255.255.0&quot;
+    end
+end
+</pre>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2014/04/29/graphite-gran-recurs-per-graficar-sistemes/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>varnish-cache, un molt bon aliat per a la web</title>
+		<link>https://marc.cortinasval.cat/blog/2013/12/17/varnish-cache-un-molt-bon-aliat-per-a-la-web/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/12/17/varnish-cache-un-molt-bon-aliat-per-a-la-web/#comments</comments>
+		<pubDate>Wed, 04 Dec 2013 14:54:32 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[cache]]></category>
+		<category><![CDATA[http]]></category>
+		<category><![CDATA[varnish]]></category>
+		<category><![CDATA[web]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=84</guid>
+		<description><![CDATA[Ja fa un parell d&#8217;anys que faig servir el varnish cache i és un molt bon aliat de qualsevol plataforma web per descarregar als servidors http (apache, nginx, lighthttpd, etc&#8230; ) i al backend, ja sigui per aplicacions amb poc tràfic com per aplicacions/plataformes d&#8217;alt rendiment, on pot ser un CLAU aliat. Per això, en [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Ja fa un parell d&#8217;anys que faig servir el varnish cache i és un molt bon aliat de qualsevol plataforma web per descarregar als servidors http (apache, nginx, lighthttpd, etc&#8230; ) i al backend, ja sigui per aplicacions amb poc tràfic com per aplicacions/plataformes d&#8217;alt rendiment, on pot ser un CLAU aliat. </p>
+<p>Per això, en aquest post enumenarem les raons principals d&#8217;implantar el varnish, citarem els processos i posarem 4 exemples de configuracions amb diferents proposits.</p>
+<p>Bueno, començaré enumerant les 3 funcionalitats principals:<br />
+ &#8211; Accelerador de continguts web, minimitzant considerablement els temps mitjans de resposta dels continguts dinamics d&#8217;un site.<br />
+ &#8211; Alliberar de càrrega el backend, des dels servidors web i sobretot a les bases de dades, sql i nosql.<br />
+ &#8211; Permetre servir continguts &#8220;caducats&#8221; en cas que la plataforma tingui problemes de rendiment.</p>
+<p>Altres funcionalitats més avançades que podem fer amb Varnish es,<br />
+ &#8211; Si treballeu amb CDNs pot fer el paper d&#8217;amortidor en moments de canvis bruscos de tràfic, per exemple, un campanya amb molt èxit, una noticia important, etc&#8230;<br />
+ &#8211; Securitzar el website, per segons quines parts de la web podem exigir que les peticions haguin de complir uns determinats requeriments. Això també ho pot fer el apache, però aixi el podem alliberar d&#8217;aquestes tasques.<br />
+ &#8211; En plataformes d&#8217;alt rendiment, si treballeu amb CDNs, per bloquejar l&#8217;accés a determinades parts de les webs que no es puguin processar per averia en el sistema.</p>
+<p>Segur que podeu trobar altres funcionalitats, aquestes són les que he utilitzat.</p>
+<p>La filosofia del Varnish es emmagatzemar a memòria volàtil tots els cantinguts &#8220;cachejables&#8221; i estalviar de cicles de proces i cicles d&#8217;espera d&#8217;entrada i sortida, es a dir, l&#8217;equiliri IO-CPU-RAM es veurà afectat així: disminuim IO, disminuim us de CPU, increment ús de memoria, on és molt important dimensionar bé la memòria que utilitzarem.</p>
+<p>Un dels principals inconvenients dels Varnish és el HTTPS, encara que té el sentit. Varnish és un accelerador de continguts HTTP que vol disminuir el temps de resposta, el httpS és el contrari, requereix de temps de proces per a tal d&#8217;assegurar la seguretat. Conclusió, Varnish no es capaç i no ho serà mai de servir contignut per HTTPS. Només el podrem fer servir per aquelles parts del website que no siguin segures. <a href=http://marc.cortinasval.cat/blog/2013/12/01/balancejador-https-economic-nginxhaproxypacemaker/>També ho podeu utilitzar en parts de la web segures si poseu un nginx per davant, en aquest altre post teniu explicat millor aquesta solució.</a></p>
+<p>D&#8217;altra banda, la corba d&#8217;aprenentatge del varnish es considerable, de fet, un graph em va ajudar a entendre totes les transicions possibles, es a dir, és el tipic aliat que si el compliquem molt es pot tornar en enemic. <a href=https://www.varnish-software.com/static/book/Tuning.html>De fet, el varnish són 2 procesos un pare i un fill (fork), on el pare fa el paper de gestió i compila les configuracion escrites amb llenguatge VCL i el fill és qui realment fa realment les funcions descrites en la configuracio VCL. En aquest link ho explica detalladament.</a></p>
+<p><a href=https://www.varnish-cache.org/docs/3.0/tutorial/vcl.html#>Es a dir, la clau del varnish, és escriure un VCL amb allò que realment necessitem que faci. Aqui us deixo un graph que vaig decidir fer un cop vaig llegir la documentació oficial del varnish d&#8217;aquest link.</a><br />
+<a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/12/Varnish_subroutines_Graph.png"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/12/Varnish_subroutines_Graph.png" alt="Varnish_subroutines_Graph" width="1302" height="768" class="aligncenter size-full wp-image-347" /></a></p>
+<p>Seguidament posarem 3 exemples de fitxers basics de VCL i comentarem la seva finalitat:</p>
+<p><strong>Exemple 1</strong></p>
+<pre class="brush: plain; title: ; notranslate">
+backend default {
+  .host = &quot;127.0.0.1&quot;;
+  .port = &quot;8080&quot;;
+  .max_connections = 40;
+  .first_byte_timeout = 180s;
+  .between_bytes_timeout = 180s;
+}
+
+sub vcl_recv {
+      return(pass);
+}
+</pre>
+<p>Aquesta configuració l&#8217;únic que voliem és limitar la quantitat de connexions(max_connections) que li passarem al un apache en local, en aquest cap no cachejem res.</p>
+<p><strong>Exemple 2</strong></p>
+<pre class="brush: plain; title: ; notranslate">
+backend default {
+  .host = &quot;127.0.0.1&quot;;
+  .port = &quot;8080&quot;;
+  .max_connections = 200;
+  .connect_timeout = 180s;
+  .first_byte_timeout = 180s;
+  .between_bytes_timeout = 180s;
+  .probe = {
+    .url = &quot;/healthcheck.php&quot;;
+    .timeout = 100 ms;
+    .interval = 1s;
+    .window = 10;
+    .threshold = 8;
+  }
+}
+
+sub vcl_recv {
+  if (req.http.Host == &quot;setup.domain.com&quot;)
+  {
+    set req.grace = 30s;
+    return(lookup);
+  }
+  else
+  {
+   return(pass);
+  }
+}
+
+sub vcl_fetch {
+  set beresp.grace = 1h;
+}
+</pre>
+<p>En aquest exemple només cachejem les peticions del domini &#8220;setup.domain.com&#8221;, domini intern de la plataforma que serveix les configuracions de l&#8217;aplicació. Ademés, volem que si el backend no respon, seguiran sen vàlids durant 1 hora. Això ho conseguim en les tres últimes linies de codi. <a href=http://www.tomas.cat/blog/ca/configuració-bàsica-de-varnish-amb-http-cache-i-stale-while>El meu company Tomas té un article on exemplifica molt bé aquest comportament. Una de les coses més interessants del article de Tomàs es diferenciar les dues situacions en les que aquest parametre es important.</a><br />
+&#8211; No hi ha cap backend disponible, per tant servim contingut antic.<br />
+&#8211; Hi ha backends disponibles, i un fil ja ha demanat nou contingut. Mentre aquest nou contingut arriba des del backend, el varnish continua servint l&#8217;antic a la resta de fils.</p>
+<p><strong>Exemple 3</strong></p>
+<pre class="brush: plain; title: ; notranslate">
+sub vcl_recv {
+…
+        if (req.url ~ &quot;.*remindmethepassword.*&quot; &amp;&amp; !req.http.User-Agent) {
+            error 403 &quot;Forbidden&quot;;
+        }
+…
+        return(pass);
+}
+</pre>
+<p>En el exemple anterior, podem aferir-hi regles que augmentent la seguretat, per exemple, en les peticions que tinguin remindmethepassword en la URL necessitaran tenir el User-Agent, sino retornem un 403.</p>
+<p><strong>Exemple 4</strong></p>
+<pre class="brush: plain; title: ; notranslate">
+backend default {
+  .host = &quot;127.0.0.1&quot;;
+  .port = &quot;8080&quot;;
+  .max_connections = 200;
+  .connect_timeout = 180s;
+  .first_byte_timeout = 180s;
+  .between_bytes_timeout = 180s;
+  .probe = {
+    .url = &quot;/healthcheck.php&quot;;
+    .timeout = 10 ms;
+    .interval = 5s;
+    .window = 5;
+    .threshold = 3;
+  }
+}
+
+sub vcl_error {
+}
+
+sub vcl_recv {
+     if (req.restarts == 0) {
+       if (req.http.x-forwarded-for) {
+           set req.http.X-Forwarded-For =
+               req.http.X-Forwarded-For + &quot;, &quot; + client.ip;
+       } else {
+           set req.http.X-Forwarded-For = client.ip;
+       }
+     }
+     if (req.request != &quot;GET&quot; &amp;&amp;
+       req.request != &quot;HEAD&quot; &amp;&amp;
+       req.request != &quot;PUT&quot; &amp;&amp;
+       req.request != &quot;POST&quot; &amp;&amp;
+       req.request != &quot;TRACE&quot; &amp;&amp;
+       req.request != &quot;OPTIONS&quot; &amp;&amp;
+       req.request != &quot;DELETE&quot;) {
+         /* Non-RFC2616 or CONNECT which is weird. */
+         return (pipe);
+     }
+     if (req.request != &quot;GET&quot; &amp;&amp; req.request != &quot;HEAD&quot; &amp;&amp; req.request != &quot;POST&quot; ) {
+         /* We only deal with GET and HEAD by default */
+         return (pass);
+     }
+   set req.grace = 30s;
+    return(lookup);
+}
+
+sub vcl_fetch {
+     if (beresp.ttl &lt;= 0s ||
+         beresp.http.Vary == &quot;*&quot;) {
+               return (hit_for_pass);
+     }
+ if(beresp.ttl &gt; 0s){  unset beresp.http.Set-Cookie;}
+
+  set beresp.grace = 1h;
+  return(deliver);
+}
+</pre>
+<p>En aquest exemple ja comença a ser més complert:<br />
+ &#8211; limitat a 200 connexions, a més peticions, retornem 503.<br />
+ &#8211; accepted petitions GET, HEAD, PUT, POST, TRACE, OPTIONS, DELETE.<br />
+ &#8211; cachejem GET, POST, HEAD segons les capceleres HTTP que emet el backend<br />
+ &#8211; en el moment en que anem a buscar un objecte en la cache, eliminem les capçeleres Set-Cookie<br />
+ &#8211; tindrem 1 hora els elements en la cache, en cas que el backend estigui caigut o no respongui</p>
+<p>Finalment, el ideal seria tenir ben segmentada la plana web amb les diferents seccions i tenir identificades les url&#8217;s de cadascuna d&#8217;elles facilitant així:<br />
+ &#8211; La propia aplicació generi les capçeleres HTTP adecuades especificant quant de temps serà vàlid el contingut, segons quines seccións o accions tindrem uns temps de caducitat diferents<br />
+ &#8211; La propia aplicació permite caducar/invalidar el contingut en el varnish en les situacions que ho necessitin.<br />
+ &#8211; Securitzar les parts de la web que ho requereixin jugant amb les capçeleres</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/12/17/varnish-cache-un-molt-bon-aliat-per-a-la-web/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>openSSL, recopilem comandes i eines web per securitzar</title>
+		<link>https://marc.cortinasval.cat/blog/2013/12/06/openssl-recopilem-comandes-i-eines-web-per-securitzar/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/12/06/openssl-recopilem-comandes-i-eines-web-per-securitzar/#comments</comments>
+		<pubDate>Fri, 06 Dec 2013 11:09:16 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[https]]></category>
+		<category><![CDATA[openssl]]></category>
+		<category><![CDATA[secure]]></category>
+		<category><![CDATA[startssl]]></category>
+		<category><![CDATA[thawte]]></category>
+
+		<guid isPermaLink="false">https://marc.cortinasval.cat/blog/?p=362</guid>
+		<description><![CDATA[Tots tart o d&#8217;hora ens trobem amb la necessitat d&#8217;haber de securitzar comunicacions, i moltes vegades no tens a má la comanda openssl per segons quins casos, és per això que m&#8217;he decidit per recopilar-les. &#8211; Per crear petición de certificar (CSR) i clau no signada, demana info per command line: &#8211; Per crear petición [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Tots tart o d&#8217;hora ens trobem amb la necessitat d&#8217;haber de securitzar comunicacions, i moltes vegades no tens a má la comanda openssl per segons quins casos, és per això que m&#8217;he decidit per recopilar-les.</p>
+<p>&#8211; Per crear petición de certificar (CSR) i clau no signada, demana info per command line:</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl req -nodes -new -keyout cortinasval.key.pem -out cortinasval.csr.pem
+openssl req -nodes -new -keyout cortinasval.key.pem -out cortinasval.csr.pem rsa:2048 
+</pre>
+<p>&#8211; Per crear petición de certificar (CSR) a partir de clau, demana info per command line:</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl req -nodes -new -key cortinasval.key.pem -out cortinasval.csr.pem
+</pre>
+<p>&#8211; Mostra la clau fingerprint d&#8217;un clau:</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl x509 -subject -dates -fingerprint -in cortinasval.key.pem
+</pre>
+<p>&#8211; Generem clau de 4096 bits</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl genrsa -out cortinasval.key.pem 4096
+</pre>
+<p>&#8211; Mostrem informació d&#8217;una solicitud de firma (CSR)</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl req -text -noout -in cortinasval.csr.pem
+</pre>
+<p>&#8211; Mostrem informació d&#8217;un certificat generat</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl x509 -in cortinasval.crt.pem -noout -text
+</pre>
+<p>&#8211; Creant fitxers PEM per als servidors</p>
+<pre class="brush: plain; title: ; notranslate">
+cat cortinasval.key.pem cortinasval.crt.pem cortinasval.dhp.pem &gt; cortinasval.pem
+</pre>
+<p>&#8211; Firmar e-mails</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl smine -sign -in msg.txt -text -out msg.encrypted -signer cortinasval.crt.pem -inkey cortinasval.key.pem
+</pre>
+<p>&#8211; Crear fitxer PKCS12 </p>
+<pre class="brush: plain; title: ; notranslate">
+openssl pkcs12 -export -in cortinasval.crt.pem -inkey cortinasval.key.pem -out fitxer.p12 -name &quot;Marc Cortinas&quot;
+</pre>
+<p>&#8211; Mostrar certificats utilitzats en la comunicació a un socket</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl s_client -showcerts -connect marc.cortinasval.cat:443 -CApath /etc/pki/tls/certs
+</pre>
+<p>Si volem crear una entitat certificadora ens hem d&#8217;assegurar que existeixin els fitxers index.txt(buit) i el serial(posat a 01), a mes, crearem directoris private i network. Editem el fitxer openssl.cnf i configurem default_days_certificate i private_key, finalment posem la cantitat de bits que utilitzarem per a la key (1024..2048)</p>
+<p>&#8211; Per crear certificat CA</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl req -new -x509 -days 3650 -keyout private/cortinasval-CA.key.pem -out ./cortinasval-CA.crt.pem 
+</pre>
+<p>&#8211; Exportar el certificat CA al format DER</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl x509 -in cortinasval-CA.crt.pem -outform der -out cortinasval-CA.crt
+</pre>
+<p>&#8211; Revokem un certificat</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl ca -revoke cortinasval.crt.pem
+</pre>
+<p>&#8211; Generem la llista de Revocacio de certificats</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl ca -gencrl -out crl/cortinaslval-CA.crl
+</pre>
+<p>&#8211; Firmem la petició de certificat (CSR)</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl ca -out cortinasval.crt.pem -in cortinaslval.req.pem
+</pre>
+<p>&#8211; Creem el parametre Diffie-Hoffman per l&#8217;actual CA</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl dhparam -out cortinasval-CA.dhp.pem 1536
+</pre>
+<p>&#8211; Creem certificat auto-signat a partir d&#8217;una clau</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl req -new -x509 -key cortinasval.key.pem -out cortinasval.crt.pem
+</pre>
+<p>&#8211; Encriptar un fitxer sencill</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl enc -bf -A -in fitxer_de_test.txt
+</pre>
+<p>&#8211; Desencriptar un fitxer sencill</p>
+<pre class="brush: plain; title: ; notranslate">
+openssl enc -bf -d -A -in fitxer_de_test.txt
+</pre>
+<p>&#8211; Calcul de claus sha1</p>
+<pre class="brush: plain; title: ; notranslate">
+ openssl speed sha1
+</pre>
+<p>Pels servidors Webs que volguem fer ús del httpS, cada proveidor d&#8217;entitats certificadores te el seu manual, deixo aquí els 2 que he hagut d&#8217;instalar:<br />
+ &#8211; <a href=https://search.thawte.com/support/ssl-digital-certificates/index?page=content&#038;actp=CROSSLINK&#038;id=SO15464> Thawte </a><br />
+ &#8211; <a href=http://www.startssl.com/?app=21> Startssl </a></p>
+<p>Eines utils per obtener información del nivel de seguretat:<br />
+ &#8211; <a href=https://ssltools.thawte.com/checker/views/certCheck.jsp> Thhwte tool </a><br />
+ &#8211; <a href=https://www.ssllabs.com> SSL Labs </a></p>
+<p>Quins conceptes hem de tenir clar?<br />
+ &#8211; Tamany de Bits utilitzats a l&#8217;hora de crear el fitxers .pem<br />
+ &#8211; SAN, noms de dominos acceptats pels certifictats, poden ser N noms, i tambe portar wildcard.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/12/06/openssl-recopilem-comandes-i-eines-web-per-securitzar/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>Balancejador HTTP/S econòmic: Nginx+Haproxy+Pacemaker</title>
+		<link>https://marc.cortinasval.cat/blog/2013/12/04/balancejador-https-economic-nginxhaproxypacemaker/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/12/04/balancejador-https-economic-nginxhaproxypacemaker/#comments</comments>
+		<pubDate>Tue, 19 Mar 2013 17:32:00 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[balance]]></category>
+		<category><![CDATA[centos]]></category>
+		<category><![CDATA[corosync]]></category>
+		<category><![CDATA[ha]]></category>
+		<category><![CDATA[haproxy]]></category>
+		<category><![CDATA[http]]></category>
+		<category><![CDATA[https]]></category>
+		<category><![CDATA[nginx]]></category>
+		<category><![CDATA[pacemaker]]></category>
+		<category><![CDATA[vmware]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=25</guid>
+		<description><![CDATA[Seguidament us explicaré com es pot montar un balancejador httpS molt econòmic i molt eficient, el qual s&#8217;ha implementat tan en entorns productius com no productius, la motivació inicial del qual va ser centralitzar el balanceig dels diferents entorns d&#8217;integració continua d&#8217;una aplicació web. En entorns productius també l&#8217;he implementat després de fer varies probes [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Seguidament us explicaré com es pot montar un balancejador httpS molt econòmic i molt eficient, el qual s&#8217;ha implementat tan en entorns productius com no productius, la motivació inicial del qual va ser centralitzar el balanceig dels diferents entorns d&#8217;integració continua d&#8217;una aplicació web. En entorns productius també l&#8217;he implementat després de fer varies probes de rendiment amb el &#8220;ab&#8221; i el &#8220;siege&#8221; .</p>
+<p>L&#8217;únic requeriment que hem d&#8217;asumir és allotjar tot tràfic dels diferents entorns en subdominis d&#8217;un domini (p.e.example.com), on podem tenir int01.example.com, int02.example.com, test01.example.com, test02.example.com, pre.example.com, etc..</p>
+<p>Anàlogament, en els entorns de producció, podem fer la mateixa discriminació diferenciant el tràfic pels paisos(es.example.com,fr.example.com), plataformes(m.example.com), tipus de contingut(static.example.com).</p>
+<p>Els objectius que em vaig marcar van ser:</p>
+<li>Baix cost econòmic: utilitzarem programari de codi obert des dels operatius fins als dimonis: CentOS, Nginx, Haproxy, Pacemaker, Corosync.</li>
+<li>Alta disponibilitat de maquinari i programari: a nivell de maquinari ho montarem en una infraestructura virtualitzada amb varis nodes físics i implemtarem el pacemaker+corosync per a tenir alta disponibilitat en els dimonis.</li>
+<li>Centralitzar la negociació SSL de tota la plataforma en un punt inicial i alliberar càrrega SSL del reste de la plataforma.</li>
+<li>Permetre més flexibilitat i control en els balancejos de cadascún dels entorns: haproxy permet fa possible controlar en un pool de balanceig si un frontal hi està activat segons el seu nivell de càrrega o si te connexió contra la base de dades, per exemple.</li>
+<li>Tenir una plataforma securitzada, requeriment essencial sobretot en entorns productius.</li>
+<p>Els dimonis que utilitzarem serà Nginx, Haproxy, Pacemaker i Corosync, tot programari lliure on abarata el cost considerablement.</p>
+<p>En el següent esquema es veu clarament l&#8217;arquitectura de tot el montatge.</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB.png"><img class="size-medium wp-image-64 aligncenter" alt="fisicalLB" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/fisicalLB-300x203.png" width="300" height="203" /></a></p>
+<p>El comento breument, no entraré en detall en tot, em centro en lo important d&#8217;aquest post. Els navegadors dels usuaris fan les peticions a les empreses que fan de CDN, després aquestes peticions van a parar en la nostra plataforma on filtrarem el tràfic amb un firewall. Un cop les peticions són filtrades van a parar un nginx. La finalitat del nginx es discriminar el tràfic segons el entorn i centralitzar totes les negociacions SSL del tràfic HTTPS. Seguidament, les peticions passen a un haproxy on aquest balanceja entre els diferents frontals de cadascun dels entorns.</p>
+<p>Per tal de securitzar-ho tot, definirem 3 VLAN&#8217;s, dmz, frontend i backend. Tot el tràfic és filtrat pel firewall, el tràfic sortint, el entrant i el tràfic entre zones. En la DMZ posarem 2 maquines virtuals CentOs on tindrem els serveis de Nginx i Haproxy en actiu-passiu utlitzant pacemaker-corosync. En el frontend tenim els frontals de cadascun dels entorns i en el backend tenim les dades, mysql, cassandras, mongos, nfs, cifs, etc&#8230;.</p>
+<p>Per exemplificar-ho millor, ens centrarem només en un entorn, int01.example.com.</p>
+<p>Primerament en la DMZ montarem una 2 màquines virtuals on hi tindrem 2 ip flotants, una per el nginx i l&#8217;altre pel haproxy. Jo ho he implemetat en una infraestructura virtualitzada vmware però també es poden montar solucions més econòmiques com XenServer, KVM, etc&#8230; Evidentment, sigui quina sigui la solució de virtualització, hem d&#8217;assegurar-nos que les màquines virtuales sempre estàn corrent en màquines físiques diferents.</p>
+<p>Les peticions entraran en la ip flotant del nginx, el nginx té dues funcions, centralitzar la negociació SSL i discriminar el tràfic per entorns. En el tràfic HTTPS afegirem una capçalera HTTP &#8220;X-forwarded-proto: https&#8221;, on l&#8217;apache la recollirà i activarà la variable HTTPS emmascarant-li a la aplicació. El tipus de certificat que afegirem en el nginx serà un certificat signat per una entitat certificadora oficial on el Common-Name que utilitzarem serà de tipus wildcard, es a dir, per aquest exemple, &#8220;*.example.com&#8221;, això ens facilitza molt la gestió del certificats i ens dona molta facilitat de gestió. En entorns de producció ho dimensionem assignant els valors correctes de <a href="http://wiki.nginx.org/CoreModule#worker_processes">worker_processes</a><strong> </strong>i <a href="http://wiki.nginx.org/EventsModule#worker_connections">worker_connections</a> tenint en compte la formula: max clients = worker_processes * worker_connections/4.</p>
+<p>Seguidament les peticions passen al haproxy on aquest balanceja entre els diferents frontals de cadascun del entorn. El haproxy ens permet estriar l&#8217;algorisme de balanceig, jo acostumo a utilitzar Round Robin. A més, podem prefixar els rangs de IPs dels frontals que hi hauran en cadascun dels entorns, així podem desplegar més frontals en el cas que sigui necessari sense haber de reinicilitzar el dimoni.<br />
+Haproxy fara una petició a un php que hi ha en cadascun dels frontals on retorna un &#8220;OK&#8221; si no està swapejant, no té molta càrrega i té conectivitat en les bases de dades. Cal remarcar que haproxy també ens permet realitzar balancejos &#8220;sticky&#8221; tan en aplicacions JAVA com PHP, depenentment d&#8217;una capçalara HTTP, habitualment les capçaleres JSESSIONID i PHPSESSID respectivament. (en apps ASP teniem ASPSESSIONID). <a href="http://code.google.com/p/haproxy-docs/wiki/maxconn">En entorns de producció fixarem la variable maxconn tenim en compte que cada petició consumeix 17kb.</a></p>
+<p>Finalment les peticions arriben als frontals on primerament passen pel varnish i les peticions que no siguin cachejables arribaran finalment al apache, crec que aquests dos dimonis es mereixen un post especial per ells dos, que ja tinc en el backlog del blog.</p>
+<p>En el següent diagrama clarifica tota l&#8217;arquitectura:</p>
+<div id="attachment_68" style="width: 310px" class="wp-caption aligncenter"><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional.png" target="_blank"><img class="size-medium wp-image-68 " title="Diagrama Lògic" alt="Diagrama Lògic" src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/funcional-300x179.png" width="300" height="179" /></a><p class="wp-caption-text">Diagrama Lògic</p></div>
+<p>Seguidament posaré les configuracions més importants, Nginx, Haproxy, Pacemaker:</p>
+<p>Parametres del Nginx</p>
+<pre class="brush: plain; title: ; notranslate">
+....
+upstream http-example-int01 {
+    server lb2-vip.example.com:8080;
+    keepalive 16;
+}
+server {
+        listen lb1-vip.example.com:80;
+    server_name int01.example.com ~^.*-int01\.example\.com$;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host;
+                proxy_pass http://http-example-int01/;
+                proxy_redirect off;
+        }
+}
+server {
+        listen lb1-vip.example.com:443 ssl;
+    server_name int01.example.com ~^.*-int01\.example\.com$;
+
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/crt/concat.pem;
+        ssl_certificate_key /etc/nginx/ssl/key/example.key;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto https;
+                proxy_set_header Host $host;
+                proxy_pass http://http-example-int01/;
+                proxy_redirect off;
+        }
+}
+....
+</pre>
+<p>Parametres del Haproxy</p>
+<pre class="brush: plain; title: ; notranslate">
+...
+frontend example-int01 lb2-vip.grpprod.com:8080
+    default_backend example-int01
+backend  example-int01
+        option forwardfor
+        option httpchk GET /healthcheck.php
+        http-check expect string OK
+        server  web01 x.y.z.w:80 check inter 2000 fall 3
+        server  web02 x.y.z.w:80 check inter 2000 fall 3
+        server  web03 x.y.z.w:80 check inter 2000 fall 3
+        server  web04 x.y.z.w:80 check inter 2000 fall 3
+        server  web05 x.y.z.w:80 check inter 2000 fall 3
+...
+</pre>
+<p>Parametres del Apache</p>
+<pre class="brush: plain; title: ; notranslate">
+
+ ServerName int01.example.com
+    DocumentRoot &quot;/srv/www/example/fa-front/public&quot;
+
+   &lt;Directory &quot;/srv/www/example/fa-front/public&quot;&gt;
+      Options -Indexes FollowSymLinks
+      AllowOverride None
+      Allow from All
+      Order Allow,Deny
+      RewriteEngine On
+      RewriteCond %{HTTP:X-Forwarded-Proto} https
+      RewriteRule .* - [E=HTTPS:on]
+
+      RewriteCond %{REQUEST_FILENAME} -s [OR]
+      RewriteCond %{REQUEST_FILENAME} -l [OR]
+      RewriteCond %{REQUEST_FILENAME} -d
+      RewriteRule ^.*$ - [NC,L]
+      RewriteRule ^.*$ index.php [NC,L]
+
+   SetEnv APPLICATION_ENV int01
+   DirectoryIndex index.php
+
+   LogFormat &quot;%v %{Host}i %h %l %u %t \&quot;%r\&quot; %&gt;s %b %{User-agent}i&quot; marc.int01
+   CustomLog /var/log/httpd/cloud-example-front.log example
+
+</pre>
+<p>Parametres del Pacemaker</p>
+<pre class="brush: plain; title: ; notranslate">
+node balance01
+node balance02
+primitive nginx lsb:nginx \
+        op monitor interval=&quot;1s&quot; \
+        meta target-role=&quot;Started
+primitive haproxy lsb:haproxy \
+        op monitor interval=&quot;1s&quot; \
+        meta target-role=&quot;Started&quot;
+primitive lb1-vip ocf:heartbeat:IPaddr2 \
+        params ip=&quot;x.x.x.x&quot; iflabel=&quot;nginx-vip&quot; cidr_netmask=&quot;32&quot; \
+        op monitor interval=&quot;1s&quot;
+primitive lb2-vip ocf:heartbeat:IPaddr2 \
+        params ip=&quot;y.y.y.y&quot; iflabel=&quot;haproxy-vip&quot; cidr_netmask=&quot;32&quot; \
+        op monitor interval=&quot;1s&quot;
+group haproxy_cluster lb2-vip haproxy \
+        meta target-role=&quot;Started&quot;
+group nginx_cluster lb1-vip  nginx \
+        meta target-role=&quot;Started&quot;
+property $id=&quot;cib-bootstrap-options&quot; \
+        dc-version=&quot;1.1.7-6.el6-148fccfd5985c5590cc601123c6c16e966b85d14&quot; \
+        cluster-infrastructure=&quot;openais&quot; \
+        expected-quorum-votes=&quot;2&quot; \
+        stonith-enabled=&quot;false&quot; \
+        last-lrm-refresh=&quot;1355137974&quot; \
+        no-quorum-policy=&quot;ignore&quot;
+rsc_defaults $id=&quot;rsc-options&quot; \
+        resource-stickiness=&quot;100&quot;
+</pre>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/12/04/balancejador-https-economic-nginxhaproxypacemaker/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Tmux ha guanyat!</title>
+		<link>https://marc.cortinasval.cat/blog/2013/11/29/tmux-ha-guanyat/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/11/29/tmux-ha-guanyat/#comments</comments>
+		<pubDate>Fri, 22 Nov 2013 08:36:55 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[console]]></category>
+		<category><![CDATA[iterm]]></category>
+		<category><![CDATA[screen]]></category>
+		<category><![CDATA[ssh2]]></category>
+		<category><![CDATA[terminal]]></category>
+		<category><![CDATA[terminator]]></category>
+		<category><![CDATA[tmux]]></category>
+		<category><![CDATA[tty]]></category>
+		<category><![CDATA[wemux]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=247</guid>
+		<description><![CDATA[Parlem de terminals de consola! Parlem de TMUX!!! Fa ja uns mesos que estem treballant en el departament amb aquest multiplexor de terminals i estem tant contents amb ell que s&#8217;ha guanyat un post! Encara recordo amb nostàlgia quant vem descobrir l&#8217;screen, eina que vem explotar en els servidors per llençar processos que sabem que [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Parlem de terminals de consola! Parlem de TMUX!!!<br />
+Fa ja uns mesos que estem treballant en el departament amb aquest multiplexor de terminals i estem tant contents amb ell que s&#8217;ha guanyat un post!</p>
+<p>Encara recordo amb nostàlgia quant vem descobrir l&#8217;screen, eina que vem explotar en els servidors per </p>
+<li>llençar processos que sabem que tenen una llarga durada, aqui tenim d&#8217;aliats el &#8220;&#038;>>&#8221; i el time ( /usr/bin/time &#8211;format=&#8221;%E %S %U %P&#8221; &#8211;output=&#8221;logfile&#8221;)</li>
+<li>llençar processos crítics on volem minimitzar els riscos de deixar-ho a mitges per algun tall de llum en el nostre laptop</li>
+<li>llençar processos de forma desatesa que volem que es comportin com un dimoni, util quan et demanen llençar script com si fos un dimoni a mode urgent.</li>
+<li>llençar processos on puguin fer seguiment als companys, útil per el processos que duran varis torns d&#8217;operadors</li>
+<p>però com va dir un colega, l&#8217;screen està &#8220;depre&#8221; ( de deprecated! està passat de moda! ), amb tota la raó del món! ja veureu&#8230;</li>
+<p>D&#8217;una altra banda, <a href="https://launchpad.net/terminator/+download" title="Terminator" target="_blank">Terminator(Linux)</a> i <a href="http://iterm.sourceforge.net" title="iTerm" target="_blank">iTerm(Mac)</a> han estat les consoles utilitzades per realitzar varies tasques a la vegades en diferents servidors, per fer desplegaments de codi, canvis de configuracions, apagar focs, etc&#8230; Mitjançant les pestanyes pots tindre varies consoles connectades a diferents entorns o grups de servidors diferents, a més, cadascuna de les pestanyes les pots dividir en panells i executar les mateixes commandes o scripts alhora, MOLT útil!!!</p>
+<p>Doncs si aquestes funcionalitats del iTerm/Terminator ens han estat MOLT útils, imagineu-vos combinat amb el screen, i n&#8217;obtenim el TMUX!!. Ja fa uns quants caps de setmana que vaig passar una tarda per apendre les opcions i preparant-me la configuració a mida, i va ser MOLT productiu, ho recomano a qualsevol sysadmin. Haig de reconèixer que al principi vaig tenir una mica de reticiència però ara ho agraeixo.</p>
+<p>Descric el que més valoro:</p>
+<li>tenim pestanyes per agrupar per roles/entorns els servidor on estic connectat</li>
+<li>cadascuna de les pestanyes les podem dividir en panells</li>
+<li>podem enviar comandes a tots els panells alhora d&#8217;una mateixa pestanya</li>
+<li>podem redimensionar els panells fàcilment</li>
+<li>podem desplaçar-nos pels diferents panells i/o pestanyes amb comoditat</li>
+<li>NO necessitem de les X11, impresionant!</li>
+<li>pots definir el buffer de cadascun del panell, recomano perdre uns moments per definir un gran buffer, sempre ho acabem utilitzant en algun moment</li>
+<li>podem fer ús de plantilles, definint les pestanyes i les mides que obrirem i inclus automatitzar-ho</li>
+<li>podem personalitzar quins són la combinació de tecles utilitzades per a fer ús del tmux</li>
+<p>Adjunto el meu perfil del tmux en aquest post, on recalcaré les que trobo més interessants.<br />
+Fitxer per descarregar: <a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux.conf_.txt">tmux.conf</a><br />
+Path: $HOME/.tmux.conf</p>
+<pre class="brush: plain; title: ; notranslate">
+# Avisa on fa perpellugues el nom de la pestanya on algun dels seus panells ha tingut activitat
+set -g visual-activity on
+# Per a cada panell guardem 10000 linies de buffer
+set -g buffer-limit 10000
+# C^B+r per recarregar en el tmux canvis en aquestes configuracion (aixo per nota!)
+unbind r
+bind r source-file ~/.tmux.conf  \; display &quot;Reloaded!&quot;
+#C^B+a :(All) per escriure en tots els panells de la pestanya
+unbind a
+bind a setw synchronize-panes on
+# C^B+o :(One) per escriure nomes en panell seleccionat
+unbind o
+bind o setw synchronize-panes off
+# Els indexos de panells i pestanyes comencen per 1, en comptes de 0 que és el per defecte
+set -g base-index 1
+setw -g pane-base-index 1
+# Personalitzant la barra d'estat
+# Powerline symbols: ⮂ ⮃ ⮀ ⮁ ⭤
+set -g status-utf8 on
+set -g status-left-length 32
+set -g status-right-length 150
+set -g status-interval 2
+
+set -g status-left '#[fg=colour15,bg=colour238,bold] #S #[fg=colour238,bg=colour234,nobold]⮀'
+set -g status-right '#[fg=colour245]⮃ %R ⮃ %d %b #[fg=colour254,bg=colour234,nobold]⮂#[fg=colour16,bg=colour254,bold] #h '
+set -g window-status-format &quot;#[fg=white,bg=colour234] #I #W &quot;
+set -g window-status-current-format &quot;#[fg=colour234,bg=colour39]⮀#[fg=colour16,bg=colour39,noreverse,bold] #I ⮁ #W #F #[fg=colour39,bg=colour234,nobold]⮀&quot;
+</pre>
+<p>Aqui defineixo una plantilla del tmux per facilitar l&#8217;ús, molt útil a l&#8217;hora d&#8217;apagar focs.<br />
+<a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.sh_.txt">tmux_magento.sh</a><br />
+El seguent gif mostra la execució de la plantilla que us he penjat, on hem connecto a tots els frontals d&#8217;un mateix role(magento), 8 frontals. La plantilla no deixa de ser un shell script on cada linia mofica el tmux on estem. De fet, per fer-lo funcionar, ÉS NECESSARI estar dins una pestanya del tmux i tenir els indexos dels panells configurats a 1, en comptes de 0 com té per defecte el tmux.</p>
+<p><a href="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif"><img src="https://marc.cortinasval.cat/blog/wp-content/uploads/2013/11/tmux_magento.gif" alt="tmux_magento" width="620" height="538" class="aligncenter size-full wp-image-294" /></a></p>
+<p>Com podeu veure en el gif anterior, jo estic acostumat a connectar-me des d&#8217;un tmux a moltes consoles tty de varis servidors per SSH2. Un altre forme de treballar seria connectar-me a instancies de tmux en cadascun dels servidors a través d&#8217;un fitxer socket, en comptes de connectar-me a la consola, ideal per a compartir sessions remotes alhora entre varis operadors.</p>
+<p>Per finalitzar, les fonts consultades:<br />
+<a title="http://blog.sanctum.geek.nz/zooming-tmux-panes/" href="http://blog.sanctum.geek.nz/zooming-tmux-panes/" target="_blank">Zooming Tmux Panes</a><br />
+<a title="http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/" href="http://spin.atomicobject.com/2012/04/04/simple-remote-pairing-with-wemux/wemux/" target="_blank">Simple Remote Pairing with Wemux</a><br />
+<a title="http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily" href="http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily" target="_blank">Splitting terminal with tmux</a><br />
+<a title="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" href="http://www.openbsd.org/cgi-bin/man.cgi?query=tmux&amp;sektion=1" target="_blank">Manual del Tmux</a></p>
+<p>Projects Links:<br />
+<a title="http://tmux.sourceforge.net" href="http://tmux.sourceforge.net" target="_blank">Tmux Project</a><br />
+<a title="https://github.com/zolrath/wemux" href="https://github.com/zolrath/wemux">Wemux Project</a></p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/11/29/tmux-ha-guanyat/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>WordPress en Raspberry Pi</title>
+		<link>https://marc.cortinasval.cat/blog/2013/11/20/wordpress-en-raspberry-pi/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/11/20/wordpress-en-raspberry-pi/#comments</comments>
+		<pubDate>Sun, 17 Mar 2013 18:37:56 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[berryboot]]></category>
+		<category><![CDATA[mysql]]></category>
+		<category><![CDATA[nginx]]></category>
+		<category><![CDATA[php-fpm]]></category>
+		<category><![CDATA[pluguins]]></category>
+		<category><![CDATA[raspberrypi]]></category>
+		<category><![CDATA[raspbian]]></category>
+		<category><![CDATA[widgets]]></category>
+		<category><![CDATA[wordpress]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=4</guid>
+		<description><![CDATA[Primer post del blog!! Tot just acabo de instalar el wordpress i vaig a recopilar tots els pasos. En la RaspberryPi he instalat com a operatiu un debian amb els daemons nginx, php-fpm i mysql per a fer correr el wordpress. Enumero els pasos: Instalo berryboot en la targeta SD, on instalo el debian en [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Primer post del blog!! Tot just acabo de instalar el wordpress i vaig a recopilar tots els pasos.<br />
+En la RaspberryPi he instalat com a operatiu un debian amb els daemons nginx, php-fpm i mysql per a fer correr el wordpress. Enumero els pasos:</p>
+<ul>
+<ul>
+<li><span style="line-height: 1.714285714; font-size: 1rem;">Instalo berryboot en la targeta SD, on instalo el debian en la raspberry, <a href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=12776" target="_blank">aqui més info</a></span></li>
+<li>Faig un &#8220;apt-get update&#8221; per actualitzar les fonts dels repositoris i instalo el meu editor preferit.</li>
+<li>Instalo tots els dimonis:</li>
+</ul>
+</ul>
+<pre class="brush: plain; title: ; notranslate">
+$sudo apt-get install nginx php5-fpm php5-cgi php5-cli php5-common php5-curl php5-gd php5-mcrypt php5-mysql mysql-server
+</pre>
+<ul>
+<li><span style="line-height: 1.714285714; font-size: 1rem;">Configuro el php-fpm amb el nginx, per utilizarem un file unix per comunicar la interpretació del  php amb el nginx que el servirà, en conclusió, definirem el virtualhost de nginx i settejarem una variable del php</span></li>
+</ul>
+<p>File: /etc/nginx/sites-available/marc.cortinasval.cat</p>
+<pre class="brush: plain; title: ; notranslate">
+server {
+        listen   80; ## listen for ipv4; this line is default and implied
+        root /usr/share/nginx/www;
+        index index.php;
+        server_name marc.cortinasval.cat;
+        location / {
+                rewrite  ^/?$  /blog/  redirect;
+                try_files $uri $uri/ /index.php;
+        }
+        location /blog/ {
+                try_files $uri $uri/ /blog/index.php?$args;
+        }
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+        location ~ /\.ht {
+                deny all;
+        }
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+                expires max;
+                log_not_found off;
+        }
+}
+</pre>
+<p>Ens asegurem que el socket unix definit en el fastcgi_pass del nginx correspon al del php-fpm</p>
+<pre class="brush: plain; title: ; notranslate">
+$ grep listen /etc/php5/fpm/pool.d/www.conf
+listen = /var/run/php5-fpm.sock
+</pre>
+<p>Finalment canviarem el parametre del cgi.fix_pathinfo a 0 en el file /etc/php5/fpm/php.ini</p>
+<pre class="brush: plain; title: ; notranslate">
+$grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
+cgi.fix_pathinfo=0
+</pre>
+<ul>
+<li><span style="line-height: 1.714285714; font-size: 1rem;">Instalo wordpress, per una banda els fitxers php de blog i per una altra preparem la base de dades de mysql que utilitzara i configurem la cadena de conexió de la aplicació.</span></li>
+</ul>
+<p>Baixem la aplicacio i la posem on toca</p>
+<pre class="brush: plain; title: ; notranslate">
+$ cd /usr/share/nginx/www/
+$ wget http://wordpress.org/latest.zip
+$ unzip latest.zip
+$ mv wordpress blog
+$ rm latest.zip
+</pre>
+<p>Preparem la base de dades en mysql, des del client del mysql</p>
+<pre class="brush: plain; title: ; notranslate">
+mysql&gt; CREATE DATABASE wordpress;
+Query OK, 1 row affected (6.58 sec)
+mysql&gt; GRANT ALL PRIVILEGES ON wordpress.* TO &quot;wordpress&quot;@&quot;localhost&quot;IDENTIFIED BY &quot;wordpress&quot;;
+Query OK, 0 rows affected (0.01 sec)
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.02 sec)
+mysql&gt; exit;
+Bye
+</pre>
+<p>Configurem la cadena de conexio de la aplicació</p>
+<pre class="brush: plain; title: ; notranslate">
+cp wp-config-sample.php wp-config.php
+vim wp-config.php
+[\sourcecode]
+
+File /usr/share/nginx/www/blog/wp-config.php
+
+1
+/** The name of the database for WordPress */
+define('DB_NAME', 'wordpress');
+/** MySQL database username */
+define('DB_USER', 'wordpress');
+/** MySQL database password */
+define('DB_PASSWORD', 'wordpress');
+/** MySQL hostname */
+define('DB_HOST', 'localhost');
+</pre>
+<p>Corregim permisos i reiniciem dimonis</p>
+<pre class="brush: plain; title: ; notranslate">
+$sudo chown -R www-data.www-data /usr/share/nginx/www/
+$sudo service nginx restart 
+$sudo service php5-fpm restart
+</pre>
+<p>Accedem via web on configurarem el nom del blog i el nom i password del usuari que administrarà el blog, en aquest pas serà quant es crearà la estructura de dades en el mysql.</p>
+<p>Configuro el permanent link del wordpress, aixo serveix per a tenir url&#8217;s més amistoses, com per exemple:  http://marc.cortinasval.cat/blog/index.php/2013/03/wordpress-en-raspberry-pi<br />
+Per aconseguir-ho, primer ens asegurem que tenim les seguents linies en el virtualhost de nginx i després anem a settings&#8211;&gt;permalinks i configurem el format.<br />
+File: /etc/nginx/sites-available/marc.cortinasval.cat</p>
+<pre class="brush: plain; title: ; notranslate">
+...
+        location /blog/ {
+                try_files $uri $uri/ /blog/index.php?$args;
+        }
+...
+</pre>
+<ul>
+<li><span style="line-height: 1.714285714; font-size: 1rem;">Afegeixo i configuro els pluguins de wordpress, llisto aquí els que més m&#8217;han molat: </span></li>
+</ul>
+<p>SyntaxHighlighter Evolved<br />
+WP to Twitter<br />
+NextScripts: Social Networks Auto-Poster<br />
+Author Spotlight (Widget)<br />
+ExtraWatch Live Stats and Visitor Counter FREE<br />
+Google Analytics<br />
+Google Analytics for WordPress<br />
+Social Login for wordpress<br />
+User Photo</p>
+<ul>
+<li>Poso un minim de categories i creo un menu amb aquestes categories</li>
+<li>Finalment em baixo un thema i poso el menu en el tema</li>
+<li>Poso el witget de delicious</li>
+</ul>
+<p>Escric aquest primer post i ja tinc el blog preparat per a recopilar més info!!!!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/11/20/wordpress-en-raspberry-pi/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>blog personal amb domini .CAT propi, distribució i hospedatge per menys de 7€/any</title>
+		<link>https://marc.cortinasval.cat/blog/2013/07/21/blog-personal-amb-domini-cat-propi-distribucio-i-hospedatge-per-menys-de-7eany/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/07/21/blog-personal-amb-domini-cat-propi-distribucio-i-hospedatge-per-menys-de-7eany/#comments</comments>
+		<pubDate>Sun, 21 Jul 2013 14:03:38 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[Varis]]></category>
+		<category><![CDATA[amazon]]></category>
+		<category><![CDATA[apache]]></category>
+		<category><![CDATA[blog]]></category>
+		<category><![CDATA[cdn]]></category>
+		<category><![CDATA[cloud]]></category>
+		<category><![CDATA[cloudflare]]></category>
+		<category><![CDATA[dns]]></category>
+		<category><![CDATA[ec2]]></category>
+		<category><![CDATA[google]]></category>
+		<category><![CDATA[gybo]]></category>
+		<category><![CDATA[http]]></category>
+		<category><![CDATA[httpd]]></category>
+		<category><![CDATA[https]]></category>
+		<category><![CDATA[mod_SPDY]]></category>
+		<category><![CDATA[puntCAT]]></category>
+		<category><![CDATA[s3]]></category>
+		<category><![CDATA[SPDY]]></category>
+		<category><![CDATA[wordpress]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=122</guid>
+		<description><![CDATA[Avui és un dia trist professionalment parlant perquè el passat divendres en Tomas Nuñez, company de feina amb qui m&#8217;ho he passat molt bé durant els darrers 2 anys, va finalitzar el contracte i ha marxat al Canada a començar una nova experiència  aprofito el post per desitjar-li tota la bona sort en la seva nova aventura on [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Avui és un dia trist professionalment parlant perquè el passat divendres en Tomas Nuñez, company de feina amb qui m&#8217;ho he passat molt bé durant els darrers 2 anys, va finalitzar el contracte i ha marxat al Canada a començar una nova experiència  aprofito el post per desitjar-li tota la bona sort en la seva nova aventura on estic convençut que s&#8217;ho passarà molt bé!</p>
+<p>A més, també cal remarcar que la motivació inicial de trastejar tot l&#8217;esmentat en aquest post va néixer sopant amb els ex-companys de la EGB, on un d&#8217;ells, l&#8217;Estanis Plantada, un geògraf viatger apassionat de la bicicleta vol fer montar-se un site per anar publicant les seves experiències.</p>
+<p>Dit això, vaig per feina, en aquest post us explicaré com publicar un blog (en el meu cas el que tenia en la RaspberryPi) en el &#8220;cloud&#8221; (Amazon) on l&#8217;hi traurem un millor rendiment per menys de 8€ el primer any, no entraré molt en detall tècnic, únicament el que és important és tenir recopilades TOTES les funcionalitats implementades amb un cost molt baix, alhora, recopilo els links de les diferents fonts que he anat coneixent i jugant. Per a cada punt teniu el link de les fonts consultades on he tret la informació.</p>
+<ul>
+<ul>
+<li><span style="font-size: 1rem; line-height: 1.714285714;">Registre de domini</span></li>
+</ul>
+</ul>
+<p>En poc menys d&#8217;uns mesos els dominis .puntCAT han baixat molt el seu preu, vaig repassar els registradors i el més econòmic va ser <a title="CDmon" href="https://www.cdmon.com/" target="_blank">CDMON</a> que per 6.95€. Els <a href="http://www.gybo.com/" target="_blank">amics de Google han llençat als EUA, Canada i ha algun país més el projecte GYBO</a>, on pots conseguir gratis el primer any el registre de un 1 domini amb TLD del tipus .ORG .COM .CA .IN, després val 5$/mes.</p>
+<ul>
+<ul>
+<li>Distribució i securització del blog gràcies a la CDN de CloudFlare</li>
+</ul>
+</ul>
+<p>Si volem minitzar el trafic entre el usuari final i el hosting que tindrem en Amazon, <a title="Cloudflare" href="http://es.cloudflare.com/plans" target="_blank">podem activar gratuitament la funcionalitat de CDN de Cloudfare</a>, a més, també hi afegim un petit control de seguretat. L&#8217;unic inconvenient és que la versió gratuita no soporta la distribució de continguts utilitzant el protocol segur HTTPS.</p>
+<ul>
+<ul>
+<li> Hostatge de la web en el &#8220;cloud&#8221; de <a title="Amazon EC2 free first year" href="http://aws.amazon.com/es/free/terms/" target="_blank">Amazon EC2 gratis el primer any, aquí tenim les condicions</a></li>
+</ul>
+</ul>
+<p>Muntem un node virtual en Amazon EC2 on hi posarem el blog (en el meu cas he migrat el blog de la RaspberryPi), aquí és on els tècnics posem més de la nostre part :). A més, cal remarcar que tindrem control total d&#8217;una maquina virtual en 1 dels CPD&#8217;s, molt útil per qualsevol tècnic que ho munti on ho aprofitarà per trastejar i implementar altres eines (ja podeu estar segurs). A destacar! tenim gratis fins a un volum de 30GB en Amazon S3! (podem muntar un owncloud i ja tenim més que GoogleDrive i Dropbox!)</p>
+<ul>
+<li>Tràfic segur i encriptat entre el navegador del usuari final i el servidor del blog <a title="Self signed CA in Apache" href="http://www.wpwhitesecurity.com/wordpress-security/generate-self-signed-ssl-certificated-apache-https/" target="_blank">amb un certificat SSL auto signat</a></li>
+<li><a title="SPDY en chrome, ¿quant en IE? jajajajaj!" href="http://en.wikipedia.org/wiki/SPDY" target="_blank">Afegim en el mod_SPDY pels navegadors de Google Chrome</a></li>
+<li><a href="http://crlog.info/2011/09/10/install-and-configure-varnish-3-0-1-cache-with-wordpress/" target="_blank">Accelerem la entrega de contingut dinamic afegint el Varnish-Cache</a></li>
+<li><a href="http://www.trickytechs.com/how-to-increase-pagespeed-score-of-wordpress-blog/" target="_blank">Optimitzem la entrega de fitxers del Blog, ja centrant-nos en el cas de WordPress, activant la compressió de JS i el modul de wordpress W3 Total Cache.</a></li>
+</ul>
+<p>Doncs tot això ho tenim muntat en poc més d&#8217;unes hores on només hi hem invertit menys de 7€!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/07/21/blog-personal-amb-domini-cat-propi-distribucio-i-hospedatge-per-menys-de-7eany/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>descobrint les preferencies de Samsung amb la grabació del senyal TdT/TdtHD</title>
+		<link>https://marc.cortinasval.cat/blog/2013/05/01/descobrint-les-preferencies-de-samsung-amb-la-grabacio-del-senyal-tdttdthd/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/05/01/descobrint-les-preferencies-de-samsung-amb-la-grabacio-del-senyal-tdttdthd/#comments</comments>
+		<pubDate>Wed, 01 May 2013 10:51:10 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[exfat]]></category>
+		<category><![CDATA[fat32]]></category>
+		<category><![CDATA[hd]]></category>
+		<category><![CDATA[multimedia]]></category>
+		<category><![CDATA[samsung]]></category>
+		<category><![CDATA[seagate]]></category>
+		<category><![CDATA[TdT]]></category>
+		<category><![CDATA[TdTHD]]></category>
+		<category><![CDATA[tv]]></category>
+		<category><![CDATA[tvled]]></category>
+		<category><![CDATA[xfs]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=105</guid>
+		<description><![CDATA[Aprofitant que tinc un matí de festa i que la meva empresa va fer una campanya interna per tal d&#8217;aprofitar el sobre-stock que tenia, vaig comprar-me un disc dur extern USB Seagate de 3TB per a connectarlo a la TV per 75€. En aquest post recopilaré les proves que he fet per tal de descobrir [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Aprofitant que tinc un matí de festa i que la meva empresa va fer una campanya interna per tal d&#8217;aprofitar el sobre-stock que tenia, vaig comprar-me un disc dur extern USB Seagate de 3TB per a connectarlo a la TV per 75€.</p>
+<p>En aquest post recopilaré les proves que he fet per tal de descobrir les preferencies de la TV Samsung amb la gestió del contingut multimedia que hi gestiona en els dispositiu d&#8217;emmagatzemament USB.<br />
+<a href="http://www.samsung.com/es/consumer/av/televisions/gama-2011/UE46D7000LSXXC-spec?subsubtype=led" title="Especificacions Fabricant TV Samsung"></a><br />
+<a href="http://www.seagate.com/es/es/external-hard-drives/desktop-hard-drives/expansion-hard-drive/?sku=STBV3000200" title="Especificacions Fabricant Disc Dur Extern USB"></a><br />
+Primerament, el disc venia en NTFS, i el televisor només es capaç de llegir FAT8, FAT16, FAT32, VFAT i XFS.<br />
+Em vaig decebre una mica quant no llegia el ExFat. <img src="https://marc.cortinasval.cat/blog/wp-includes/images/smilies/icon_sad.gif" alt=":(" class="wp-smiley" /><br />
+Coneixent les limitacions del FAT (no pot gestionar fitxers més grans de 4GB), única opció es el XFS</p>
+<p>A més, només accepta XFS formatant-lo directament connectant-lo al TV, llavors, la única forma de utilitzar-lo, es tenir el disc formatat en FAT, connectarlo per a que ens ho reconegui i després des del menu de la TV anar a grabació on ens demanarà formatar-lo (oju! perdrem les dades).</p>
+<p>Per acabar de rematar, el disc de 3TB el formata en XFS de tal forma que només tens 765GB disponibles, ho formata limitant els blocs de data i de log dels sistema XFS a 195695670 i 8192 respectivament, ¿perquè? NO HO ENTENC! no li trobo&#8230;</p>
+<p>Si deixem de banda el sistema de fitxers i mirem els fitxers multimedia i el codec que utilitza. He grabat durant 10 minuts un canal TdT i un TdTHD, ocupant aproximadament 300MBytes i 1000MBytes. Us deixo la estructura de fitxers que utilitza:</p>
+<pre class="brush: plain; title: ; notranslate">
+.
+├── [root     root     4.0K]  CONTENTS
+│   ├── [root     root     2.0K]  20130428102157.ckf
+│   ├── [root     root       44]  20130428102157.enc
+│   ├── [root     root     7.3K]  20130428102157.inf
+│   ├── [root     root      92K]  20130428102157.mdb
+│   ├── [root     root     202K]  20130428102157.mta
+│   ├── [root     root     281M]  20130428102157.srf
+│   ├── [root     root     2.0K]  20130428103327.ckf
+│   ├── [root     root       44]  20130428103327.enc
+│   ├── [root     root     7.3K]  20130428103327.inf
+│   ├── [root     root      49K]  20130428103327.mdb
+│   ├── [root     root     101K]  20130428103327.mta
+│   ├── [root     root     985M]  20130428103327.srf
+│   ├── [root     root        8]  FavoriteInfo.dev
+│   └── [root     root      136]  NewBoard4Rpsp.inf
+├── [root     root       34]  database
+│   ├── [root     root     552K]  Ace.dat
+│   └── [root     root     256K]  Ace.log
+└── [root     root       16]  PVRDBVersion.mgr
+</pre>
+<p>Són els fitxers srf els que tenen els canals de video i audio, on el bitrate aprox és de 3920 Kbps i 13.7 Mbps per </p>
+<p>Conclusió, per una banda suposo que Samsung aplica estrategia comercial per tal que els Disc durs USB només siguin compatibles entre els seus televisors i per una altra jo agafaré aquest disc de 3TB, el punxare a la raspberry i el compartire per CIFS/DLNA i li posare un transmission, única forma de tenir els 3TB disponibles per tot el pis i des de tots els gadgets. </p>
+<p>Adjunto el TXT amb les proves que he fet.</p>
+<p><a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/05/SamsungUSBSpecifies.txt">SamsungUSBSpecifies</a></p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/05/01/descobrint-les-preferencies-de-samsung-amb-la-grabacio-del-senyal-tdttdthd/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>disc de 2TB amb client p2p+cifs+dlna</title>
+		<link>https://marc.cortinasval.cat/blog/2013/03/31/disc-de-2tb-amb-client-p2pcifsdlna/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/03/31/disc-de-2tb-amb-client-p2pcifsdlna/#comments</comments>
+		<pubDate>Sun, 31 Mar 2013 17:54:58 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[Varis]]></category>
+		<category><![CDATA[cifs]]></category>
+		<category><![CDATA[dlna]]></category>
+		<category><![CDATA[iomega]]></category>
+		<category><![CDATA[nas]]></category>
+		<category><![CDATA[storage]]></category>
+		<category><![CDATA[torrent]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=86</guid>
+		<description><![CDATA[Si teniu un televisor modern amb client de DLNA, una molt bona opció es tenir un disc dur amb mooooolt d&#8217;espai amb un client torrent per a poder descarregar pelicules sense haber de tenir un &#8220;pc&#8221; encés, ademés, jo ho tinc habilitat per a poder-me connectar des de Internet, concretament des del mobil. El gadget [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Si teniu un televisor modern amb client de DLNA, una molt bona opció es tenir un disc dur amb mooooolt d&#8217;espai amb un client torrent per a poder descarregar pelicules sense haber de tenir un &#8220;pc&#8221; encés, ademés, jo ho tinc habilitat per a poder-me connectar des de Internet, concretament des del mobil.</p>
+<p>El gadget que he fet servir ha estat una cabina NAS IOMEGA, <a href="http://go.iomega.com/es/products/network-storage-desktop/ez-media/?partner=4715">aqui teniu info del producte</a>. Jo el vaig comprar aquestes pasades festes de nadal per 99€ a pixmania, però el seu preu ha pujat considerblement, <a href="http://www.pixmania.com/es/es/12576962/art/iomega/servidor-de-red-nas-ez-me.html">aquí  us deixo el link del gadget.</a></p>
+<p>Podia fer servir el client de torrent instalat en el dispositiu per defecte però després de provar-lo durant un parell de dies el vaig descartar per COMPLERT, principalment perque hem deixaba el gadget totalment inoperatiu al cap d&#8217;una estona (després de comentar-ho amb support i llegir el forum em van dir que era un BUG&#8230;)</p>
+<p>Resumint, aprofitant que el dispositiu té un DEBIAN vaig optar per instalar-hi el transmission. Aqui us deixo les pases:</p>
+<p>0. Instalo la ultima versió del firmware disponible pel fabricant i activo la seguretat posant-li un usuari i password.<br />
+  http://ip-cabina  &#8211; Anem a configuració i definim un password de administració.</p>
+<p>1. Activo el servei SSH2 en la cabina, http://ip-cabina/diagnostics.html i activo el SSH.</p>
+<p>2. Instalo les fonts del gestor de repositori IPKG</p>
+<pre class="brush: plain; title: ; notranslate">
+#echo /etc/ipkg.conf
+src cross http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/cross/unstable
+src native http://ipkg.nslu2-linux.org/feeds/optware/cs08q1armel/native/unstable
+#ipkg update
+</pre>
+<p>3. Instalo el transmission-daemon </p>
+<pre class="brush: plain; title: ; notranslate">
+ipkg install transmission
+</pre>
+<p>4. Configuro el fitxer de configuració, us el adjunto en el post. En la primera execucio, el password el poses en format de test pla i en l&#8217;execució el propi transmission el codifica. La primera execució la faig aixi</p>
+<pre class="brush: plain; title: ; notranslate">
+/mnt/system/opt/bin/transmission-daemon -g /mnt/pools/A/A0/content/torrent/.config
+</pre>
+<p><a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/settings.json_.txt">settings.json</a></p>
+<p>5. Afegeixo el transmission perque s&#8217;inici automaticament en l&#8217;engegada del sistema<br />
+ &#8211; Us adjunto el init.d script que tinc per iniciar el dimoni, amb path /etc/init.d/transmission-daemon<br />
+<a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/transmission-daemon.initd_.sh_.txt">transmission-daemon.initd.sh</a><br />
+ &#8211; Despres de testejarlo el vaig posar en el boot del sistema</p>
+<pre class="brush: plain; title: ; notranslate">
+update-rc.d transmission-daemon defaults
+</pre>
+<p>6. Habilito el accés en el router de casa per a accedir-hi des de internet.<br />
+ Per una banda tinc habilitat un servei de DNS amb ip dinamica amb el proveidor no-ip.org i per una altra he habilitat un PAT en el encaminador per a tenir acces al transmission-gui.</p>
+<p>7. Verifico que tingui la comparticio activada del contingut multimedia i ja ho tindre disponible des de la SmartTV</p>
+<p>Ja tenim 2 TB per baixar series i pelicules amb HD i 3D, accessible des del mobil 3G i a més a molt baix consum d&#8217;electricitat!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/03/31/disc-de-2tb-amb-client-p2pcifsdlna/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Publicant Jira per httpS</title>
+		<link>https://marc.cortinasval.cat/blog/2013/03/20/publicant-jira-per-https/</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/03/20/publicant-jira-per-https/#comments</comments>
+		<pubDate>Wed, 20 Mar 2013 13:09:32 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Tecnologia]]></category>
+		<category><![CDATA[httpd]]></category>
+		<category><![CDATA[https]]></category>
+		<category><![CDATA[jira]]></category>
+		<category><![CDATA[nginx]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=21</guid>
+		<description><![CDATA[Si mai heu de publicar la aplicació de ticketing de l&#8217;empresa a internet, aqui us deixo un petit how-to de com ho he fet amb el JIRA. Els objectius, per variar, son principalment tenir alta disponibilitat i securitzar la publicació. Per aquest motiu ho podem fer com a minim amb 2 VLAN&#8217;s, frontend i backend, [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Si mai heu de publicar la aplicació de ticketing de l&#8217;empresa a internet, aqui us deixo un petit how-to de com ho he fet amb el JIRA.</p>
+<p>Els objectius, per variar, son principalment tenir alta disponibilitat i securitzar la publicació. Per aquest motiu ho podem fer com a minim amb 2 VLAN&#8217;s, frontend i backend, on en el frontend posarem un nginx i en el backend posarem la aplicació de JIRA.</p>
+<p>En el frontend posarem un servidor nginx que farà de proxypass cap el backend, en ell delegarem la negociació SSL del httpS. Aquest servidor nginx el posarem a sobre d&#8217;una plataforma virtualitzada on hi aplicarem HA, a més, podem afegir tenir un actiu-passiu utilitzant pacemaker o keepalived. Finalment hi posarem un filtrat per accedir a la part de administració de la aplicació.</p>
+<p>En el backend hi tindrem el servidor JIRA, on aqui la alta disponibilitat només la hem aplicat a nivell de màquina virtual, ja que la aplicació JIRA no està preparada per tenir-la clusteritzada.</p>
+<p>Finalment us deixo els fitxers de configuració, el del virtualhost del nginx:</p>
+<pre class="brush: plain; title: ; notranslate">
+server {
+    listen x.y.z.w:80;
+    server_name jira.example.com;
+    rewrite        ^ https://$server_name$request_uri? permanent;
+}
+server {
+    listen x.y.z.w:443 ssl;
+    server_name jira.example.com;
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/crt/concat.pem;
+    ssl_certificate_key /etc/nginx/ssl/key/example.key;
+    location / {
+        client_max_body_size 10M;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Host $host;
+        proxy_pass http://http-jira/;
+        proxy_redirect off;
+    }
+    include security_jira.conf;
+}
+</pre>
+<p>Per tal de securitzar l&#8217;accés a la part de administració del Jira, us adjunto el fitxer <a href="http://marc.cortinasval.cat/blog/wp-content/uploads/2013/03/security_jira.conf_.txt">security_jira.conf</a></p>
+<p>Finalment en el servidor de java-standalone hem de indicar que el les url&#8217;s les ha de montar amb el https, indicant el nom de domini i el port el cual faran les seguents peticions:</p>
+<pre class="brush: plain; title: ; notranslate">
+scheme=&quot;https&quot;
+proxyName=&quot;jira.example.com&quot;
+proxyPort=&quot;443&quot;
+</pre>
+<p>Quedarà el fitxer així:</p>
+<pre class="brush: plain; title: ; notranslate">
+...
+    &lt;Service name=&quot;Catalina&quot;&gt;
+        &lt;Connector port=&quot;8080&quot;
+                   maxThreads=&quot;150&quot;
+                   minSpareThreads=&quot;25&quot;
+                   maxSpareThreads=&quot;75&quot;
+                   connectionTimeout=&quot;20000&quot;
+                   enableLookups=&quot;false&quot;
+                   maxHttpHeaderSize=&quot;8192&quot;
+                   protocol=&quot;HTTP/1.1&quot;
+                   useBodyEncodingForURI=&quot;true&quot;
+                   redirectPort=&quot;8443&quot;
+                   acceptCount=&quot;100&quot;
+                   disableUploadTimeout=&quot;true&quot;
+                   scheme=&quot;https&quot;
+                   proxyName=&quot;jira.example.com&quot;
+                   proxyPort=&quot;443&quot;
+/&gt;
+....
+</pre>
+<p>A disfrutar!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/03/20/publicant-jira-per-https/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

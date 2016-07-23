@@ -1,0 +1,152 @@
+<VirtualHost *:80>
+        ServerName marc.cortinasval.cat
+       #Only in update
+        SecRuleEngine off
+	
+	RewriteEngine On	
+
+	RewriteCond %{HTTP:X-Forwarded-Proto}  =https
+        RewriteRule  ^/?$ https://marc.cortinasval.cat/blog/en/ [R,L]
+
+	RewriteRule  ^/?$ http://marc.cortinasval.cat/blog/en/ [R,L]
+
+	RewriteCond %{HTTP:X-Forwarded-Proto}  =https
+	RewriteRule ^/blog/?$ https://marc.cortinasval.cat/blog/en/ [R,L]
+
+	RewriteRule ^/blog/?$ http://marc.cortinasval.cat/blog/en/ [R,L]
+
+        Alias /blog /var/www/html
+        <Directory /var/www/html>
+            Options FollowSymLinks
+            #AllowOverride Limit Options FileInfo
+            AllowOverride None
+            DirectoryIndex index.php
+            Order allow,deny
+            Allow from all
+
+    RewriteEngine On
+    RewriteCond %{HTTP:X-Forwarded-Proto} https
+    RewriteRule .* - [E=HTTPS:on]
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+ </Directory>
+        ErrorLog "|/usr/sbin/rotatelogs -l /var/log/httpd/blog.error.%Y.%m.%d.log 86400"
+        CustomLog "|/usr/sbin/rotatelogs -l /var/log/httpd/blog.access.%Y.%m.%d.log 86400" akamai
+
+        SetEnvIf Origin-mode debug debug_on
+        Header set X-Request-Processing-Time: %D env=debug_on
+        Header set X-Request-Received: %t env=debug_on
+        PassEnv HOSTNAME
+        Header set X-WebServer-Response "%{HOSTNAME}e" env=debug_on
+
+php_value upload_max_filesize 12M
+
+<IfModule mod_mime.c>
+ AddType application/x-javascript .js
+ AddType text/css .css
+</IfModule>
+<IfModule mod_deflate.c>
+ SetOutputFilter DEFLATE
+ <IfModule mod_setenvif.c>
+  SetEnvIfNoCase Request_URI \.(?:rar|zip)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:gif|jpg|png)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:avi|mov|mp4)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.mp3$ no-gzip dont-vary
+ </IfModule>
+ <IfModule mod_setenvif.c>
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+ </IfModule>
+ <IfModule mod_headers.c>
+  Header append Vary User-Agent env=!dont-vary
+ </IfModule>
+</IfModule>
+
+
+    #Enabled to optimize marc blog: https://developers.google.com/speed/pagespeed/module/configuration
+	ModPagespeed on
+	ModPagespeedRespectVary on
+	ModPagespeedDisableRewriteOnNoTransform off
+	ModPagespeedLowercaseHtmlNames on
+	ModPagespeedModifyCachingHeaders off
+	ModPagespeedXHeaderValue "Powered By mod_mcortinas_speed"
+	ModPagespeedPreserveUrlRelativity on
+	ModPagespeedDomain marc.cortinasval.cat
+	ModPagespeedEnableFilters rewrite_javascript
+	ModPagespeedUseExperimentalJsMinifier on
+	ModPagespeedEnableFilters rewrite_css
+	ModPagespeedEnableFilters fallback_rewrite_css_urls
+
+</VirtualHost>
+<VirtualHost *:443>
+    ServerName marc.cortinasval.cat
+    RequestHeader set X-Forwarded-Proto "https"
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:80/
+    ProxyPassReverse / http://127.0.0.1:80/
+
+
+       #Only in update
+        SecRuleEngine off
+        ErrorLog "|/usr/sbin/rotatelogs -l /var/log/httpd/blog-ssl.error.%Y.%m.%d.log 86400"
+        CustomLog "|/usr/sbin/rotatelogs -l /var/log/httpd/blog-ssl.access.%Y.%m.%d.log 86400" akamai
+
+SSLEngine on
+#SSLProtocol all -SSLv2
+SSLProtocol All -SSLv2 -SSLv3
+SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM
+SSLCertificateFile /etc/httpd/conf.d/startssl/cortinasval.crt
+SSLCertificateKeyFile /etc/httpd/conf.d/startssl/cortinasval.key
+SSLCertificateChainFile /etc/httpd/conf.d/startssl/sub.class1.server.ca.pem
+SSLCACertificateFile /etc/httpd/conf.d/startssl/ca.pem
+
+
+php_value upload_max_filesize 12M
+
+SecRuleEngine off
+
+<IfModule mod_mime.c>
+ AddType application/x-javascript .js
+ AddType text/css .css
+</IfModule>
+<IfModule mod_deflate.c>
+ SetOutputFilter DEFLATE
+ <IfModule mod_setenvif.c>
+  SetEnvIfNoCase Request_URI \.(?:rar|zip)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:gif|jpg|png)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:avi|mov|mp4)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.mp3$ no-gzip dont-vary
+ </IfModule>
+ <IfModule mod_setenvif.c>
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+ </IfModule>
+ <IfModule mod_headers.c>
+  Header append Vary User-Agent env=!dont-vary
+ </IfModule>
+</IfModule>
+
+    #Enabled to optimize marc blog: https://developers.google.com/speed/pagespeed/module/configuration
+        ModPagespeed on
+        ModPagespeedRespectVary on
+        ModPagespeedDisableRewriteOnNoTransform off
+        ModPagespeedLowercaseHtmlNames on
+        ModPagespeedModifyCachingHeaders off
+        ModPagespeedXHeaderValue "Powered By mod_mcortinas_speed"
+        ModPagespeedPreserveUrlRelativity on
+        ModPagespeedDomain marc.cortinasval.cat
+        ModPagespeedEnableFilters rewrite_javascript
+        ModPagespeedUseExperimentalJsMinifier on
+        ModPagespeedEnableFilters rewrite_css
+        ModPagespeedEnableFilters fallback_rewrite_css_urls
+</VirtualHost>

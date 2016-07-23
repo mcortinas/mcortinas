@@ -1,0 +1,1040 @@
+location ~* Administrators.jspa {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteAttachment {
+allow x.y.z.w;
+deny all;
+}
+location ~* AcknowledgeTask {
+allow x.y.z.w;
+deny all;
+}
+location ~* ActivateWorkflow {
+allow x.y.z.w;
+deny all;
+}
+location ~* ActivateWorkflowStep2 {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddIssueSecurity {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddIssueSecurityScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddLevel {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddNotification {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddNotificationScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddPermission {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddPermissionScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddPopMailServer {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddProject {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddProjectCategory {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddRepository {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddSmtpMailServer {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddUser {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowSchemeEntity {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransition {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransitionCondition {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransitionConditionParams {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransitionFunctionParams {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransitionPostFunction {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransitionValidator {
+allow x.y.z.w;
+deny all;
+}
+location ~* AddWorkflowTransitionValidatorParams {
+allow x.y.z.w;
+deny all;
+}
+location ~* AssociateFieldToScreens {
+allow x.y.z.w;
+deny all;
+}
+location ~* AssociateIssueTypeSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* AssociateIssueTypeSchemesWithDefault {
+allow x.y.z.w;
+deny all;
+}
+location ~* BugzillaImport {
+allow x.y.z.w;
+deny all;
+}
+location ~* BulkEditUserGroups {
+allow x.y.z.w;
+deny all;
+}
+location ~* CloneWorkflow {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureCache {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureCsvMapping {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureCustomField {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureFieldLayout {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureFieldLayoutScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureFieldScreen {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureFieldScreenScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureFogBugzMapping {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureIssueTypeScreenScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureLogging {
+allow x.y.z.w;
+deny all;
+}
+location ~* ConfigureOptionSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* CopyFieldLayout {
+allow x.y.z.w;
+deny all;
+}
+location ~* CopyFieldLayoutScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* CopyIssueSecurityScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* CopyNotificationScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* CopyPermissionScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* CopyWorkflowScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* CreateCustomField {
+allow x.y.z.w;
+deny all;
+}
+location ~* CreateDraftWorkflow {
+allow x.y.z.w;
+deny all;
+}
+location ~* CsvImporter {
+allow x.y.z.w;
+deny all;
+}
+location ~* CurrentUsersList {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteCustomField {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteGroup {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteIssueSecurity {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteIssueSecurityLevel {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteIssueSecurityScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteIssueType {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteLinkType {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteMailServer {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteNotification {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteNotificationScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteOptionScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeletePermission {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeletePermissionScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeletePriority {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteProject {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteProjectCategory {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteProjectRole {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteRepository {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteResolution {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteStatus {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteSubTaskIssueType {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteTrustedApplication {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteUser {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteUserProperty {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowSchemeEntity {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowStep {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowTransitionCondition {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowTransitionPostFunction {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowTransitions {
+allow x.y.z.w;
+deny all;
+}
+location ~* DeleteWorkflowTransitionValidator {
+allow x.y.z.w;
+deny all;
+}
+location ~* DisableSubTasks {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditAnnouncementBanner {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditApplicationProperties {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditAttachmentSettings {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditBasicConfig {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditCustomField {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditCustomFieldDefaults {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditCustomFieldOptions {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditDefaultFieldLayoutItem {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldLayout {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldLayoutItem {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldLayoutItemRenderer {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldLayoutItemRendererConfirmation {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldLayoutScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldScreen {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldScreenScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditFieldScreenSchemeItem {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditIssueSecurities {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditIssueSecurityScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditIssueType {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditIssueTypeScreenScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditLinkType {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditListener {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditLookAndFeel {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditNotifications {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditNotificationScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditPermissions {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditPermissionScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditPriority {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditProjectCategory {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditProjectRole {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditResolution {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditService {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditStatus {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditSubTaskIssueTypes {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditTrustedApplication {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditUser {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditUserDefaultSettings {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditUserGroups {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditUserProjectRoles {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditUserProperties {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditUserProperty {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflow {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowSchemeEntities {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowStep {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowTransition {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowTransitionConditionParams {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowTransitionPostFunctionParams {
+allow x.y.z.w;
+deny all;
+}
+location ~* EditWorkflowTransitionValidatorParams {
+allow x.y.z.w;
+deny all;
+}
+location ~* EnterpriseSelectProjectRepository {
+allow x.y.z.w;
+deny all;
+}
+location ~* ExternalImport {
+allow x.y.z.w;
+deny all;
+}
+location ~* FogBugzImport {
+allow x.y.z.w;
+deny all;
+}
+location ~* GlobalPermissions {
+allow x.y.z.w;
+deny all;
+}
+location ~* GroupBrowser {
+allow x.y.z.w;
+deny all;
+}
+location ~* ImportWorkflowFromXml {
+allow x.y.z.w;
+deny all;
+}
+location ~* IndexAdmin {
+allow x.y.z.w;
+deny all;
+}
+location ~* IndexOptimize {
+allow x.y.z.w;
+deny all;
+}
+location ~* IntegrityChecker {
+allow x.y.z.w;
+deny all;
+}
+location ~* JellyRunner {
+allow x.y.z.w;
+deny all;
+}
+location ~* JiraSupportRequest {
+allow x.y.z.w;
+deny all;
+}
+location ~* LDAPConfigurer {
+allow x.y.z.w;
+deny all;
+}
+location ~* ListEventTypes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ListWorkflows {
+allow x.y.z.w;
+deny all;
+}
+location ~* MailQueueAdmin {
+allow x.y.z.w;
+deny all;
+}
+location ~* MakeDefaultLevel {
+allow x.y.z.w;
+deny all;
+}
+location ~* ManageConfiguration {
+allow x.y.z.w;
+deny all;
+}
+location ~* ManageConfigurationScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* ManageIssueTypeSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ManageSubTasks {
+allow x.y.z.w;
+deny all;
+}
+location ~* MantisImport {
+allow x.y.z.w;
+deny all;
+}
+location ~* MigrateIssueTypes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectEmail {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportBackupOverviewProgress {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportMappingProgress {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportMissingMandatoryUsersCannotCreate {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportMissingMandatoryUsersExtMgmt {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportMissingOptionalUsersCannotCreate {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportMissingOptionalUsersExtMgmt {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportMissingUsersAutoCreate {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportProgress {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportResults {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportSelectBackup {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportSelectProject {
+allow x.y.z.w;
+deny all;
+}
+location ~* ProjectImportSummary {
+allow x.y.z.w;
+deny all;
+}
+location ~* PublishDraftWorkflow {
+allow x.y.z.w;
+deny all;
+}
+location ~* RepositoryTest {
+allow x.y.z.w;
+deny all;
+}
+location ~* ResetFailedLoginCount {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchedulerAdmin {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeComparisonPicker {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeComparisonTool {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeGroupToRoleMapper {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeGroupToRoleResult {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeGroupToRoleTransformer {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeMerge {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeMergePreview {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeMergeResult {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemePicker {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemePurgeToolPreview {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemePurgeToolResults {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemePurgeTypePicker {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeTools {
+allow x.y.z.w;
+deny all;
+}
+location ~* SchemeTypePicker {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectFieldLayoutScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectIssueTypeSchemeForProject {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectIssueTypeScreenScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectCategory {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectIssueSecurityScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectPermissionScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectRepository {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectSecuritySchemeStep2 {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectWorkflowScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectWorkflowSchemeStep2 {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectProjectWorkflowSchemeStep3 {
+allow x.y.z.w;
+deny all;
+}
+location ~* SelectScreenScheme {
+allow x.y.z.w;
+deny all;
+}
+location ~* SendBulkMail {
+allow x.y.z.w;
+deny all;
+}
+location ~* SendTestMail {
+allow x.y.z.w;
+deny all;
+}
+location ~* ServiceExecutor {
+allow x.y.z.w;
+deny all;
+}
+location ~* SetGlobalEmailPreference {
+allow x.y.z.w;
+deny all;
+}
+location ~* SetPassword {
+allow x.y.z.w;
+deny all;
+}
+location ~* TaskAdmin {
+allow x.y.z.w;
+deny all;
+}
+location ~* TimeTrackingAdmin {
+allow x.y.z.w;
+deny all;
+}
+location ~* TrackbackAdmin {
+allow x.y.z.w;
+deny all;
+}
+location ~* UpdatePopMailServer {
+allow x.y.z.w;
+deny all;
+}
+location ~* UpdateRepository {
+allow x.y.z.w;
+deny all;
+}
+location ~* UpdateSmtpMailServer {
+allow x.y.z.w;
+deny all;
+}
+location ~* UserBrowser {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewApplicationProperties {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewAttachmentSettings {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewCustomFields {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewDefaultProjectRoleActors {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewFieldLayouts {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewFieldLayoutSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewFieldScreens {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewFieldScreenSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewGroup {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewIssueColumns {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewIssueFields {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewIssueSecuritySchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewIssueTypes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewIssueTypeScreenSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewLicense {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewLinkTypes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewListeners {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewLogging {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewLookAndFeel {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewMemoryInfo {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewNotificationSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewPermissionSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewPlugins {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewPriorities {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewProjectCategories {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewProjectRoles {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewProjectRoleUsage {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewResolutions {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewServices {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewStatuses {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewSystemInfo {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewTranslations {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewTrustedApplications {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewUpgradeHistory {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewUser {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewUserDefaultSettings {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewUserProjectRoles {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowSchemes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowStep {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowStepMetaAttributes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowSteps {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowTransition {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowTransitionConditionalResult {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowTransitionMetaAttributes {
+allow x.y.z.w;
+deny all;
+}
+location ~* ViewWorkflowXml {
+allow x.y.z.w;
+deny all;
+}
+location ~* XmlBackup {
+allow x.y.z.w;
+deny all;
+}
+location ~* XmlRestore {
+allow x.y.z.w;
+deny all;
+}

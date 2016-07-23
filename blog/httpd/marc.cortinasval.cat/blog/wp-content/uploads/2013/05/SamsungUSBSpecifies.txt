@@ -1,0 +1,179 @@
+------- Block Device Specifies
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142/CONTENTS# fdisk -s /dev/sdb1
+2930266328
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142/CONTENTS# fdisk -s /dev/sdb
+2930266580
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142/CONTENTS# fdisk -l /dev/sdb
+Note: sector size is 4096 (not 512)
+
+Disk /dev/sdb: 3000.6 GB, 3000592977920 bytes
+255 heads, 63 sectors/track, 45600 cylinders, total 732566645 sectors
+Units = sectors of 1 * 4096 = 4096 bytes
+Sector size (logical/physical): 4096 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disk identifier: 0x0001c2fe
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1              63   732566644  2930266328   83  Linux
+
+-------- FileSystem specifies
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# mount | grep xfs
+/dev/sdb1 on /media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142 type xfs (rw,nosuid,nodev,uhelper=udisks2)
+
+root@youANDme:~# xfs_admin -lu /dev/sdb1
+label = ""
+UUID = d4fc377b-54d3-4c1f-b05b-d2df34c62142
+root@youANDme:~# xfs_info /dev/sdb1
+meta-data=/dev/sdb1              isize=256    agcount=4, agsize=48923918 blks
+         =                       sectsz=4096  attr=2
+data     =                       bsize=4096   blocks=195695670, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0
+log      =internal               bsize=4096   blocks=8192, version=2
+         =                       sectsz=4096  sunit=1 blks, lazy-count=0
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+root@youANDme:~# xfs_check /dev/sdb1
+xfs_check: /dev/sdb1 contains a mounted and writable filesystem
+
+fatal error -- couldn't initialize XFS library
+root@youANDme:~# xfs_check /dev/sdb1
+root@youANDme:~# xfs_repair /dev/sdb1
+Phase 1 - find and verify superblock...
+Phase 2 - using internal log
+        - zero log...
+xfs_repair: read failed: Invalid argument
+XFS: empty log check failed
+zero_log: cannot find log head/tail (xlog_find_tail=22), zeroing it anyway
+        - scan filesystem freespace and inode maps...
+        - found root inode chunk
+Phase 3 - for each AG...
+        - scan and clear agi unlinked lists...
+        - process known inodes and perform inode discovery...
+        - agno = 0
+        - agno = 1
+        - agno = 2
+        - agno = 3
+        - process newly discovered inodes...
+Phase 4 - check for duplicate blocks...
+        - setting up duplicate extent list...
+        - check for inodes claiming duplicate blocks...
+        - agno = 0
+        - agno = 1
+        - agno = 2
+        - agno = 3
+Phase 5 - rebuild AG headers and trees...
+        - reset superblock...
+Phase 6 - check inode connectivity...
+        - resetting contents of realtime bitmap and summary inodes
+        - traversing filesystem ...
+        - traversal finished ...
+        - moving disconnected inodes to lost+found ...
+Phase 7 - verify and correct link counts...
+done
+
+-------- Files specifies
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# tree -shug
+.
+├── [root     root     4.0K]  CONTENTS
+│   ├── [root     root     2.0K]  20130428102157.ckf
+│   ├── [root     root       44]  20130428102157.enc
+│   ├── [root     root     7.3K]  20130428102157.inf
+│   ├── [root     root      92K]  20130428102157.mdb
+│   ├── [root     root     202K]  20130428102157.mta
+│   ├── [root     root     281M]  20130428102157.srf
+│   ├── [root     root     2.0K]  20130428103327.ckf
+│   ├── [root     root       44]  20130428103327.enc
+│   ├── [root     root     7.3K]  20130428103327.inf
+│   ├── [root     root      49K]  20130428103327.mdb
+│   ├── [root     root     101K]  20130428103327.mta
+│   ├── [root     root     985M]  20130428103327.srf
+│   ├── [root     root        8]  FavoriteInfo.dev
+│   └── [root     root      136]  NewBoard4Rpsp.inf
+├── [root     root       34]  database
+│   ├── [root     root     552K]  Ace.dat
+│   └── [root     root     256K]  Ace.log
+└── [root     root       16]  PVRDBVersion.mgr
+
+2 directories, 17 files
+
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file PVRDBVersion.mgr 
+PVRDBVersion.mgr: ASCII text
+
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file database/Ace.
+Ace.dat  Ace.log  
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file database/Ace.dat 
+database/Ace.dat: data
+
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file CONTENTS/20130428103327.ckf 
+CONTENTS/20130428103327.ckf: PDP-11 UNIX/RT ldp
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file CONTENTS/20130428103327.enc 
+CONTENTS/20130428103327.enc: VMS Alpha executable
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file CONTENTS/20130428103327.inf
+CONTENTS/20130428103327.inf: data
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file CONTENTS/20130428103327.mdb 
+CONTENTS/20130428103327.mdb: data
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file CONTENTS/20130428103327.mta
+CONTENTS/20130428103327.mta: XML document text
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# file CONTENTS/20130428103327.srf
+CONTENTS/20130428103327.srf: data
+
+
+----------- Multimedia Specifies
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# mediainfo CONTENTS/20130428103327.srf | head -17
+General
+ID                                       : 101 (0x65)
+Complete name                            : CONTENTS/20130428103327.srf
+Format                                   : MPEG-TS
+File size                                : 985 MiB
+Duration                                 : 10mn 1s
+Overall bit rate                         : 13.7 Mbps
+
+Video
+ID                                       : 191 (0xBF)
+Menu ID                                  : 813 (0x32D)
+Format                                   : AVC
+Format/Info                              : Advanced Video Codec
+Format profile                           : High@L4.0
+Codec ID                                 : 27
+Encryption                               : Encrypted
+
+root@youANDme:/media/mcortinas/d4fc377b-54d3-4c1f-b05b-d2df34c62142# mediainfo CONTENTS/20130428102157.srf | head -15
+General
+ID                                       : 97 (0x61)
+Complete name                            : CONTENTS/20130428102157.srf
+Format                                   : MPEG-TS
+File size                                : 281 MiB
+Duration                                 : 10mn 0s
+Overall bit rate                         : 3 920 Kbps
+
+Video
+ID                                       : 131 (0x83)
+Menu ID                                  : 803 (0x323)
+Format                                   : MPEG Video
+Codec ID                                 : 2
+Compression mode                         : Lossy
+Encryption                               : Encrypted
+
+
+----------- DIFFERENCES BETWEEN XFS's
+SAMSUNG
+root@youANDme:~# xfs_info /dev/sdb1
+meta-data=/dev/sdb1              isize=256    agcount=4, agsize=48923918 blks
+         =                       sectsz=4096  attr=2
+data     =                       bsize=4096   blocks=195695670, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0
+log      =internal               bsize=4096   blocks=8192, version=2
+         =                       sectsz=4096  sunit=1 blks, lazy-count=0
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+
+UBUNTU
+xfs_info /dev/sdb1
+meta-data=/dev/sdb1              isize=256    agcount=32, agsize=22892706 blks
+         =                       sectsz=4096  attr=2
+data     =                       bsize=4096   blocks=732566582, imaxpct=5
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0
+log      =internal               bsize=4096   blocks=357698, version=2
+         =                       sectsz=4096  sunit=1 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0

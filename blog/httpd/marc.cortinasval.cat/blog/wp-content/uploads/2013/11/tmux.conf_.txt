@@ -1,0 +1,48 @@
+#mouse control which panes is selected
+#set-option -g mouse-select-pane on
+
+# set 256 colors
+#set -g default-terminal "screen-256color"
+
+# set default shell
+#set -g default-command "exec /bin/bash"
+
+#added tmux-pasteboard
+#set-option -g default-command "/opt/local/bin/reattach-to-user-namespace bash"
+
+#Alert everytime there are activity in each panes
+set -g visual-activity on
+setw -g  monitor-activity on
+
+#Buffer for each panes
+set -g display-panes-time 10000
+
+# force a reload of the config file
+unbind r
+bind r source-file ~/.tmux.conf  \; display "Reloaded!"
+
+
+unbind a
+bind a setw synchronize-panes on
+
+unbind o
+bind o setw synchronize-panes off
+
+# Start numbering at 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# be more responsive, changing the default delay
+set -sg escape-time 1
+
+# Custom status bar
+# Powerline symbols: ⮂ ⮃ ⮀ ⮁ ⭤
+set -g status-utf8 on
+set -g status-left-length 32
+set -g status-right-length 150
+set -g status-interval 2
+
+set -g status-left '#[fg=colour15,bg=colour238,bold] #S #[fg=colour238,bg=colour234,nobold]⮀'
+set -g status-right '#[fg=colour245]⮃ %R ⮃ %d %b #[fg=colour254,bg=colour234,nobold]⮂#[fg=colour16,bg=colour254,bold] #h '
+set -g window-status-format "#[fg=white,bg=colour234] #I #W "
+set -g window-status-current-format "#[fg=colour234,bg=colour39]⮀#[fg=colour16,bg=colour39,noreverse,bold] #I ⮁ #W #F #[fg=colour39,bg=colour234,nobold]⮀"

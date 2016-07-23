@@ -1,0 +1,12 @@
+backend default {
+  .host = "127.0.0.1";
+  .port = "8080";
+  .max_connections = 200;
+  .first_byte_timeout = 120s;
+  .between_bytes_timeout = 120s;
+}
+
+sub vcl_recv {
+      return(pass);
+}
+

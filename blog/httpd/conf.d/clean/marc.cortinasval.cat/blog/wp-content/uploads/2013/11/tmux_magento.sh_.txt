@@ -1,0 +1,30 @@
+#!/bin/bash
+
+tmux new-window \;
+tmux rename-window 'Magento'
+
+tmux split-window -h
+
+tmux select-pane -t 1
+tmux split-window -v
+tmux split-window -v
+
+tmux select-pane -t 1
+tmux split-window -v
+
+tmux select-pane -t 5
+tmux split-window -v
+tmux split-window -v
+
+tmux select-pane -t 5
+tmux split-window -v
+
+for panel in $(seq 1 8)
+do
+ let node=$panel+1
+ tmux send-keys -t "$panel" C-z "ssh magento-$node" Enter
+done
+
+tmux setw synchronize-panes on
+tmux send-keys "hostname && uptime" Enter
+ 

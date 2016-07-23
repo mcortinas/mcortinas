@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>One more technical blog in the net &#187; pluguins</title>
+	<atom:link href="https://marc.cortinasval.cat/blog/tag/pluguins-en/feed/" rel="self" type="application/rss+xml" />
+	<link>https://marc.cortinasval.cat/blog</link>
+	<description>it's flowing through my head...</description>
+	<lastBuildDate>Mon, 12 Jan 2015 08:16:14 +0000</lastBuildDate>
+	<language>en-US</language>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.7.3</generator>
+	<item>
+		<title>WordPress running on RaspberryPi</title>
+		<link>https://marc.cortinasval.cat/blog/2013/11/20/wordpress-running-on-raspberrypi/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=wordpress-running-on-raspberrypi</link>
+		<comments>https://marc.cortinasval.cat/blog/2013/11/20/wordpress-running-on-raspberrypi/#comments</comments>
+		<pubDate>Wed, 20 Nov 2013 22:20:33 +0000</pubDate>
+		<dc:creator><![CDATA[mcortinas]]></dc:creator>
+				<category><![CDATA[SysAdmin]]></category>
+		<category><![CDATA[Technology]]></category>
+		<category><![CDATA[berryboot]]></category>
+		<category><![CDATA[mysql]]></category>
+		<category><![CDATA[nginx]]></category>
+		<category><![CDATA[php-fpm]]></category>
+		<category><![CDATA[pluguins]]></category>
+		<category><![CDATA[raspberrypi]]></category>
+		<category><![CDATA[raspbian]]></category>
+		<category><![CDATA[widgets]]></category>
+		<category><![CDATA[wordpress]]></category>
+
+		<guid isPermaLink="false">http://marc.cortinasval.cat/blog/?p=240</guid>
+		<description><![CDATA[This is my first post in my fresh wordpress installation. Just now i&#8217;ve finished installing wordpress and i&#8217;m going to collect all steps. I&#8217;ve selected install Debian as operating system, then i use nginx, php-fpm and mysql daemons for running wordpress. This are all steps: I had installed berryboot in SD card, and then i [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>This is my first post in my fresh wordpress installation. Just now i&#8217;ve finished installing wordpress and i&#8217;m going to collect all steps. I&#8217;ve selected install Debian as operating system, then i use nginx, php-fpm and mysql daemons for running wordpress. This are all steps:</p>
+<ul>
+<ul>
+<li>I had installed berryboot in SD card, and then i installed debian as a operative system. <a href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=12776" target="_blank">More info in this link</a></span></li>
+<li>You must run &#8220;apt-get update&#8221; to update the repository source and i&#8217;ve installed my favourite editor.</li>
+<li>I&#8217;ve installed all daemons needed:</li>
+</ul>
+</ul>
+<pre class="brush: plain; title: ; notranslate">
+$sudo apt-get install nginx php5-fpm php5-cgi php5-cli php5-common php5-curl php5-gd php5-mcrypt php5-mysql mysql-server
+</pre>
+<ul>
+<li><span style="line-height: 1.714285714; font-size: 1rem;">Set php-fpm to work with nginx daemons, for that we will use a socket unix file to communicate to nginx daemons, and then we can configure nginx virtual host and set a specific global variable from php.</span></li>
+</ul>
+<p>File: /etc/nginx/sites-available/marc.cortinasval.cat</p>
+<pre class="brush: plain; title: ; notranslate">
+server {
+        listen   80; ## listen for ipv4; this line is default and implied
+        root /usr/share/nginx/www;
+        index index.php;
+        server_name marc.cortinasval.cat;
+        location / {
+                rewrite  ^/?$  /blog/  redirect;
+                try_files $uri $uri/ /index.php;
+        }
+        location /blog/ {
+                try_files $uri $uri/ /blog/index.php?$args;
+        }
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+        location ~ /\.ht {
+                deny all;
+        }
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+                expires max;
+                log_not_found off;
+        }
+}
+</pre>
+<p>We must check the php5-fpm is listening in the properly unix file</p>
+<pre class="brush: plain; title: ; notranslate">
+$ grep listen /etc/php5/fpm/pool.d/www.conf
+listen = /var/run/php5-fpm.sock
+</pre>
+<p>Finally, we modify the cgi.fix_pathinfo to 0 in the file /etc/php5/fpm/php.ini</p>
+<pre class="brush: plain; title: ; notranslate">
+$grep cgi.fix_pathinfo /etc/php5/fpm/php.ini
+cgi.fix_pathinfo=0
+</pre>
+<ul>
+<li>Firstly install the php files, then  prepare the mysql database and finally set database credentials.</span></li>
+</ul>
+<p>Download wordpress installation files and unzip.</p>
+<pre class="brush: plain; title: ; notranslate">
+$ cd /usr/share/nginx/www/
+$ wget http://wordpress.org/latest.zip
+$ unzip latest.zip
+$ mv wordpress blog
+$ rm latest.zip
+</pre>
+<p>We prepare mysql database:</p>
+<pre class="brush: plain; title: ; notranslate">
+mysql&gt; CREATE DATABASE wordpress;
+Query OK, 1 row affected (6.58 sec)
+mysql&gt; GRANT ALL PRIVILEGES ON wordpress.* TO &quot;wordpress&quot;@&quot;localhost&quot;IDENTIFIED BY &quot;wordpress&quot;;
+Query OK, 0 rows affected (0.01 sec)
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.02 sec)
+mysql&gt; exit;
+Bye
+</pre>
+<p>Set database credentials in wordpress application</p>
+<pre class="brush: plain; title: ; notranslate">
+cp wp-config-sample.php wp-config.php
+vim wp-config.php
+</pre>
+<p>File /usr/share/nginx/www/blog/wp-config.php</p>
+<pre class="brush: plain; title: ; notranslate">
+/** The name of the database for WordPress */
+define('DB_NAME', 'wordpress');
+/** MySQL database username */
+define('DB_USER', 'wordpress');
+/** MySQL database password */
+define('DB_PASSWORD', 'wordpress');
+/** MySQL hostname */
+define('DB_HOST', 'localhost');
+</pre>
+<p>Fix permissions in files and restart all daemons</p>
+<pre class="brush: plain; title: ; notranslate">
+$sudo chown -R www-data.www-data /usr/share/nginx/www/
+$sudo service nginx restart 
+$sudo service php5-fpm restart
+</pre>
+<p>Open any browser and you can do the first http request, then you can see the installation wizard is triggered.<br />
+Set admin blog credentials and the wizard creates mysql data structure. </p>
+<p>I recommend you use url friendlies, it can increase the user experience, for example this url: http://marc.cortinasval.cat/blog/index.php/2013/03/wordpress-en-raspberry-pi<br />
+For that, we add this lines in nginx virtual host configuration.<br />
+File: /etc/nginx/sites-available/marc.cortinasval.cat</p>
+<pre class="brush: plain; title: ; notranslate">
+...
+        location /blog/ {
+                try_files $uri $uri/ /blog/index.php?$args;
+        }
+...
+</pre>
+<ul>
+<li>Finally, add and set the wordpress pluggins, i&#8217;ve listed the plugging i like it.</span></li>
+</ul>
+<p>SyntaxHighlighter Evolved<br />
+WP to Twitter<br />
+NextScripts: Social Networks Auto-Poster<br />
+Author Spotlight (Widget)<br />
+ExtraWatch Live Stats and Visitor Counter FREE<br />
+Google Analytics<br />
+Google Analytics for WordPress<br />
+Social Login for wordpress<br />
+User Photo</p>
+<ul>
+<li>Create categories and define menu tabs</li>
+<li>Select, download and install any theme and add the menu</li>
+</ul>
+<p>I write this first post and my blog is ready to collect my technical experiences!!!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://marc.cortinasval.cat/blog/2013/11/20/wordpress-running-on-raspberrypi/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>
