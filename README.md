@@ -8,17 +8,11 @@ Adding Personal Repository code and configurations
 
 ## Content
 
-* ELK personal lab
-* Docker personal lab 
-* Blog personal lab 
+* ELK personal lab ,[more info here](https://marc.cortinasval.cat/blog/2015/01/12/elk-en-centos7/)
+* Docker personal lab, CI with docker first lab  
+* Blog personal lab , settings on my AWF free year wordpress configuration 
+* Phantomas 2 graphite python script, [more info here] (https://github.com/macbre/phantomas/issues/381)
 
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
