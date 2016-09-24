@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
 import logging
 
 logger = logging.getLogger('simple_example')
