@@ -1,0 +1,125 @@
+<VirtualHost *:8080>
+
+        ServerName marc.cortinasval.cat
+	ServerAlias static1.cortinasval.cat static2.cortinasval.cat static3.cortinasval.cat static4.cortinasval.cat
+
+        #Only in update
+        # SecRuleEngine off
+        SecRuleEngine off
+	Header unset X-Pingback
+	
+	RewriteEngine On	
+
+	RewriteCond %{HTTP:X-Forwarded-Proto}  =https
+        RewriteRule  ^/?$ https://marc.cortinasval.cat/blog/en/ [R,L]
+
+	RewriteRule  ^/?$ http://marc.cortinasval.cat/blog/en/ [R,L]
+
+	RewriteCond %{HTTP:X-Forwarded-Proto}  =https
+	RewriteRule ^/blog/?$ https://marc.cortinasval.cat/blog/en/ [R,L]
+
+	RewriteRule ^/blog/?$ http://marc.cortinasval.cat/blog/en/ [R,L]
+
+        Alias /reis /var/www/reis
+        Alias /blog /var/www/html
+        #Enabled to optimize marc blog: https://developers.google.com/speed/pagespeed/module/configuration
+        ModPagespeed on
+	ModPagespeedModifyCachingHeaders off
+	ModPagespeedLowercaseHtmlNames on
+	ModPagespeedDisableRewriteOnNoTransform off
+	ModPagespeedXHeaderValue "Powered By mod_pages_speed - 1.8.31.5-4307"
+        ModPagespeedPreserveUrlRelativity on
+        ModPagespeedUseExperimentalJsMinifier on
+	ModPagespeedAllow wildcard_spec
+	ModPagespeedAllow "*"
+	ModPagespeedPreserveUrlRelativity on
+
+        <Directory "/var/www/html/wp-includes/js/jquery/jquery.js">
+        ModPagespeedDomain http://static1.cortinasval.cat
+	</Directory>
+
+        <Directory /var/www/html>
+	ModPagespeedRewriteLevel CoreFilters
+	ModPagespeedEnableFilters rewrite_images            
+
+	    Options FollowSymLinks
+            #AllowOverride Limit Options FileInfo
+            AllowOverride None
+            DirectoryIndex index.php
+            Order allow,deny
+            Allow from all
+
+
+
+    #RewriteEngine On
+    #RewriteCond %{HTTP:X-Forwarded-Proto} https
+    #RewriteRule .* - [E=HTTPS:on]
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+ </Directory>
+
+ExpiresActive On
+ExpiresByType image/jpg "access plus 1 year"
+ExpiresByType image/jpeg "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType application/pdf "access plus 1 month"
+ExpiresByType text/x-javascript "access plus 1 month"
+ExpiresByType application/x-javascript "access plus 1 month"
+ExpiresByType application/x-shockwave-flash "access plus 1 month"
+ExpiresByType image/x-icon "access plus 1 year"
+ExpiresByType image/svg+xml "access plus 1 years"
+ExpiresByType application/x-font-ttf "access plus 1 years"
+ExpiresByType application/x-font-truetype "access plus 1 years"
+ExpiresByType application/x-font-opentype "access plus 1 years"
+ExpiresByType application/font-woff "access plus 1 years"
+ExpiresByType application/font-woff2 "access plus 1 years"
+ExpiresByType application/vnd.ms-fontobject "access plus 1 years"
+ExpiresByType application/font-sfnt "access plus 1 years"
+ExpiresByType application/x-font-woff "access plus 1 years"
+
+        ErrorLog "|/usr/sbin/rotatelogs -l /var/log/httpd/blog.error.%Y.%m.%d.log 86400"
+        CustomLog "|/usr/sbin/rotatelogs -l /var/log/httpd/blog.access.%Y.%m.%d.log 86400" akamai
+
+        SetEnvIf Origin-mode debug debug_on
+        Header set X-Request-Processing-Time: %D env=debug_on
+        Header set X-Request-Received: %t env=debug_on
+        PassEnv HOSTNAME
+        Header set X-WebServer-Response "%{HOSTNAME}e" env=debug_on
+
+php_value upload_max_filesize 12M
+
+<IfModule mod_mime.c>
+ AddType application/x-javascript .js
+ AddType text/css .css
+</IfModule>
+<IfModule mod_deflate.c>
+ SetOutputFilter DEFLATE
+ <IfModule mod_setenvif.c>
+  SetEnvIfNoCase Request_URI \.(?:rar|zip)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:gif|jpg|png)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.(?:avi|mov|mp4)$ no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.mp3$ no-gzip dont-vary
+ </IfModule>
+ <IfModule mod_setenvif.c>
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+ </IfModule>
+ <IfModule mod_headers.c>
+  Header append Vary User-Agent env=!dont-vary
+ </IfModule>
+</IfModule>
+
+
+
+</VirtualHost>
