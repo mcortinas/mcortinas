@@ -12,7 +12,7 @@ Adding Personal Repository code and configurations
 * Docker personal lab, CI with docker first lab  
 * Blog personal lab , settings on my AWS free year wordpress configuration 
 * Phantomas 2 graphite python script, [more info here] (https://github.com/macbre/phantomas/issues/381)
-
+* Bash - quick bash scripts and recipes 
 
 ## Authors
 
